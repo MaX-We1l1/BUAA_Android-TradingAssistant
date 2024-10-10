@@ -1,2 +1,1 @@
-BUAA_Android-TradingAssistant
-Hello
+# BUAA_Android-TradingAssistant
