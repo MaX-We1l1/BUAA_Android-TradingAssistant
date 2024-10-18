@@ -2,6 +2,9 @@ package com.example.myapplication.database;
 
 import androidx.annotation.NonNull;
 
+import com.example.myapplication.R;
+
+import org.litepal.LitePal;
 import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 
@@ -13,12 +16,15 @@ public class User extends LitePalSupport {
     @Column(nullable = false, unique = true)
     private String username;        //primary
     private String password;
-    private String registerTime;// 头像
+    private String registerTime;
+    //private int headImage = R.drawable.user; // 头像
     private String personalitySign; // 个性签名, 不超过20个字
     private String birthday; //生日, yyyymmdd 的格式, 防止前导零的情况, 以字符串存
     private String sex; //性别,直接用“男”,"女"就行。 ~~男用"m"表示, 女用"f"表示~~
 
-
+    //
+    private List<TradeRecord> tradeRecordList = new ArrayList<TradeRecord>();
+    public List<Hobby> getHobbyList = new ArrayList<>();
     /*
         函数部分
      */
@@ -53,25 +59,8 @@ public class User extends LitePalSupport {
 
 
     //  外键约束
-    /*public List<Blog> getBlogList() {
-        return LitePal.where("user_id = ?", String.valueOf(id)).find(Blog.class);
-    }
-
-    public List<BlogCommentTable> getBlogCommentTableList() {
-        return LitePal.where("user_id = ?", String.valueOf(id)).find(BlogCommentTable.class);
-    }
-
-    public List<ExerciseRecord> getExerciseRecordList() {
-        return LitePal.where("user_id = ?", String.valueOf(id)).find(ExerciseRecord.class);
-    }
-
-    public List<_Group> getGroups() {
-        List<Joiner_Group> joinerGroupList = LitePal.where("user_id = ?", String.valueOf(id)).find(Joiner_Group.class);
-        List<_Group> groups = new ArrayList<>();
-        for (Joiner_Group joinerGroup : joinerGroupList) {
-            groups.add(joinerGroup.getGroup());
-        }
-        return groups;
+    public List<TradeRecord> getTradeRecordList() {
+        return LitePal.where("user_id = ?", String.valueOf(id)).find(TradeRecord.class);
     }
 
     public List<Hobby> getHobbyList() {
@@ -117,13 +106,13 @@ public class User extends LitePalSupport {
         this.registerTime = registerTime;
     }
 
-    public int getHeadImage() {
-        return headImage;
-    }
+//    public int getHeadImage() {
+//        return headImage;
+//    }
 
-    public void setHeadImage(int headImage) {
-        this.headImage = headImage;
-    }
+//    public void setHeadImage(int headImage) {
+//        this.headImage = headImage;
+//    }
 
     public String getPersonalitySign() {
         return personalitySign;
@@ -131,22 +120,6 @@ public class User extends LitePalSupport {
 
     public void setPersonalitySign(String personalitySign) {
         this.personalitySign = personalitySign;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public int getWeight() {
-        return weight;
-    }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
     }
 
     public String getBirthday() {
@@ -163,6 +136,6 @@ public class User extends LitePalSupport {
 
     public void setSex(String sex) {
         this.sex = sex;
-    }*/
+    }
 
 }
