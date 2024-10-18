@@ -22,6 +22,21 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
+        <activity
+            android:name=".HomepageActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".chat.ChatListActivity">
+            <!-- 如果需要在其他地方启动这个 Activity，可以添加 intent-filter -->
+        </activity>
+        <activity android:name=".chat.ChatDetailActivity">
+            <!-- 如果需要在其他地方启动这个 Activity，可以添加 intent-filter -->
+        </activity>
+
     </application>
 
 </manifest>
