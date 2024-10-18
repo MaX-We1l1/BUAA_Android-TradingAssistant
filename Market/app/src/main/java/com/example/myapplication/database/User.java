@@ -24,7 +24,7 @@ public class User extends LitePalSupport {
 
     //
     private List<TradeRecord> tradeRecordList = new ArrayList<TradeRecord>();
-    public List<Hobby> getHobbyList = new ArrayList<>();
+    public List<Type> commodityHobbyList = new ArrayList<>();
     /*
         函数部分
      */
@@ -63,7 +63,7 @@ public class User extends LitePalSupport {
         return LitePal.where("user_id = ?", String.valueOf(id)).find(TradeRecord.class);
     }
 
-    public List<Hobby> getHobbyList() {
+    public List<Hobby> getcommodityHobbyList() {
         return LitePal.where("user_id = ?", String.valueOf(id)).find(Hobby.class);
     }
 
