@@ -1,26 +1,33 @@
 package com.example.myapplication.chat;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.myapplication.R;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ChatListActivity extends AppCompatActivity {
 
     private ListView chatListView;
-    private EditText searchBox;
-    private ImageView searchButton, menuButton;
+    private FloatingSearchView mSearchView;
+//    private EditText searchBox;
+//    private ImageView searchButton, menuButton;
     private ChatAdapter chatAdapter; // 你的聊天适配器
     private ArrayList<ChatItem> chatList; // 聊天列表数据
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +35,8 @@ public class ChatListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chatlist);
 
         chatListView = findViewById(R.id.chat_list_view);
-        searchBox = findViewById(R.id.search_box);
+        mSearchView = findViewById(R.id.floating_search_view);
+        //searchBox = findViewById(R.id.search_box);
         // TODO: 搜索功能以及菜单功能仍未完善
 //        searchButton = findViewById(R.id.search_button);
 //        menuButton = findViewById(R.id.menu_button);
@@ -56,6 +64,27 @@ public class ChatListActivity extends AppCompatActivity {
 //            Toast.makeText(this, "菜单功能待实现", Toast.LENGTH_SHORT).show();
 //        });
 
+        // 监听搜索框的查询变化
+        mSearchView.setOnQueryChangeListener((oldQuery, newQuery) -> {
+            // 提供建议项
+            provideSuggestions(newQuery);
+        });
+
+        mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+            @Override
+            public void onSearchAction(String currentQuery) {
+                // 执行搜索操作
+                saveSearchHistory(currentQuery);
+                performSearch(currentQuery);
+            }
+
+            @Override
+            public void onSuggestionClicked(SearchSuggestion suggestion) {
+                // 处理建议项点击事件
+                mSearchView.setSearchText(suggestion.getBody());
+            }
+        });
+
         // 点击聊天列表项跳转到具体聊天界面
         chatListView.setOnItemClickListener((parent, view, position, id) -> {
             // TODO: 跳转到聊天界面
@@ -64,4 +93,38 @@ public class ChatListActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
+    private void provideSuggestions(String query) {
+        SharedPreferences preferences = getSharedPreferences("search_history", MODE_PRIVATE);
+        Set<String> historySet = preferences.getStringSet("history", new HashSet<>());
+
+        List<ContactSearchSuggestion> suggestions = new ArrayList<>();
+        for (String history : historySet) {
+            if (history.toLowerCase().contains(query.toLowerCase())) {
+                suggestions.add(new ContactSearchSuggestion(history));
+            }
+        }
+
+        // 将建议项设置到搜索框
+        mSearchView.swapSuggestions(suggestions);
+    }
+
+
+    @SuppressLint("MutatingSharedPrefs")
+    private void saveSearchHistory(String query) {
+        SharedPreferences preferences = getSharedPreferences("search_history", MODE_PRIVATE);
+        Set<String> historySet = preferences.getStringSet("history", new HashSet<>());
+        if (!query.isEmpty()) {
+            historySet.add(query);
+        }
+        preferences.edit().putStringSet("history", historySet).apply();
+    }
+
+
+    private void performSearch(String query) {
+        // 实现搜索逻辑，比如过滤聊天列表
+        Toast.makeText(this, "搜索: " + query, Toast.LENGTH_SHORT).show();
+    }
+
+
 }

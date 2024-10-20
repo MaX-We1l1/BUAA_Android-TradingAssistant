@@ -32,12 +32,11 @@ android {
 }
 
 dependencies {
-
+    implementation ("com.github.arimorty:floatingsearchview:2.1.1")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(files("libs/litepal-2.0.0-src.jar"))
     implementation(files("libs/litepal-2.0.0-src.jar"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
