@@ -35,7 +35,9 @@
             <!-- 如果需要在其他地方启动这个 Activity，可以添加 intent-filter -->
         </activity>
         <activity android:name=".chat.ChatDetailActivity">
+        </activity>
             <!-- 如果需要在其他地方启动这个 Activity，可以添加 intent-filter -->
+        <activity android:name=".profile.ProfileActivity">
         </activity>
 
     </application>

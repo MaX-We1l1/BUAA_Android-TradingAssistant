@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.myapplication.R;
+import com.example.myapplication.profile.ProfileActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -92,6 +94,20 @@ public class ChatListActivity extends AppCompatActivity {
             intent.putExtra("chat_id", chatList.get(position).getId()); // 传递聊天 ID
             startActivity(intent);
         });
+
+        // 这里可以设置其他初始化逻辑，比如加载数据等
+        Button messagesButton = findViewById(R.id.button_messages);
+        messagesButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ChatListActivity.this, ChatListActivity.class);
+            startActivity(intent);
+        });
+
+        Button userButton = findViewById(R.id.button_profile);
+        userButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ChatListActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     private void provideSuggestions(String query) {
