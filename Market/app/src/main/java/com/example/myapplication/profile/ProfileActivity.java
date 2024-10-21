@@ -3,6 +3,7 @@ package com.example.myapplication.profile;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +37,13 @@ public class ProfileActivity extends AppCompatActivity {
         // 根据用户名设置头像
         setProfileImage(currentUser);
 
+        ImageButton orderButton = findViewById(R.id.order_arrow_button);
+        orderButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, OrderActivity.class);
+            startActivity(intent);
+        });
+
+
         // 这里可以设置其他初始化逻辑，比如加载数据等
         Button messagesButton = findViewById(R.id.button_messages);
         messagesButton.setOnClickListener(v -> {
@@ -67,6 +75,8 @@ public class ProfileActivity extends AppCompatActivity {
         // 设置头像
         profileImageView.setImageResource(avatarResId);
     }
+
+    //TODO 根据用户名选择地址
 
 
 
