@@ -3,7 +3,7 @@ package com.example.myapplication.database;
 import org.litepal.crud.LitePalSupport;
 
 public class Commodity extends LitePalSupport {
-    private long id; //编号，期望递增
+    private long id; //编号
     private String commodityName; //名称
     // TODO 添加商品图片
     private Float price; //价格
