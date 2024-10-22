@@ -5,6 +5,7 @@ import android.util.Log;
 import org.litepal.LitePal;
 import org.litepal.crud.LitePalSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DBFunction {
@@ -148,6 +149,28 @@ public class DBFunction {
             Log.d(DBFunction.TAG, "成功删除商品，ID: " + commodityId);
         } else {
             Log.w(DBFunction.TAG, "未找到该商品，删除失败，ID: " + commodityId);
+        }
+    }
+
+    public static void addChatMessage(String chatId, String content, long sendId, long recId) {
+        ChatMessage cm = new ChatMessage();
+        cm.setChatId(chatId);
+        cm.setRead(false);
+        cm.setMessageContent(content);
+        cm.setTimestamp(System.currentTimeMillis());
+        cm.setReceiverId(recId);
+        cm.setSenderId(sendId);
+        cm.save();
+    }
+
+    public static List<ChatMessage> findChatHistoryByChatId(String recId, String sendId) {
+        List<ChatMessage> cms = LitePal.where("chatId = ? OR chatId = ?",
+                recId + "_" + sendId,
+                sendId + "_" + recId).find(ChatMessage.class);
+        if (cms == null || cms.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            return cms;
         }
     }
 }
