@@ -18,7 +18,7 @@ public class DBFunction {
             return null;
         }
     }
-    
+
     public static void addUser(String username, String password, String registerDate) {
         User user = new User();
         user.setUsername(username);
@@ -31,7 +31,7 @@ public class DBFunction {
     public static boolean isAllowLogin(String username, String password) {
         return LitePal.isExist(User.class, "username = ? and password = ?", username, password);
     }
-    
+
     //保证用户名唯一
     public static boolean isUsernameExist(String username) {
         return LitePal.isExist(User.class, "username = ?", username);
@@ -94,22 +94,31 @@ public class DBFunction {
         updateUser.updateAll("username = ?", username);
     }
 
-    public static void addStar(String username, Type commodityType) {
+    //收藏某件商品
+    public static void addStar(String userName, long commodityId) {
         Hobby hobby = new Hobby();
-        hobby.setUserByName(username);
-        hobby.setCommodityType(commodityType);
+        hobby.setUserName(userName);
+        hobby.setCommodityId(commodityId);
         hobby.save();
     }
 
-    //    取消用户对某项运动的收藏，保证这个sportName在收藏列表里
-    public static void cancelStar(String username, String sportName) {
+    //取消用户对某个商品的收藏，保证这个商品在收藏列表里
+    public static void cancelStar(String username, long commodityId) {
         User user = findUserByName(username);
         if (user != null) {
-            LitePal.deleteAll(Hobby.class, "user_id=? and sportname=?", String.valueOf(user.getId()), sportName);
+            // 查找该用户的收藏记录
+            List<Hobby> hobbies = LitePal.where("username = ? and commodityId = ?", username, String.valueOf(commodityId)).find(Hobby.class);
+            if (!hobbies.isEmpty()) {
+                // 删除第一条找到的记录
+                LitePal.delete(Hobby.class, hobbies.get(0).getId());
+            } else {
+                Log.w(DBFunction.TAG, "未找到该用户的收藏记录，cancelStar失败");
+            }
         } else {
-            Log.w(DBFunction.TAG, "不存在username用户，cancelStar失败");
+            Log.w(DBFunction.TAG, "不存在用户名为 " + username + " 的用户，cancelStar失败");
         }
     }
+
 
     public static void addRecordToDB(TradeRecord oneTradeRecord) {
         TradeRecord tradeRecord = new TradeRecord();
@@ -132,4 +141,13 @@ public class DBFunction {
         commodity.save();
     }
 
+    //删除某项商品
+    public static void delCommodity(long commodityId) {
+        int rowsAffected = LitePal.delete(Commodity.class, commodityId);
+        if (rowsAffected > 0) {
+            Log.d(DBFunction.TAG, "成功删除商品，ID: " + commodityId);
+        } else {
+            Log.w(DBFunction.TAG, "未找到该商品，删除失败，ID: " + commodityId);
+        }
+    }
 }
