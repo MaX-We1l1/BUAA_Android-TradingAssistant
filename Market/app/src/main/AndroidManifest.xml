@@ -42,7 +42,8 @@
         <activity android:name=".square.CommodityListActivity">
         </activity>
         <activity android:name=".square.CommodityDetailActivity"/>
-            
+        <activity android:name=".profile.FavoriteActivity"/>
+        <activity android:name=".profile.AddressActivity"/>
         <activity android:name=".profile.OrderActivity">
         </activity>
 

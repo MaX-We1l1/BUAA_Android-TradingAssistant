@@ -173,4 +173,28 @@ public class DBFunction {
             return cms;
         }
     }
+
+    //地址管理
+    public static void addAddress(String userName, String address) {
+        User user = findUserByName(userName);
+        if (user != null) {
+            user.addAddress(address);
+        } else {
+            Log.w(DBFunction.TAG, "未找到该用户，添加地址失败， userName: " + userName);
+        }
+    }
+
+    public static void delAddress(String userName, int index) {
+        User user = findUserByName(userName);
+        if (user != null) {
+            // 查找该用户的收藏记录
+            if (user.getAddress().size() > index) {
+                user.delAddress(index);
+            } else {
+                Log.w(DBFunction.TAG, "索引超出");
+            }
+        } else {
+            Log.w(DBFunction.TAG, "不存在用户名为 " + userName + " 的用户");
+        }
+    }
 }
