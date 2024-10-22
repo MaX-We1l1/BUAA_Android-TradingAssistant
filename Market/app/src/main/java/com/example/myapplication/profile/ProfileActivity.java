@@ -13,6 +13,7 @@ import com.example.myapplication.HomepageActivity;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.chat.ChatListActivity;
+import com.example.myapplication.square.CommodityListActivity;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -54,6 +55,12 @@ public class ProfileActivity extends AppCompatActivity {
         Button userButton = findViewById(R.id.button_profile);
         userButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        Button squareButton = findViewById(R.id.button_square);
+        squareButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, CommodityListActivity.class);
             startActivity(intent);
         });
     }

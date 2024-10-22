@@ -14,6 +14,7 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.myapplication.R;
 import com.example.myapplication.profile.ProfileActivity;
+import com.example.myapplication.square.CommodityListActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -105,6 +106,12 @@ public class ChatListActivity extends AppCompatActivity {
         Button userButton = findViewById(R.id.button_profile);
         userButton.setOnClickListener(v -> {
             Intent intent = new Intent(ChatListActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        Button squareButton = findViewById(R.id.button_square);
+        squareButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ChatListActivity.this, CommodityListActivity.class);
             startActivity(intent);
         });
 
