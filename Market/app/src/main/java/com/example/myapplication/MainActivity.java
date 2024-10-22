@@ -13,6 +13,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.myapplication.database.DBFunction;
+
 import org.litepal.LitePal;
 
 /*
@@ -45,9 +47,8 @@ public class MainActivity extends AppCompatActivity {
         } else if (password.equals("")) {
             return LoginCheckResult.NO_PASSWORD;
         }
-        // TODO 用户名和密码合法性检查函数
-        // isAllowLogin()
-        boolean isAllow = true;
+        // TODO 用户名和密码合法性检查函数 ok
+        boolean isAllow = DBFunction.isAllowLogin(username,password);
         if (isAllow) // 不管怎么样，先登录进去
             return LoginCheckResult.SUCCESS;
         else
