@@ -13,6 +13,7 @@ import com.example.myapplication.HomepageActivity;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.chat.ChatListActivity;
+import com.example.myapplication.profile.FavoriteActivity;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -37,9 +38,21 @@ public class ProfileActivity extends AppCompatActivity {
         // 根据用户名设置头像
         setProfileImage(currentUser);
 
-        ImageButton orderButton = findViewById(R.id.order_arrow_button);
+        ImageButton orderButton = findViewById(R.id.order_button);
         orderButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, OrderActivity.class);
+            startActivity(intent);
+        });
+
+        ImageButton favoriteButton = findViewById(R.id.favorite_button);
+        favoriteButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, FavoriteActivity.class);
+            startActivity(intent);
+        });
+
+        ImageButton addressButton = findViewById(R.id.address_button);
+        addressButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, AddressActivity.class);
             startActivity(intent);
         });
 

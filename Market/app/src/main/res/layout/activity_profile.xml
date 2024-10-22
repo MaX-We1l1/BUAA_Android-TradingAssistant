@@ -95,7 +95,7 @@
 
                     <!-- 将 ImageView 替换成 ImageButton -->
                     <ImageButton
-                        android:id="@+id/order_arrow_button"
+                        android:id="@+id/order_button"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_arrow_right"
@@ -131,13 +131,16 @@
                         android:layout_toRightOf="@id/favorite_icon"
                         android:layout_marginLeft="16dp" />
 
-                    <ImageView
-                        android:id="@+id/favorite_arrow"
+                    <ImageButton
+                        android:id="@+id/favorite_button"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_arrow_right"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true" />
+                        android:layout_centerVertical="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Arrow button" />
+
                 </RelativeLayout>
 
                 <!-- 地址管理 -->
@@ -166,13 +169,15 @@
                         android:layout_toRightOf="@id/address_icon"
                         android:layout_marginLeft="16dp" />
 
-                    <ImageView
-                        android:id="@+id/address_arrow"
+                    <ImageButton
+                        android:id="@+id/address_button"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_arrow_right"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true" />
+                        android:layout_centerVertical="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Arrow button" />
                 </RelativeLayout>
 
                 <!-- 设置 -->
