@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 
+import com.example.myapplication.database.DBFunction;
+
 import java.util.Calendar;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -53,7 +55,9 @@ public class RegisterActivity extends AppCompatActivity {
             return RegisterCheckResult.NO_AGAIN_PASSWORD;
         } else if (!password1.equals(password2)) {
             return RegisterCheckResult.PASSWORD_NOT_SAME;
-        } //TODO 检查用户名是否已经存在
+        } else if (DBFunction.isUsernameExist(username)) {
+            return RegisterCheckResult.USERNAME_EXIST;
+        }
         return RegisterCheckResult.SUCCESS;
     }
 
@@ -76,7 +80,8 @@ public class RegisterActivity extends AppCompatActivity {
                 int month = calendar.get(Calendar.MONTH) + 1;
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 String date = String.format("%04d-%02d-%02d", year, month, day);
-                //TODO 加入进去
+                //TODO 加入进去 ok
+                DBFunction.addUser(username, password1, password2);
                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                 toastThis("注册成功!");
                 finish();
