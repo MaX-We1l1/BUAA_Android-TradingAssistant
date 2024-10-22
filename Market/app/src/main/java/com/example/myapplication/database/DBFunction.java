@@ -8,7 +8,7 @@ import org.litepal.crud.LitePalSupport;
 import java.util.List;
 
 public class DBFunction {
-    public static final String TAG = "from db";
+    public static final String TAG = "from database";
 
     public static User findUserByName(String username) {
         List<User> users = LitePal.where("username = ?", username).find(User.class);
@@ -119,4 +119,17 @@ public class DBFunction {
         tradeRecord.setNote(oneTradeRecord.getNote());
         tradeRecord.save();
     }
+
+    public static void addCommodity(String name, String sellerName, String releaseDate,
+                                    Type type, Float price, String description) {
+        Commodity commodity = new Commodity();
+        commodity.setType(type);
+        commodity.setReleaseDate(releaseDate);
+        commodity.setCommodityName(name);
+        commodity.setPrice(price);
+        commodity.setDescription(description);
+        commodity.setSellerName(sellerName);
+        commodity.save();
+    }
+
 }

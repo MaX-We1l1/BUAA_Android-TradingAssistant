@@ -8,6 +8,10 @@ public class TradeRecord extends LitePalSupport {
     private User seller;
     private String note; //交易备注
 
+    public TradeRecord() {
+
+    }
+
     public String getDate() {
         return date;
     }

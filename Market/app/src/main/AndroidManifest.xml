@@ -39,6 +39,10 @@
             <!-- 如果需要在其他地方启动这个 Activity，可以添加 intent-filter -->
         <activity android:name=".profile.ProfileActivity">
         </activity>
+        <activity android:name=".square.CommodityListActivity">
+        </activity>
+        <activity android:name=".square.CommodityDetailActivity">
+        </activity>
 
     </application>
 

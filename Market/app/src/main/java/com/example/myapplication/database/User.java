@@ -21,6 +21,7 @@ public class User extends LitePalSupport {
     private String personalitySign; // 个性签名, 不超过20个字
     private String birthday; //生日, yyyymmdd 的格式, 防止前导零的情况, 以字符串存
     private String sex; //性别,直接用“男”,"女"就行。 ~~男用"m"表示, 女用"f"表示~~
+    private String location; //TODO 位置管理
 
     //
     private List<TradeRecord> tradeRecordList = new ArrayList<TradeRecord>();

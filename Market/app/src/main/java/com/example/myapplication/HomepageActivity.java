@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.chat.ChatListActivity;
 import com.example.myapplication.profile.ProfileActivity;
+import com.example.myapplication.square.CommodityListActivity;
 
 public class HomepageActivity extends AppCompatActivity {
     @Override
@@ -25,6 +26,12 @@ public class HomepageActivity extends AppCompatActivity {
         Button userButton = findViewById(R.id.button_profile);
         userButton.setOnClickListener(v -> {
             Intent intent = new Intent(HomepageActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        Button squareButton = findViewById(R.id.button_square);
+        squareButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomepageActivity.this, CommodityListActivity.class);
             startActivity(intent);
         });
 

@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/BUAA_Android-TradingAssistant.iml" filepath="$PROJECT_DIR$/.idea/BUAA_Android-TradingAssistant.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/My_Application.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/My_Application.app.main.iml" />
     </modules>
   </component>
 </project>
