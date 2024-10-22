@@ -41,7 +41,9 @@
         </activity>
         <activity android:name=".square.CommodityListActivity">
         </activity>
-        <activity android:name=".square.CommodityDetailActivity">
+        <activity android:name=".square.CommodityDetailActivity"/>
+            
+        <activity android:name=".profile.OrderActivity">
         </activity>
 
     </application>
