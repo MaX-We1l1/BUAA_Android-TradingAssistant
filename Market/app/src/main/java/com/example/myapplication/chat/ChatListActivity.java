@@ -52,8 +52,8 @@ public class ChatListActivity extends AppCompatActivity {
         // 初始化聊天列表
         lastChatList = new ArrayList<>();
         // TODO: 添加聊天数据到 chatList
-        lastChatList.add(new ChatItem(DBFunction.findUserByName("QYC").getId(), "QYC", "你好，有空吗？"));
-        lastChatList.add(new ChatItem(DBFunction.findUserByName("CYF").getId(), "CYF", "关于交易的事..."));
+        lastChatList.add(new ChatItem(2, "QYC", "你好，有空吗？"));
+        lastChatList.add(new ChatItem(3, "CYF", "关于交易的事..."));
 
 
         chatAdapter = new ChatAdapter(this, lastChatList);
@@ -96,10 +96,10 @@ public class ChatListActivity extends AppCompatActivity {
         // 点击聊天列表项跳转到具体聊天界面
         chatListView.setOnItemClickListener((parent, view, position, id) -> {
             // TODO: 跳转到聊天界面
-            Intent intent = new Intent(ChatListActivity.this, ChatDetailActivity.class);
+            Intent intent = new Intent(ChatListActivity.this, ChatMsgView.class);
             intent.putExtra("chat_id", lastChatList.get(position).getId()); // 传递聊天 ID
             intent.putExtra("chat_name", lastChatList.get(position).getName());
-            intent.putExtra("chat_history", lastChatList.get(position).getName());
+            intent.putExtra("chat_history", lastChatList.get(position).getLastMessage());
             startActivity(intent);
         });
 

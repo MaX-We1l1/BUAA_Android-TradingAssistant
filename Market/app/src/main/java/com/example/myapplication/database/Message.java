@@ -2,20 +2,27 @@ package com.example.myapplication.database;
 
 import org.litepal.crud.LitePalSupport;
 
-public class ChatMessage extends LitePalSupport {
+public class Message extends LitePalSupport {
+    public static final int TYPE_RECEIVED = 0;
+    public static final int TYPE_SENT = 1;
+
     private long id; // 消息唯一标识
-    private String chatId; // 关联的聊天 ID
     private long senderId; // 发送者 ID
     private long receiverId; // 接收者 ID
-    private String messageContent; // 消息内容
+    private String content; // 消息内容
     private long timestamp; // 发送时间戳
     private boolean isRead; // 是否已读
+    private int type;   //
 
-    public ChatMessage() {
+    public Message() {
     }
 
-    public String getChatId() {
-        return chatId;
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public long getId() {
@@ -26,12 +33,8 @@ public class ChatMessage extends LitePalSupport {
         return isRead;
     }
 
-    public String getMessageContent() {
-        return messageContent;
-    }
-
-    public void setChatId(String chatId) {
-        this.chatId = chatId;
+    public String getContent() {
+        return content;
     }
 
     public void setId(long id) {
@@ -42,8 +45,8 @@ public class ChatMessage extends LitePalSupport {
         return timestamp;
     }
 
-    public void setMessageContent(String messageContent) {
-        this.messageContent = messageContent;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public long getReceiverId() {

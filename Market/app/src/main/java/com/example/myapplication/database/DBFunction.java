@@ -3,7 +3,6 @@ package com.example.myapplication.database;
 import android.util.Log;
 
 import org.litepal.LitePal;
-import org.litepal.crud.LitePalSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,21 +151,22 @@ public class DBFunction {
         }
     }
 
-    public static void addChatMessage(String chatId, String content, long sendId, long recId) {
-        ChatMessage cm = new ChatMessage();
-        cm.setChatId(chatId);
+    public static Message addChatMessage(String content, long sendId, long recId, int type) {
+        Message cm = new Message();
         cm.setRead(false);
-        cm.setMessageContent(content);
+        cm.setContent(content);
         cm.setTimestamp(System.currentTimeMillis());
         cm.setReceiverId(recId);
         cm.setSenderId(sendId);
+        cm.setType(type);
         cm.save();
+        return cm;
     }
 
-    public static List<ChatMessage> findChatHistoryByChatId(String recId, String sendId) {
-        List<ChatMessage> cms = LitePal.where("chatId = ? OR chatId = ?",
+    public static List<Message> findChatHistoryByChatId(String recId, String sendId) {
+        List<Message> cms = LitePal.where("chatId = ? OR chatId = ?",
                 recId + "_" + sendId,
-                sendId + "_" + recId).find(ChatMessage.class);
+                sendId + "_" + recId).find(Message.class);
         if (cms == null || cms.isEmpty()) {
             return new ArrayList<>();
         } else {
