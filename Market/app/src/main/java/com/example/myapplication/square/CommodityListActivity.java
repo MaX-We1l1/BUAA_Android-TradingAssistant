@@ -34,7 +34,7 @@ public class CommodityListActivity extends AppCompatActivity {
 
         // 初始化商品列表
         //TODO 每次都会多添加两个,添加得放在其他地方
-//        commodityList = new ArrayList<>();
+        commodityList = new ArrayList<>();
 //        DBFunction.addCommodity("商品1", "卖家1","2024-10-21",
 //                Type.BOOK, 100.0F, "学生自用，几乎全新，可小刀，屠龙刀勿扰");
 //        Commodity commodity1 = LitePal.find(Commodity.class, 1);

@@ -12,10 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.profile.ProfileActivity;
+import com.example.myapplication.square.CommodityListActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +31,9 @@ public class ChatListActivity extends AppCompatActivity {
 //    private EditText searchBox;
 //    private ImageView searchButton, menuButton;
     private ChatAdapter chatAdapter; // 你的聊天适配器
-    private ArrayList<ChatItem> chatList; // 聊天列表数据
+    private ArrayList<ChatItem> lastChatList; // 最新聊天列表数据
+    private HashMap<String, ArrayList<ChatItem>> chatList = new HashMap<>();
+    private String userName = MainActivity.getCurrentUsername();
 
 
 
@@ -44,13 +50,13 @@ public class ChatListActivity extends AppCompatActivity {
 //        menuButton = findViewById(R.id.menu_button);
 
         // 初始化聊天列表
-        chatList = new ArrayList<>();
+        lastChatList = new ArrayList<>();
         // TODO: 添加聊天数据到 chatList
-        chatList.add(new ChatItem("1", "张三", "你好，有空吗？"));
-        chatList.add(new ChatItem("2", "李四", "关于交易的事..."));
+        lastChatList.add(new ChatItem(2, "QYC", "你好，有空吗？"));
+        lastChatList.add(new ChatItem(3, "CYF", "关于交易的事..."));
 
 
-        chatAdapter = new ChatAdapter(this, chatList);
+        chatAdapter = new ChatAdapter(this, lastChatList);
         chatListView.setAdapter(chatAdapter);
 
         // 点击事件
@@ -90,8 +96,10 @@ public class ChatListActivity extends AppCompatActivity {
         // 点击聊天列表项跳转到具体聊天界面
         chatListView.setOnItemClickListener((parent, view, position, id) -> {
             // TODO: 跳转到聊天界面
-            Intent intent = new Intent(ChatListActivity.this, ChatDetailActivity.class);
-            intent.putExtra("chat_id", chatList.get(position).getId()); // 传递聊天 ID
+            Intent intent = new Intent(ChatListActivity.this, ChatMsgView.class);
+            intent.putExtra("chat_id", lastChatList.get(position).getId()); // 传递聊天 ID
+            intent.putExtra("chat_name", lastChatList.get(position).getName());
+            intent.putExtra("chat_history", lastChatList.get(position).getLastMessage());
             startActivity(intent);
         });
 
@@ -105,6 +113,12 @@ public class ChatListActivity extends AppCompatActivity {
         Button userButton = findViewById(R.id.button_profile);
         userButton.setOnClickListener(v -> {
             Intent intent = new Intent(ChatListActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        Button squareButton = findViewById(R.id.button_square);
+        squareButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ChatListActivity.this, CommodityListActivity.class);
             startActivity(intent);
         });
 

@@ -34,16 +34,17 @@
         <activity android:name=".chat.ChatListActivity">
             <!-- 如果需要在其他地方启动这个 Activity，可以添加 intent-filter -->
         </activity>
-        <activity android:name=".chat.ChatDetailActivity">
-        </activity>
             <!-- 如果需要在其他地方启动这个 Activity，可以添加 intent-filter -->
         <activity android:name=".profile.ProfileActivity">
         </activity>
         <activity android:name=".square.CommodityListActivity">
         </activity>
         <activity android:name=".square.CommodityDetailActivity"/>
-            
+        <activity android:name=".profile.FavoriteActivity"/>
+        <activity android:name=".profile.AddressActivity"/>
         <activity android:name=".profile.OrderActivity">
+        </activity>
+        <activity android:name=".chat.ChatMsgView">
         </activity>
 
     </application>

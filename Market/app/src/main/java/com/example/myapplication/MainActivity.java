@@ -33,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
         return currentUsername;
     }
 
+    public static long getCurrentUserId() {
+        if (DBFunction.isUsernameExist(currentUsername)) {
+            return DBFunction.findUserByName(currentUsername).getId();
+        } return 0;
+    }
+
     private enum LoginCheckResult {
         // 优先级自上至下
         NO_USERNAME,

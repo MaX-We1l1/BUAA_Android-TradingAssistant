@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 String date = String.format("%04d-%02d-%02d", year, month, day);
                 //TODO 加入进去 ok
-                DBFunction.addUser(username, password1, password2);
+                DBFunction.addUser(username, password1, date);
                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                 toastThis("注册成功!");
                 finish();

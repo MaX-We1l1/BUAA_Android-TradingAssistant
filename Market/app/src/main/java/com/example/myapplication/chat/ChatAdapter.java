@@ -12,7 +12,6 @@ import com.example.myapplication.R;
 import java.util.List;
 
 public class ChatAdapter extends ArrayAdapter<ChatItem> {
-
     public ChatAdapter(Context context, List<ChatItem> chats) {
         super(context, 0, chats);
     }
@@ -22,11 +21,11 @@ public class ChatAdapter extends ArrayAdapter<ChatItem> {
         ChatItem chat = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_chat, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.message_item, parent, false);
         }
 
-        TextView chatName = convertView.findViewById(R.id.chat_name);
-        TextView chatPreview = convertView.findViewById(R.id.chat_preview);
+        TextView chatName = convertView.findViewById(R.id.sender_name);
+        TextView chatPreview = convertView.findViewById(R.id.message_text);
 
         chatName.setText(chat.getName());
         chatPreview.setText(chat.getLastMessage());
