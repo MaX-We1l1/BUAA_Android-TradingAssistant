@@ -35,5 +35,12 @@ public class HomepageActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        Button sellButton = findViewById(R.id.button_sell);
+        sellButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomepageActivity.this, AddCommodityActivity.class);
+            startActivity(intent);
+        });
+
+
     }
 }

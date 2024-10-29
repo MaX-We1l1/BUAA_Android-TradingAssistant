@@ -1,5 +1,6 @@
 package com.example.myapplication.square;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,10 +23,12 @@ import java.util.List;
 public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.CommodityViewHolder> {
     private List<Commodity> commodityList;
     private Context context;
+    private int requestCode;
 
-    public CommodityAdapter(Context context, List<Commodity> commodityList) {
+    public CommodityAdapter(Context context, List<Commodity> commodityList, int requestCode) {
         this.context = context;
         this.commodityList = commodityList;
+        this.requestCode = requestCode;
     }
 
     @NonNull
@@ -49,13 +52,21 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.Comm
             Log.d("CommodityAdapter", "点击的商品 ID: " + commodity.getId());
             Intent intent = new Intent(context, CommodityDetailActivity.class);
             intent.putExtra("commodity_id", commodity.getId());
-            context.startActivity(intent);
+            //context.startActivity(intent);
+            ((Activity) context).startActivityForResult(intent, requestCode); // 使用传递的请求码
         });
+
     }
 
     @Override
     public int getItemCount() {
         return commodityList.size();
+    }
+
+    public void updateList(List<Commodity> newList) {
+        commodityList.clear(); // 清空当前列表
+        commodityList.addAll(newList); // 添加新列表
+        notifyDataSetChanged(); // 通知适配器更新
     }
 
     public static class CommodityViewHolder extends RecyclerView.ViewHolder {
@@ -69,4 +80,5 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.Comm
             commodityPrice = itemView.findViewById(R.id.commodity_price);
         }
     }
+
 }

@@ -2,18 +2,25 @@ package com.example.myapplication.square;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.chat.ChatListActivity;
 import com.example.myapplication.database.Commodity;
 
 import org.litepal.LitePal;
+
+import java.util.Objects;
 
 public class CommodityDetailActivity extends AppCompatActivity {
     private TextView commodityName; // 商品名称
@@ -22,6 +29,9 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private ImageView commodityImage; // 商品图片
     private TextView commoditySeller;
     private Button wantButton; //想要，跳转到聊天界面
+    private Button editButton;
+    private Commodity commodity;
+    private Button saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +44,13 @@ public class CommodityDetailActivity extends AppCompatActivity {
         commodityImage = findViewById(R.id.commodity_image);
         commoditySeller = findViewById(R.id.commodity_seller); // 绑定卖家信息
         wantButton = findViewById(R.id.button_want); // 绑定“想要”按钮
+        editButton = findViewById(R.id.button_edit_commodity); //
+        saveButton = findViewById(R.id.button_save); //
 
         //从 Intent 中获取商品 ID
         Intent intent = getIntent();
         long commodityId = intent.getLongExtra("commodity_id", -1);
+        commodity = LitePal.find(Commodity.class, commodityId);
 
         // 确保 ID 有效并执行后续逻辑
         if (commodityId != -1) {
@@ -46,6 +59,14 @@ public class CommodityDetailActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "商品 ID 无效", Toast.LENGTH_SHORT).show();
         }
+
+        //检测当前是否是卖家，是就显示修改按钮
+        if (isCurrentUserSeller(commodity)) {
+            editButton.setVisibility(View.VISIBLE);
+            editButton.setOnClickListener(v -> enableEditing());
+        }
+        //保存按钮
+        saveButton.setOnClickListener(v -> saveChanges());
     }
 
     private void loadCommodityDetails(long commodityId) {
@@ -72,4 +93,66 @@ public class CommodityDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "未找到该商品", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private boolean isCurrentUserSeller(Commodity commodity) {
+        // 检查当前用户是否为卖家
+        return Objects.equals(commodity.getSellerName(), MainActivity.getCurrentUsername()); // 替换为实际逻辑
+    }
+
+    private void enableEditing() {
+        // 只有卖家能编辑
+        if (isCurrentUserSeller(commodity)) {
+            commodityPrice.setEnabled(true);
+            commodityDescription.setEnabled(true);
+            saveButton.setVisibility(View.VISIBLE);
+        } else {
+            Toast.makeText(this, "无法编辑商品信息", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void saveChanges() {
+        String description = commodityDescription.getText().toString();
+        String priceString = commodityPrice.getText().toString();
+        float price;
+
+        // 检查价格输入是否为空
+        if (priceString.isEmpty()) {
+            Toast.makeText(this, "价格不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 移除非数字和小数点字符
+        priceString = priceString.replaceAll("[^\\d.]", "");
+
+        try {
+            price = Float.parseFloat(priceString);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "请输入有效的价格", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 更新商品对象
+        commodity.setDescription(description);
+        commodity.setPrice(price);
+        commodity.save(); // 保存更新到数据库
+
+        Toast.makeText(this, "商品信息已更新", Toast.LENGTH_SHORT).show();
+
+        // 禁用编辑模式
+        disableEditing();
+
+        //关闭当前页面
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra("updated", true); // 或其他需要返回的数据
+        setResult(RESULT_OK, resultIntent);
+        finish(); // 关闭当前活动
+    }
+
+
+    private void disableEditing() {
+        commodityPrice.setEnabled(false);
+        commodityDescription.setEnabled(false);
+        saveButton.setVisibility(View.GONE);
+    }
+
 }
