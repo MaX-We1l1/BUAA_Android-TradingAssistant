@@ -2,6 +2,7 @@ package com.example.myapplication.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -57,6 +58,12 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        ImageButton settingsButton = findViewById(R.id.settings_button);
+        settingsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        });
+
 
         // 这里可以设置其他初始化逻辑，比如加载数据等
         Button messagesButton = findViewById(R.id.button_messages);
@@ -76,6 +83,7 @@ public class ProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(ProfileActivity.this, CommodityListActivity.class);
             startActivity(intent);
         });
+
     }
 
     /**

@@ -9,6 +9,9 @@ public class Hobby extends LitePalSupport {
     private long id;
     private long commodityId;
     private String userName;
+    private String title;      // 收藏标题
+    private String description;// 收藏描述
+    private String date;       // 收藏日期
     //private User user; //foreign key refer to User	（该记录的用户）
 
     //  外键约束

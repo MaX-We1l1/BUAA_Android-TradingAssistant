@@ -42,6 +42,7 @@
         <activity android:name=".square.CommodityDetailActivity"/>
         <activity android:name=".profile.FavoriteActivity"/>
         <activity android:name=".profile.AddressActivity"/>
+        <activity android:name=".profile.SettingsActivity"/>
         <activity android:name=".profile.OrderActivity">
         </activity>
         <activity android:name=".chat.ChatMsgView">
