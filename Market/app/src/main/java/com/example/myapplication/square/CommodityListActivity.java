@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,9 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.chat.ChatListActivity;
+import com.example.myapplication.commodity.AddCommodityActivity;
 import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.database.Type;
+import com.example.myapplication.home.HomepageActivity;
+import com.example.myapplication.profile.ProfileActivity;
 
 
 import org.litepal.LitePal;
@@ -64,6 +69,36 @@ public class CommodityListActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
             }
+        });
+
+        Button messagesButton = findViewById(R.id.button_messages);
+        messagesButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CommodityListActivity.this, ChatListActivity.class);
+            startActivity(intent);
+        });
+
+        Button userButton = findViewById(R.id.button_profile);
+        userButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CommodityListActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        Button sellButton = findViewById(R.id.button_sell);
+        sellButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CommodityListActivity.this, AddCommodityActivity.class);
+            startActivity(intent);
+        });
+
+        Button squareButton = findViewById(R.id.button_square);
+        squareButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CommodityListActivity.this, CommodityListActivity.class);
+            startActivity(intent);
+        });
+
+        Button homeButton = findViewById(R.id.button_home);
+        homeButton.setOnClickListener(v -> {
+            Intent intent = new Intent(CommodityListActivity.this, HomepageActivity.class);
+            startActivity(intent);
         });
     }
 

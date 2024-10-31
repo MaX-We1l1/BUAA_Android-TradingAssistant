@@ -24,7 +24,7 @@
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity
-            android:name=".HomepageActivity"
+            android:name=".home.HomepageActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,7 +47,7 @@
         </activity>
         <activity android:name=".chat.ChatMsgView">
         </activity>
-        <activity android:name=".AddCommodityActivity" />
+        <activity android:name=".commodity.AddCommodityActivity" />
     </application>
 
 </manifest>

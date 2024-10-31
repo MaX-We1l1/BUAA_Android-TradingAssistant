@@ -2,7 +2,6 @@ package com.example.myapplication.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -10,12 +9,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.HomepageActivity;
+import com.example.myapplication.commodity.AddCommodityActivity;
+import com.example.myapplication.home.HomepageActivity;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.chat.ChatListActivity;
 import com.example.myapplication.square.CommodityListActivity;
-import com.example.myapplication.profile.FavoriteActivity;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -84,6 +83,17 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        Button sellButton= findViewById(R.id.button_sell);
+        sellButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, AddCommodityActivity.class);
+            startActivity(intent);
+        });
+
+        Button homeButton = findViewById(R.id.button_home);
+        homeButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, HomepageActivity.class);
+            startActivity(intent);
+        });
     }
 
     /**

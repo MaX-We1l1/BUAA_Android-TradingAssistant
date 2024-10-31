@@ -14,8 +14,10 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.commodity.AddCommodityActivity;
 import com.example.myapplication.database.Contact;
 import com.example.myapplication.database.DBFunction;
+import com.example.myapplication.home.HomepageActivity;
 import com.example.myapplication.profile.ProfileActivity;
 import com.example.myapplication.square.CommodityListActivity;
 
@@ -122,6 +124,17 @@ public class ChatListActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        Button homeButton = findViewById(R.id.button_home);
+        homeButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ChatListActivity.this, HomepageActivity.class);
+            startActivity(intent);
+        });
+
+        Button sellButton = findViewById(R.id.button_sell);
+        sellButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ChatListActivity.this, AddCommodityActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override

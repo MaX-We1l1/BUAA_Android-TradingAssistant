@@ -35,8 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary">
+        android:background="@color/primaryColor"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_home"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="首页"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/button_square"
@@ -52,7 +52,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="广场"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/button_sell"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="售卖" />
 
         <Button
             android:id="@+id/button_messages"
@@ -60,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="消息"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/button_profile"
@@ -68,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="我的"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
     </LinearLayout>
 
 </RelativeLayout>

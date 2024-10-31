@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.home;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.commodity.AddCommodityActivity;
+import com.example.myapplication.R;
 import com.example.myapplication.chat.ChatListActivity;
 import com.example.myapplication.profile.ProfileActivity;
 import com.example.myapplication.square.CommodityListActivity;
@@ -29,18 +31,22 @@ public class HomepageActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        Button squareButton = findViewById(R.id.button_square);
-        squareButton.setOnClickListener(v -> {
-            Intent intent = new Intent(HomepageActivity.this, CommodityListActivity.class);
-            startActivity(intent);
-        });
-
         Button sellButton = findViewById(R.id.button_sell);
         sellButton.setOnClickListener(v -> {
             Intent intent = new Intent(HomepageActivity.this, AddCommodityActivity.class);
             startActivity(intent);
         });
 
+        Button squareButton = findViewById(R.id.button_square);
+        squareButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomepageActivity.this, CommodityListActivity.class);
+            startActivity(intent);
+        });
 
+        Button homeButton = findViewById(R.id.button_home);
+        homeButton.setOnClickListener(v -> {
+            Intent intent = new Intent(HomepageActivity.this, HomepageActivity.class);
+            startActivity(intent);
+        });
     }
 }
