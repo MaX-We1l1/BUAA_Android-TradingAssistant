@@ -62,9 +62,10 @@ public class CommodityDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "商品 ID 无效", Toast.LENGTH_SHORT).show();
         }
 
-        //检测当前是否是卖家，是就显示修改按钮
+        //检测当前是否是卖家，是就显示修改按钮,不显示想要按钮
         if (isCurrentUserSeller(commodity)) {
             editButton.setVisibility(View.VISIBLE);
+            wantButton.setVisibility(View.GONE);
             editButton.setOnClickListener(v -> enableEditing());
         }
         //保存按钮

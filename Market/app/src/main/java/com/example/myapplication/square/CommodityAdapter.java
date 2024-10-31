@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R;
 import com.example.myapplication.database.Commodity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.CommodityViewHolder> {
@@ -64,8 +65,10 @@ public class CommodityAdapter extends RecyclerView.Adapter<CommodityAdapter.Comm
     }
 
     public void updateList(List<Commodity> newList) {
+        //if (newList != null && !newList.isEmpty()) {
         commodityList.clear(); // 清空当前列表
         commodityList.addAll(newList); // 添加新列表
+        //}
         notifyDataSetChanged(); // 通知适配器更新
     }
 

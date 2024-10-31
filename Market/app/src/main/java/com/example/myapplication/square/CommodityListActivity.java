@@ -29,6 +29,7 @@ public class CommodityListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private CommodityAdapter commodityAdapter;
     private List<Commodity> commodityList;
+    private List<Commodity> commodityListClone;//用于克隆一份商品
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,10 @@ public class CommodityListActivity extends AppCompatActivity {
         // 初始化商品列表
         commodityList = LitePal.findAll(Commodity.class); // 从数据库加载商品
         commodityAdapter = new CommodityAdapter(this, commodityList, REQUEST_CODE); // 创建适配器
+
+        commodityListClone = new ArrayList<>();
+        commodityListClone = LitePal.findAll(Commodity.class);
+
         recyclerView.setAdapter(commodityAdapter); // 设置适配器
 
         // 设置搜索框
@@ -52,6 +57,7 @@ public class CommodityListActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Log.d("Search", "Text changed: " + s.toString());
                 filter(s.toString());
             }
 
@@ -64,12 +70,19 @@ public class CommodityListActivity extends AppCompatActivity {
     // 过滤商品列表
     private void filter(String text) {
         List<Commodity> filteredList = new ArrayList<>();
-        for (Commodity item : commodityList) {
-            if (item.getCommodityName().toLowerCase().contains(text.toLowerCase())) { // 根据商品名称过滤
-                filteredList.add(item);
+        if (text.isEmpty()) {
+            filteredList.addAll(commodityListClone); // 如果输入为空，返回全部商品
+        } else {
+            for (Commodity item : commodityListClone) {
+                if (item.getCommodityName().toLowerCase().contains(text.toLowerCase())) {
+                    filteredList.add(item);
+                }
             }
         }
+        //Log.d("Filter", "Filtered List Size1: " + commodityList.size());
+        //Log.d("Filter", "Filtered List Size: " + filteredList.size());
         commodityAdapter.updateList(filteredList); // 更新适配器
+        //Log.d("Filter", "Filtered List Size2: " + commodityList.size());
     }
 
     @Override
