@@ -16,7 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.chat.ChatListActivity;
+import com.example.myapplication.chat.ChatMsgView;
 import com.example.myapplication.database.Commodity;
+import com.example.myapplication.database.DBFunction;
 
 import org.litepal.LitePal;
 
@@ -85,8 +87,11 @@ public class CommodityDetailActivity extends AppCompatActivity {
 //                    .error(R.drawable.error_image) // 错误图
 //                    .into(commodityImage);
             wantButton.setOnClickListener(v -> {
-                Intent intent = new Intent(CommodityDetailActivity.this, ChatListActivity.class);
+                long user2 = DBFunction.findUserByName(commodity.getSellerName()).getId();
+                Intent intent = new Intent(CommodityDetailActivity.this, ChatMsgView.class);
                 intent.putExtra("commodity_id", commodityId);
+                intent.putExtra("chat_id", user2); // 传递聊天 ID
+                intent.putExtra("chat_name", commodity.getSellerName());
                 startActivity(intent);
             });
         } else {

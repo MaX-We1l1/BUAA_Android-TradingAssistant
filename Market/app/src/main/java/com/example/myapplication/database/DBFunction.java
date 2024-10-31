@@ -2,9 +2,12 @@ package com.example.myapplication.database;
 
 import android.util.Log;
 
+import com.example.myapplication.MainActivity;
+
 import org.litepal.LitePal;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class DBFunction {
@@ -151,26 +154,31 @@ public class DBFunction {
         }
     }
 
-    public static Message addChatMessage(String content, long sendId, long recId, int type) {
+    public static Message addChatMessage(String content, long sendId, long recId, String name) {
         Message cm = new Message();
         cm.setRead(false);
         cm.setContent(content);
         cm.setTimestamp(System.currentTimeMillis());
         cm.setReceiverId(recId);
         cm.setSenderId(sendId);
-        cm.setType(type);
+        cm.setReceiverName(name);
         cm.save();
         return cm;
     }
 
     public static List<Message> findChatHistoryByChatId(String recId, String sendId) {
-        List<Message> cms = LitePal.where("chatId = ? OR chatId = ?",
-                recId + "_" + sendId,
-                sendId + "_" + recId).find(Message.class);
-        if (cms == null || cms.isEmpty()) {
+        List<Message> cms = LitePal.where("receiverId = ? and senderId = ?",
+                recId, sendId).find(Message.class);
+        List<Message> cms1 = LitePal.where("receiverId = ? and senderId = ?",
+                sendId, recId).find(Message.class);
+        List<Message> result = new ArrayList<>();
+        result.addAll(cms1);
+        result.addAll(cms);
+        result.sort(Comparator.comparing(Message::getTimestamp));
+        if (result.isEmpty()) {
             return new ArrayList<>();
         } else {
-            return cms;
+            return result;
         }
     }
 
@@ -195,6 +203,55 @@ public class DBFunction {
             }
         } else {
             Log.w(DBFunction.TAG, "不存在用户名为 " + userName + " 的用户");
+        }
+    }
+
+    // 获取全部联系人
+    public static List<Contact> getAllContacts(String userId) {
+        return LitePal.where("userId = ?", userId).find(Contact.class);
+    }
+
+    public static void saveLastMsg(Message message) {
+        // 保存发送者的消息
+        Contact contact = LitePal.where("contactsId = ? and userId = ?",
+                String.valueOf(message.getReceiverId()), String.valueOf(message.getSenderId())).findLast(Contact.class);
+        if (contact != null) {
+            contact.setLastContent(message.getContent());
+            contact.save();
+        } else {
+            Contact newContact = new Contact();
+            newContact.setUserId(message.getSenderId()); // 发送者是user
+            newContact.setContactsId(message.getReceiverId()); // 接收者是contacts
+            newContact.setContactsName(message.getReceiverName());
+            newContact.setLastContent(message.getContent());
+            newContact.save();
+        }
+        // 保存接受者的消息
+        Contact contact1 = LitePal.where("contactsId = ? and userId = ?",
+                String.valueOf(message.getSenderId()), String.valueOf(message.getReceiverId())).findLast(Contact.class);
+        if (contact1 != null) {
+            contact1.setLastContent(message.getContent());
+            contact1.save();
+        } else {
+            Contact newContact = new Contact();
+            newContact.setUserId(message.getReceiverId()); // 接收者是user
+            newContact.setContactsId(message.getSenderId()); // 发送者是contacts
+            newContact.setContactsName(MainActivity.getCurrentUsername());
+            newContact.setLastContent(message.getContent());
+            newContact.save();
+        }
+    }
+
+    // 获取最后一条聊天记录
+    public static Message getLastMessage(long userId1, long userId2) {
+        Message sender1 = LitePal.where("senderId = ? and receiverId = ?",
+                String.valueOf(userId1), String.valueOf(userId2)).findLast(Message.class);
+        Message sender2 = LitePal.where("senderId = ? and receiverId = ?",
+                String.valueOf(userId2), String.valueOf(userId1)).findLast(Message.class);
+        if (sender1.getTimestamp() > sender2.getTimestamp()) {
+            return sender1;
+        } else {
+            return sender2;
         }
     }
 }

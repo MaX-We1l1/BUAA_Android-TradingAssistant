@@ -9,20 +9,12 @@ public class Message extends LitePalSupport {
     private long id; // 消息唯一标识
     private long senderId; // 发送者 ID
     private long receiverId; // 接收者 ID
+    private String receiverName;
     private String content; // 消息内容
     private long timestamp; // 发送时间戳
     private boolean isRead; // 是否已读
-    private int type;   //
 
     public Message() {
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public long getId() {
@@ -43,6 +35,14 @@ public class Message extends LitePalSupport {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
     }
 
     public void setContent(String content) {

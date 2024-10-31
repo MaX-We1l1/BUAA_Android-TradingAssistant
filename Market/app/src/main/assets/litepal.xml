@@ -9,5 +9,6 @@
         <mapping class="com.example.myapplication.database.TradeRecord"></mapping>
         <mapping class="com.example.myapplication.database.Hobby"></mapping>
         <mapping class="com.example.myapplication.database.Message"></mapping>
+        <mapping class="com.example.myapplication.database.Contact"></mapping>
     </list>
 </litepal>

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.database.Message;
 
@@ -43,11 +44,11 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder Holder, int position){                     //onBindViewHolder()用于对RecyclerView子项的数据进行赋值，会在每个子项被滚动到屏幕内的时候执行
         Message msg=mMsgList.get(position);
-        if(msg.getType() == Message.TYPE_RECEIVED){                                         //增加对消息类的判断，如果这条消息是收到的，显示左边布局，是发出的，显示右边布局
+        if(getType(msg) == Message.TYPE_RECEIVED){                                         //增加对消息类的判断，如果这条消息是收到的，显示左边布局，是发出的，显示右边布局
             Holder.leftLayout.setVisibility(View.VISIBLE);
             Holder.rightLayout.setVisibility(View.GONE);
             Holder.leftMsg.setText(msg.getContent());
-        }else if(msg.getType() == Message.TYPE_SENT) {
+        }else if(getType(msg) == Message.TYPE_SENT) {
             Holder.rightLayout.setVisibility(View.VISIBLE);
             Holder.leftLayout.setVisibility(View.GONE);
             Holder.rightMsg.setText(msg.getContent());
@@ -56,5 +57,13 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.ViewHolder> {
     @Override
     public int getItemCount(){
         return mMsgList.size();
+    }
+
+    public int getType(Message msg) {
+        if (msg.getSenderId() == MainActivity.getCurrentUserId()) {
+            return Message.TYPE_SENT;
+        } else {
+            return Message.TYPE_RECEIVED;
+        }
     }
 }

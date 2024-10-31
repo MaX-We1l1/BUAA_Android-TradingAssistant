@@ -14,6 +14,7 @@ import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.database.Contact;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.profile.ProfileActivity;
 import com.example.myapplication.square.CommodityListActivity;
@@ -33,7 +34,7 @@ public class ChatListActivity extends AppCompatActivity {
     private ChatAdapter chatAdapter; // 你的聊天适配器
     private ArrayList<ChatItem> lastChatList; // 最新聊天列表数据
     private HashMap<String, ArrayList<ChatItem>> chatList = new HashMap<>();
-    private String userName = MainActivity.getCurrentUsername();
+    private String userId = String.valueOf(MainActivity.getCurrentUserId());
 
 
 
@@ -52,9 +53,9 @@ public class ChatListActivity extends AppCompatActivity {
         // 初始化聊天列表
         lastChatList = new ArrayList<>();
         // TODO: 添加聊天数据到 chatList
-        lastChatList.add(new ChatItem(2, "QYC", "你好，有空吗？"));
-        lastChatList.add(new ChatItem(3, "CYF", "关于交易的事..."));
-
+        // lastChatList.add(new ChatItem(2, "QYC", "你好，有空吗？"));
+        // lastChatList.add(new ChatItem(3, "CYF", "关于交易的事..."));
+        loadChatItem(userId);
 
         chatAdapter = new ChatAdapter(this, lastChatList);
         chatListView.setAdapter(chatAdapter);
@@ -99,7 +100,6 @@ public class ChatListActivity extends AppCompatActivity {
             Intent intent = new Intent(ChatListActivity.this, ChatMsgView.class);
             intent.putExtra("chat_id", lastChatList.get(position).getId()); // 传递聊天 ID
             intent.putExtra("chat_name", lastChatList.get(position).getName());
-            intent.putExtra("chat_history", lastChatList.get(position).getLastMessage());
             startActivity(intent);
         });
 
@@ -122,6 +122,19 @@ public class ChatListActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+
+    private void loadChatItem(String userId) {
+        List<Contact> contacts = DBFunction.getAllContacts(userId);
+        for (Contact contact: contacts) {
+            lastChatList.add(new ChatItem(contact.getContactsId(), contact.getContactsName(), contact.getLastContent()));
+        }
     }
 
     private void provideSuggestions(String query) {
