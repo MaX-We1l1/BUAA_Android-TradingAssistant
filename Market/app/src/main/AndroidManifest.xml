@@ -49,5 +49,8 @@
         </activity>
         <activity android:name=".commodity.AddCommodityActivity" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET"
+        tools:ignore="ManifestOrder" />
 
 </manifest>
+
