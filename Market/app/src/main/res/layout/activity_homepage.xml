@@ -21,7 +21,9 @@
         android:layout_below="@id/edit_query_input"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="ZhipuAI" />
+        android:text="ZhipuAI"
+        android:textStyle="bold"
+        />
 
     <!-- 显示API结果的TextView，放置在调用按钮下方 -->
     <TextView

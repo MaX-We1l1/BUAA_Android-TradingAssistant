@@ -23,18 +23,30 @@ import com.zhipu.oapi.Constants;
 import com.zhipu.oapi.service.v4.model.ChatCompletionRequest;
 import com.zhipu.oapi.service.v4.model.ChatMessage;
 import com.zhipu.oapi.service.v4.model.ChatMessageRole;
+import com.zhipu.oapi.service.v4.model.Choice;
 import com.zhipu.oapi.service.v4.model.ModelApiResponse;
+import com.zhipu.oapi.service.v4.model.ModelData;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 import okhttp3.Response;
 
 public class HomepageActivity extends AppCompatActivity {
     private static final ObjectMapper mapper = new ObjectMapper();
 
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+
     private TextView textApiResult;
+    ClientV4 client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +54,8 @@ public class HomepageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_homepage);
 
         String apiKey = getString(R.string.api_key);
-        String apiSecret = getString(R.string.api_secret);
 
-        Log.d("HomepageActivity", "API Key: " + apiKey);
-        Log.d("HomepageActivity", "API Secret: " + apiSecret);
-
-        // 确认 API Key 和 Secret 不是空字符串
-        if (apiKey.isEmpty() || apiSecret.isEmpty()) {
-            Log.e("HomepageActivity", "API Key or Secret is empty!");
-            return; // 避免进一步初始化导致崩溃
-        }
-
-        ClientV4 client = new ClientV4.Builder(apiKey)
+        client = new ClientV4.Builder(apiKey)
                 .enableTokenCache()
                 .networkConfig(300, 100, 100, 100, TimeUnit.SECONDS)
                 .connectionPool(new okhttp3.ConnectionPool(8, 1, TimeUnit.SECONDS))
@@ -65,11 +67,12 @@ public class HomepageActivity extends AppCompatActivity {
 
         buttonCallApi.setOnClickListener(v -> {
             String query = editQueryInput.getText().toString();
+
             try {
-                callZhipuApi(query,client);
-            } catch (JsonProcessingException e) {
+                callZhipuApi(query);
+            } catch (JSONException e) {
                 e.printStackTrace();
-                textApiResult.setText("Error processing JSON: " + e.getMessage());
+                textApiResult.setText("Error JSON: " + e.getMessage());
             }
         });
 
@@ -105,40 +108,32 @@ public class HomepageActivity extends AppCompatActivity {
         });
     }
 
-    private void callZhipuApi(String query,ClientV4 client) throws JsonProcessingException {
-        ChatMessage chatMessage = new ChatMessage(ChatMessageRole.USER.value(),query);
-        List<ChatMessage> messageList = new ArrayList<>();
-        messageList.add(chatMessage);
-        String requestId = String.format("BUAA_Android-TradingAssistant" + String.valueOf(System.currentTimeMillis()));
-
-        ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
-                .model(Constants.ModelCharGLM3)
-                .stream(Boolean.FALSE)
-                .invokeMethod(Constants.invokeMethod)
-                .messages(messageList)
-                .requestId(requestId)
-                .build();
-
-        new Thread(() -> {
+    private void callZhipuApi(String query) throws JSONException {
+        executorService.execute(() -> {
             try {
+                ChatMessage chatMessage = new ChatMessage(ChatMessageRole.USER.value(), query);
+                List<ChatMessage> messageList = new ArrayList<>();
+                messageList.add(chatMessage);
+                String requestId = String.format("BUAA_Android-TradingAssistant : " + System.currentTimeMillis());
+
+                ChatCompletionRequest chatCompletionRequest = ChatCompletionRequest.builder()
+                        .model(Constants.ModelCharGLM3)
+                        .stream(Boolean.FALSE)
+                        .invokeMethod(Constants.invokeMethod)
+                        .messages(messageList)
+                        .requestId(requestId)
+                        .build();
+
                 ModelApiResponse invokeModelApiResp = client.invokeModelApi(chatCompletionRequest);
+                ModelData modelData = invokeModelApiResp.getData();
 
-                // Update UI on the main thread
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    try {
-                        textApiResult.setText("model output: " + mapper.writeValueAsString(invokeModelApiResp));
-                    } catch (JsonProcessingException e) {
-                        textApiResult.setText("Error: " + e.getMessage());
-                    }
-                });
-
+                Choice firstChoice = modelData.getChoices().get(0);
+                String content = (String) firstChoice.getMessage().getContent();
+                mainHandler.post(() -> textApiResult.setText("model output: " + content));
             } catch (Exception e) {
                 e.printStackTrace();
-                // Update UI on the main thread in case of error
-                new Handler(Looper.getMainLooper()).post(() ->
-                        textApiResult.setText("API call failed: " + e.getMessage())
-                );
+                mainHandler.post(() -> textApiResult.setText("Error: " + e.getMessage()));
             }
-        }).start();
+        });
     }
 }
