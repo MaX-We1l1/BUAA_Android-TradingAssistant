@@ -2,7 +2,9 @@ package com.example.myapplication.square;
 
 import static java.util.Locale.filter;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,23 +16,32 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.myapplication.R;
+import com.example.myapplication.chat.ChatAdapter;
+import com.example.myapplication.chat.ChatItem;
 import com.example.myapplication.chat.ChatListActivity;
 import com.example.myapplication.commodity.AddCommodityActivity;
 import com.example.myapplication.database.Commodity;
+import com.example.myapplication.database.Contact;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.database.Type;
 import com.example.myapplication.home.HomepageActivity;
+import com.example.myapplication.mySearchSuggestion;
 import com.example.myapplication.profile.ProfileActivity;
 
 
 import org.litepal.LitePal;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CommodityListActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1; // 定义请求码
+    private FloatingSearchView mSearchView;
     private RecyclerView recyclerView;
     private CommodityAdapter commodityAdapter;
     private List<Commodity> commodityList;
@@ -40,6 +51,8 @@ public class CommodityListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_commodity_list);
+
+        mSearchView = findViewById(R.id.commodity_search_view);
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -54,20 +67,57 @@ public class CommodityListActivity extends AppCompatActivity {
         recyclerView.setAdapter(commodityAdapter); // 设置适配器
 
         // 设置搜索框
-        EditText searchEditText = findViewById(R.id.editTextSearch);
-        searchEditText.addTextChangedListener(new TextWatcher() {
+//        EditText searchEditText = findViewById(R.id.editTextSearch);
+//        searchEditText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                //Log.d("Search", "Text changed: " + s.toString());
+//                filter(s.toString());
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//            }
+//        });
+        mSearchView.setOnLeftMenuClickListener(
+                new FloatingSearchView.OnLeftMenuClickListener() {
+                    @Override
+                    public void onMenuOpened() {
+                        provideSuggestions("");
+                    }
+
+                    @Override
+                    public void onMenuClosed() {
+                        mSearchView.clearSuggestions();
+                    }} );
+
+        // 监听搜索框的查询变化
+        mSearchView.setOnQueryChangeListener((oldQuery, newQuery) -> {
+            if (!oldQuery.isEmpty() && newQuery.isEmpty()) {
+                mSearchView.clearSuggestions();
+            } else {
+                // 提供建议项
+                provideSuggestions(newQuery);
+            }
+        });
+
+        mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onSearchAction(String currentQuery) {
+                // 执行搜索操作
+                saveSearchHistory(currentQuery);
+                performSearch(currentQuery);
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //Log.d("Search", "Text changed: " + s.toString());
-                filter(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
+            public void onSuggestionClicked(SearchSuggestion suggestion) {
+                // 处理建议项点击事件
+                mSearchView.setSearchText(suggestion.getBody());
+                performSearch(suggestion.getBody());
             }
         });
 
@@ -120,6 +170,11 @@ public class CommodityListActivity extends AppCompatActivity {
         //Log.d("Filter", "Filtered List Size2: " + commodityList.size());
     }
 
+    private void performSearch(String query) {
+        // 实现搜索逻辑
+        filter(query);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -134,6 +189,31 @@ public class CommodityListActivity extends AppCompatActivity {
         commodityList.clear();
         commodityList = LitePal.findAll(Commodity.class); // 从数据库加载商品
         commodityAdapter.updateList(commodityList);
+    }
+
+    @SuppressLint("MutatingSharedPrefs")
+    private void saveSearchHistory(String query) {
+        SharedPreferences preferences = getSharedPreferences("commodity_search_history", MODE_PRIVATE);
+        Set<String> historySet = preferences.getStringSet("history", new HashSet<>());
+        if (!query.isEmpty()) {
+            historySet.add(query);
+        }
+        preferences.edit().putStringSet("history", historySet).apply();
+    }
+
+    private void provideSuggestions(String query) {
+        SharedPreferences preferences = getSharedPreferences("commodity_search_history", MODE_PRIVATE);
+        Set<String> historySet = preferences.getStringSet("history", new HashSet<>());
+
+        List<mySearchSuggestion> suggestions = new ArrayList<>();
+        for (String history : historySet) {
+            if (history.toLowerCase().contains(query.toLowerCase())) {
+                suggestions.add(new mySearchSuggestion(history));
+            }
+        }
+
+        // 将建议项设置到搜索框
+        mSearchView.swapSuggestions(suggestions);
     }
 
 }
