@@ -43,6 +43,8 @@
         <activity android:name=".profile.FavoriteActivity"/>
         <activity android:name=".profile.AddressActivity"/>
         <activity android:name=".profile.SettingsActivity"/>
+        <activity android:name=".profile.DeveloperNewsActivity"/>
+        <activity android:name=".profile.PrivacyPolicyActivity"/>
         <activity android:name=".profile.OrderActivity">
         </activity>
         <activity android:name=".chat.ChatMsgView">

@@ -21,7 +21,12 @@ public class SettingsActivity extends AppCompatActivity {
         ImageButton settingsButton = findViewById(R.id.developer_news_button);
         settingsButton.setOnClickListener(v -> {
             Intent intent = new Intent(SettingsActivity.this, DeveloperNewsActivity.class);
-            Log.d("SettingsActivity", "Succeed");
+            startActivity(intent);
+        });
+
+        ImageButton addressButton = findViewById(R.id.address_button);
+        addressButton.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, PrivacyPolicyActivity.class);
             startActivity(intent);
         });
 
