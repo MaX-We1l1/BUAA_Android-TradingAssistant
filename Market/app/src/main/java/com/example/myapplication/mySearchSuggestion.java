@@ -1,4 +1,4 @@
-package com.example.myapplication.chat;
+package com.example.myapplication;
 
 import android.annotation.SuppressLint;
 import android.os.Parcel;
@@ -6,15 +6,15 @@ import android.os.Parcel;
 import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 
 @SuppressLint("ParcelCreator")
-public class ContactSearchSuggestion implements SearchSuggestion {
+public class mySearchSuggestion implements SearchSuggestion {
     private String suggestion;
     private boolean mIsHistory = false;
 
-    public ContactSearchSuggestion(String suggestion) {
+    public mySearchSuggestion(String suggestion) {
         this.suggestion = suggestion;
     }
 
-    public ContactSearchSuggestion(Parcel source) {
+    public mySearchSuggestion(Parcel source) {
         this.suggestion = source.readString();
         this.mIsHistory = source.readInt() != 0;
     }
@@ -32,15 +32,15 @@ public class ContactSearchSuggestion implements SearchSuggestion {
         return suggestion;
     }
 
-    public static final Creator<ContactSearchSuggestion> CREATOR = new Creator<ContactSearchSuggestion>() {
+    public static final Creator<mySearchSuggestion> CREATOR = new Creator<mySearchSuggestion>() {
         @Override
-        public ContactSearchSuggestion createFromParcel(Parcel parcel) {
-            return new ContactSearchSuggestion(parcel);
+        public mySearchSuggestion createFromParcel(Parcel parcel) {
+            return new mySearchSuggestion(parcel);
         }
 
         @Override
-        public ContactSearchSuggestion[] newArray(int i) {
-            return new ContactSearchSuggestion[i];
+        public mySearchSuggestion[] newArray(int i) {
+            return new mySearchSuggestion[i];
         }
     };
 

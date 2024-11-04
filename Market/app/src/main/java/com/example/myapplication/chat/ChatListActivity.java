@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +17,7 @@ import com.example.myapplication.commodity.AddCommodityActivity;
 import com.example.myapplication.database.Contact;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.home.HomepageActivity;
+import com.example.myapplication.mySearchSuggestion;
 import com.example.myapplication.profile.ProfileActivity;
 import com.example.myapplication.square.CommodityListActivity;
 
@@ -75,10 +75,26 @@ public class ChatListActivity extends AppCompatActivity {
 //            Toast.makeText(this, "菜单功能待实现", Toast.LENGTH_SHORT).show();
 //        });
 
+        mSearchView.setOnLeftMenuClickListener(
+                new FloatingSearchView.OnLeftMenuClickListener() {
+                    @Override
+                    public void onMenuOpened() {
+                        provideSuggestions("");
+                    }
+
+                    @Override
+                    public void onMenuClosed() {
+                        mSearchView.clearSuggestions();
+                    }} );
+
         // 监听搜索框的查询变化
         mSearchView.setOnQueryChangeListener((oldQuery, newQuery) -> {
-            // 提供建议项
-            provideSuggestions(newQuery);
+            if (!oldQuery.isEmpty() && newQuery.isEmpty()) {
+                mSearchView.clearSuggestions();
+            } else {
+                // 提供建议项
+                provideSuggestions(newQuery);
+            }
         });
 
         mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
@@ -93,6 +109,7 @@ public class ChatListActivity extends AppCompatActivity {
             public void onSuggestionClicked(SearchSuggestion suggestion) {
                 // 处理建议项点击事件
                 mSearchView.setSearchText(suggestion.getBody());
+                performSearch(suggestion.getBody());
             }
         });
 
@@ -151,13 +168,13 @@ public class ChatListActivity extends AppCompatActivity {
     }
 
     private void provideSuggestions(String query) {
-        SharedPreferences preferences = getSharedPreferences("search_history", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("contacts_search_history", MODE_PRIVATE);
         Set<String> historySet = preferences.getStringSet("history", new HashSet<>());
 
-        List<ContactSearchSuggestion> suggestions = new ArrayList<>();
+        List<mySearchSuggestion> suggestions = new ArrayList<>();
         for (String history : historySet) {
             if (history.toLowerCase().contains(query.toLowerCase())) {
-                suggestions.add(new ContactSearchSuggestion(history));
+                suggestions.add(new mySearchSuggestion(history));
             }
         }
 
@@ -168,7 +185,7 @@ public class ChatListActivity extends AppCompatActivity {
 
     @SuppressLint("MutatingSharedPrefs")
     private void saveSearchHistory(String query) {
-        SharedPreferences preferences = getSharedPreferences("search_history", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("contacts_search_history", MODE_PRIVATE);
         Set<String> historySet = preferences.getStringSet("history", new HashSet<>());
         if (!query.isEmpty()) {
             historySet.add(query);
@@ -179,7 +196,16 @@ public class ChatListActivity extends AppCompatActivity {
 
     private void performSearch(String query) {
         // 实现搜索逻辑，比如过滤聊天列表
-        Toast.makeText(this, "搜索: " + query, Toast.LENGTH_SHORT).show();
+        // Toast.makeText(this, "搜索: " + query, Toast.LENGTH_SHORT).show();
+        ArrayList<ChatItem> newChatList = new ArrayList<>();
+        List<Contact> contacts = DBFunction.getAllContacts(userId);
+        for (Contact contact: contacts) {
+            if (contact.getContactsName().contains(query)) {
+                newChatList.add(new ChatItem(contact.getContactsId(), contact.getContactsName(), contact.getLastContent()));
+            }
+        }
+        chatAdapter = new ChatAdapter(this, newChatList);
+        chatListView.setAdapter(chatAdapter);
     }
 
 
