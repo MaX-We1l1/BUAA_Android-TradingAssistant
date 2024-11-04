@@ -18,6 +18,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
         agree_button.setOnClickListener(v -> {
             Intent intent = new Intent(PrivacyPolicyActivity.this, SettingsActivity.class);
             startActivity(intent);
+            finish();
         });
 
         Button exit_button = findViewById(R.id.exit_button);
