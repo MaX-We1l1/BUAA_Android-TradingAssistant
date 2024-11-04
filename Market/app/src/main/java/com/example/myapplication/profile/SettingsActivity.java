@@ -2,8 +2,8 @@ package com.example.myapplication.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
@@ -18,15 +18,11 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-
-        ImageButton settingsButton = findViewById(R.id.settings_button);
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Intent intent = new Intent(getApplicationContext(), DeveloperNewsActivity.class);
-                Intent intent = new Intent(SettingsActivity.this, DeveloperNewsActivity.class);
-                startActivity(intent);
-            }
+        ImageButton settingsButton = findViewById(R.id.developer_news_button);
+        settingsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, DeveloperNewsActivity.class);
+            Log.d("SettingsActivity", "Succeed");
+            startActivity(intent);
         });
 
         RelativeLayout exitLoginButton = findViewById(R.id.relative_exit);

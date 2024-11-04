@@ -122,7 +122,7 @@
 
 
                     <TextView
-                        android:id="@+id/settings_text"
+                        android:id="@+id/developer_news_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="关于开发者"
@@ -131,7 +131,7 @@
                         android:layout_marginLeft="16dp" />
 
                     <ImageButton
-                        android:id="@+id/settings_button"
+                        android:id="@+id/developer_news_button"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_alignParentRight="true"
