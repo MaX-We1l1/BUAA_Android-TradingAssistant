@@ -1,6 +1,6 @@
 package com.example.myapplication.square;
 
-import static java.util.Locale.filter;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -38,6 +38,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommodityListActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1; // 定义请求码
@@ -46,6 +48,7 @@ public class CommodityListActivity extends AppCompatActivity {
     private CommodityAdapter commodityAdapter;
     private List<Commodity> commodityList;
     private List<Commodity> commodityListClone;//用于克隆一份商品
+    private LevenshteinDistance distance = new LevenshteinDistance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,9 +161,23 @@ public class CommodityListActivity extends AppCompatActivity {
         if (text.isEmpty()) {
             filteredList.addAll(commodityListClone); // 如果输入为空，返回全部商品
         } else {
+            String regex = ".*" + text.replace("", ".*") + ".*";
+            Pattern pattern = Pattern.compile(regex);
             for (Commodity item : commodityListClone) {
-                if (item.getCommodityName().toLowerCase().contains(text.toLowerCase())) {
-                    filteredList.add(item);
+                Matcher matcher = pattern.matcher(item.getCommodityName());
+                int dist = distance.apply(text, item.getCommodityName());
+                if (text.length() <= 3 ) {
+                    if (dist < 2 || matcher.find()) {
+                        filteredList.add(item);
+                    }
+                } else if (text.length() <= 6) {
+                    if (dist < 4 || matcher.find()) {
+                        filteredList.add(item);
+                    }
+                } else {
+                    if (dist < 6 || matcher.find()) {
+                        filteredList.add(item);
+                    }
                 }
             }
         }
@@ -207,7 +224,8 @@ public class CommodityListActivity extends AppCompatActivity {
 
         List<mySearchSuggestion> suggestions = new ArrayList<>();
         for (String history : historySet) {
-            if (history.toLowerCase().contains(query.toLowerCase())) {
+            int dist = distance.apply(query, history);
+            if (dist < 5) {
                 suggestions.add(new mySearchSuggestion(history));
             }
         }

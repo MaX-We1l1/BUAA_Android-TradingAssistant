@@ -33,7 +33,7 @@ android {
 
 dependencies {
     implementation ("com.github.arimorty:floatingsearchview:2.1.1")
-    //implementation ("com.amitshekhar.android:debug-db:1.0.6")
+    implementation ("org.apache.commons:commons-text:1.10.0")
     implementation("com.android.support:recyclerview-v7:24.2.1")
     implementation(libs.appcompat)
     implementation(libs.material)

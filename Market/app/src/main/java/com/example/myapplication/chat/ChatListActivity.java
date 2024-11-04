@@ -14,6 +14,7 @@ import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.commodity.AddCommodityActivity;
+import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.Contact;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.home.HomepageActivity;
@@ -21,18 +22,21 @@ import com.example.myapplication.mySearchSuggestion;
 import com.example.myapplication.profile.ProfileActivity;
 import com.example.myapplication.square.CommodityListActivity;
 
+import org.apache.commons.text.similarity.LevenshteinDistance;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChatListActivity extends AppCompatActivity {
 
     private ListView chatListView;
     private FloatingSearchView mSearchView;
-//    private EditText searchBox;
-//    private ImageView searchButton, menuButton;
+    private LevenshteinDistance distance = new LevenshteinDistance();
     private ChatAdapter chatAdapter; // 你的聊天适配器
     private ArrayList<ChatItem> lastChatList; // 最新聊天列表数据
     private HashMap<String, ArrayList<ChatItem>> chatList = new HashMap<>();
@@ -173,7 +177,8 @@ public class ChatListActivity extends AppCompatActivity {
 
         List<mySearchSuggestion> suggestions = new ArrayList<>();
         for (String history : historySet) {
-            if (history.toLowerCase().contains(query.toLowerCase())) {
+            int dist = distance.apply(query, history);
+            if (dist < 5) {
                 suggestions.add(new mySearchSuggestion(history));
             }
         }
@@ -199,9 +204,23 @@ public class ChatListActivity extends AppCompatActivity {
         // Toast.makeText(this, "搜索: " + query, Toast.LENGTH_SHORT).show();
         ArrayList<ChatItem> newChatList = new ArrayList<>();
         List<Contact> contacts = DBFunction.getAllContacts(userId);
+        String regex = ".*" + query.replace("", ".*") + ".*";
+        Pattern pattern = Pattern.compile(regex);
         for (Contact contact: contacts) {
-            if (contact.getContactsName().contains(query)) {
-                newChatList.add(new ChatItem(contact.getContactsId(), contact.getContactsName(), contact.getLastContent()));
+            Matcher matcher = pattern.matcher(contact.getContactsName());
+            int dist = distance.apply(query, contact.getContactsName());
+            if (query.length() <= 3 ) {
+                if (dist < 2 || matcher.find()) {
+                    newChatList.add(new ChatItem(contact.getContactsId(), contact.getContactsName(), contact.getLastContent()));
+                }
+            } else if (query.length() <= 6) {
+                if (dist < 4 || matcher.find()) {
+                    newChatList.add(new ChatItem(contact.getContactsId(), contact.getContactsName(), contact.getLastContent()));
+                }
+            } else {
+                if (dist < 6 || matcher.find()) {
+                    newChatList.add(new ChatItem(contact.getContactsId(), contact.getContactsName(), contact.getLastContent()));
+                }
             }
         }
         chatAdapter = new ChatAdapter(this, newChatList);
