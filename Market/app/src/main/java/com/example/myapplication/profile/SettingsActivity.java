@@ -19,6 +19,16 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
 
 
+        ImageButton settingsButton = findViewById(R.id.settings_button);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent intent = new Intent(getApplicationContext(), DeveloperNewsActivity.class);
+                Intent intent = new Intent(SettingsActivity.this, DeveloperNewsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         RelativeLayout exitLoginButton = findViewById(R.id.relative_exit);
         exitLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override

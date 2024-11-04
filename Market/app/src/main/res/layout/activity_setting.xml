@@ -134,11 +134,11 @@
                         android:id="@+id/settings_button"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_right"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Arrow button" />
+                        android:contentDescription="Arrow button"
+                        android:src="@drawable/ic_arrow_right" />
                 </RelativeLayout>
             </LinearLayout>
             <RelativeLayout
