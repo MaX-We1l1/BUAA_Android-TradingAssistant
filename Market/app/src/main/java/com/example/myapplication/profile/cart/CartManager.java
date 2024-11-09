@@ -63,7 +63,9 @@ public class CartManager {
     public double getTotalPrice() {
         double total = 0;
         for (CartItem item : cartItems) {
-            total += item.getPrice() * item.getQuantity();
+            if (item.isSelected()) {  // 只计算选中的商品
+                total += item.getPrice() * item.getQuantity();
+            }
         }
         return total;
     }

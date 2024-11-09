@@ -23,6 +23,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     private List<CartItem> cartItems;
     private Context context;
     private CartManager cartManager;
+    //private OnCartUpdateListener listener;
 
     public CartAdapter(List<CartItem> cartItems, Context context, CartManager cartManager) {
         this.cartItems = cartItems;
@@ -44,19 +45,19 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.priceTextView.setText(String.format("$%.2f", cartItem.getPrice()));
         holder.quantityTextView.setText("x" + cartItem.getQuantity());
 
-        holder.plusButton.setOnClickListener(v -> {
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
-            notifyItemChanged(position);
-            listener.onCartUpdated();
-        });
-
-        holder.minusButton.setOnClickListener(v -> {
-            if (cartItem.getQuantity() > 1) {
-                cartItem.setQuantity(cartItem.getQuantity() - 1);
-                notifyItemChanged(position);
-                listener.onCartUpdated();
-            }
-        });
+//        holder.plusButton.setOnClickListener(v -> {
+//            cartItem.setQuantity(cartItem.getQuantity() + 1);
+//            notifyItemChanged(position);
+//            listener.onCartUpdated();
+//        });
+//
+//        holder.minusButton.setOnClickListener(v -> {
+//            if (cartItem.getQuantity() > 1) {
+//                cartItem.setQuantity(cartItem.getQuantity() - 1);
+//                notifyItemChanged(position);
+//                listener.onCartUpdated();
+//            }
+//        });
 
         // 移除商品
         holder.removeButton.setOnClickListener(v -> {
@@ -78,10 +79,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         });
 
         // 设置选择框
-        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            cartItem.setSelected(isChecked);
-            listener.onCartUpdated();
-        });
+//        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+//            cartItem.setSelected(isChecked);
+//            listener.onCartUpdated();
+//        });
     }
 
     @Override
