@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,8 @@ import com.example.myapplication.chat.ChatListActivity;
 import com.example.myapplication.chat.ChatMsgView;
 import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
+import com.example.myapplication.profile.ProfileActivity;
+import com.example.myapplication.profile.cart.CartActivity;
 
 import org.litepal.LitePal;
 
@@ -30,10 +33,11 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private TextView commodityDescription; // 商品描述
     private ImageView commodityImage; // 商品图片
     private TextView commoditySeller;
-    private Button wantButton; //想要，跳转到聊天界面
+    private Button chatButton; //想要，跳转到聊天界面
     private Button editButton;
     private Commodity commodity;
     private Button saveButton;
+    private ImageButton cartButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +49,15 @@ public class CommodityDetailActivity extends AppCompatActivity {
         commodityDescription = findViewById(R.id.commodity_description);
         commodityImage = findViewById(R.id.commodity_image);
         commoditySeller = findViewById(R.id.commodity_seller); // 绑定卖家信息
-        wantButton = findViewById(R.id.button_want); // 绑定“想要”按钮
+        chatButton = findViewById(R.id.button_want); // 绑定“想要”按钮
         editButton = findViewById(R.id.button_edit_commodity); //
         saveButton = findViewById(R.id.button_save); //
+
+        cartButton = findViewById(R.id.button_cart);
+        cartButton.setOnClickListener(v-> {
+            Intent intent = new Intent(CommodityDetailActivity.this, CartActivity.class);
+            startActivity(intent);
+        });
 
         //从 Intent 中获取商品 ID
         Intent intent = getIntent();
@@ -62,10 +72,11 @@ public class CommodityDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "商品 ID 无效", Toast.LENGTH_SHORT).show();
         }
 
-        //检测当前是否是卖家，是就显示修改按钮,不显示想要按钮
+        //检测当前是否是卖家，是就显示修改按钮,不显示聊天按钮
         if (isCurrentUserSeller(commodity)) {
             editButton.setVisibility(View.VISIBLE);
-            wantButton.setVisibility(View.GONE);
+            chatButton.setVisibility(View.GONE);
+            cartButton.setVisibility(View.GONE);
             editButton.setOnClickListener(v -> enableEditing());
         }
         //保存按钮
@@ -87,7 +98,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
 //                    .placeholder(R.drawable.placeholder) // 占位图
 //                    .error(R.drawable.error_image) // 错误图
 //                    .into(commodityImage);
-            wantButton.setOnClickListener(v -> {
+            chatButton.setOnClickListener(v -> {
                 long user2 = DBFunction.findUserByName(commodity.getSellerName()).getId();
                 Intent intent = new Intent(CommodityDetailActivity.this, ChatMsgView.class);
                 intent.putExtra("commodity_id", commodityId);

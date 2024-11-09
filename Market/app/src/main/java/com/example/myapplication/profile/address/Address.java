@@ -1,4 +1,4 @@
-package com.example.myapplication.profile;
+package com.example.myapplication.profile.address;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.database.DBFunction;

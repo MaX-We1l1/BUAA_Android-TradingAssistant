@@ -1,4 +1,4 @@
-package com.example.myapplication.profile;
+package com.example.myapplication.profile.address;
 
 import android.content.Context;
 import android.view.LayoutInflater;

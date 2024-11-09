@@ -57,6 +57,16 @@
                     android:layout_toRightOf="@id/profile_image"
                     android:layout_marginLeft="16dp"
                     android:layout_below="@id/username" />
+                <ImageButton
+                    android:id="@+id/button_cart"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_cart"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:contentDescription="购物车"
+                    android:scaleType="fitCenter"
+                    android:background="?attr/selectableItemBackground" />
             </RelativeLayout>
 
             <!-- 功能选项 -->

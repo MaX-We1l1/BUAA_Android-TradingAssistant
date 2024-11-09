@@ -3,7 +3,8 @@ package com.example.myapplication.database;
 import android.util.Log;
 
 import com.example.myapplication.MainActivity;
-import com.example.myapplication.profile.Address;
+import com.example.myapplication.profile.address.Address;
+import com.example.myapplication.profile.cart.CartItem;
 
 import org.litepal.LitePal;
 
@@ -154,6 +155,46 @@ public class DBFunction {
             Log.w(DBFunction.TAG, "未找到该商品，删除失败，ID: " + commodityId);
         }
     }
+
+    // 购物车
+    public static ArrayList<String> getCart(String userName) {
+        User user = findUserByName(userName);
+        if (user != null) {
+            // 查找该用户的收藏记录
+            return user.getCart();
+        } else {
+            Log.w(DBFunction.TAG, "不存在用户名为 " + userName + " 的用户");
+        }
+        return new ArrayList<>();
+    }
+
+    public static void addCart(String userName, String cartItem) {
+        User user = findUserByName(userName);
+        if (user != null) {
+            user.addCartItem(cartItem);
+            user.save();
+        } else {
+            Log.w(DBFunction.TAG, "未找到该用户，商品添加购物车失败， userName: " + userName);
+        }
+    }
+
+    public static void delCart(String userName, int index) {
+        User user = findUserByName(userName);
+        if (user != null) {
+            // 查找该用户的购物车记录
+            if (user.getCart().size() > index) {
+                // CartItem cartItem = CartItem.parseCartItemFromString(user.getCart().get(index));
+                user.delCartItem(index);
+                user.save();
+            } else {
+                Log.w(DBFunction.TAG, "索引超出");
+            }
+        } else {
+            Log.w(DBFunction.TAG, "不存在用户名为 " + userName + " 的用户");
+        }
+    }
+
+    // 消息记录
 
     public static Message addChatMessage(String content, long sendId, long recId, String name) {
         Message cm = new Message();

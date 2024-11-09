@@ -1,4 +1,4 @@
-package com.example.myapplication.profile;
+package com.example.myapplication.profile.address;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,8 +12,6 @@ import android.widget.Toast;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.database.DBFunction;
-
-import java.util.ArrayList;
 
 public class AddAddressActivity extends Activity {
     private EditText editTextName, editTextPhone, editTextDetailAddress;

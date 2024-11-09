@@ -62,7 +62,13 @@
         android:id="@+id/button_want"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="想要"
+        android:text="联系商家"
+        android:layout_gravity="center" />
+    <Button
+        android:id="@+id/button_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加入购物车"
         android:layout_gravity="center" />
 
     <Button
@@ -79,4 +85,14 @@
         android:layout_height="wrap_content"
         android:text="编辑商品"
         android:visibility="gone"/> <!-- 默认隐藏 -->
+    <ImageButton
+        android:id="@+id/button_cart"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_cart"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:contentDescription="购物车"
+        android:scaleType="fitCenter"
+        android:background="?attr/selectableItemBackground" />
 </LinearLayout>

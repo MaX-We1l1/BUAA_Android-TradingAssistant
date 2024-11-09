@@ -14,6 +14,8 @@ import com.example.myapplication.home.HomepageActivity;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.chat.ChatListActivity;
+import com.example.myapplication.profile.address.AddressActivity;
+import com.example.myapplication.profile.cart.CartActivity;
 import com.example.myapplication.square.CommodityListActivity;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -38,6 +40,12 @@ public class ProfileActivity extends AppCompatActivity {
 
         // 根据用户名设置头像
         setProfileImage(currentUser);
+
+        ImageButton cartButton = findViewById(R.id.button_cart);
+        cartButton.setOnClickListener(v-> {
+            Intent intent = new Intent(ProfileActivity.this, CartActivity.class);
+            startActivity(intent);
+        });
 
         ImageButton orderButton = findViewById(R.id.order_button);
         orderButton.setOnClickListener(v -> {

@@ -41,7 +41,7 @@
         </activity>
         <activity android:name=".square.CommodityDetailActivity"/>
         <activity android:name=".profile.FavoriteActivity"/>
-        <activity android:name=".profile.AddressActivity"/>
+        <activity android:name=".profile.address.AddressActivity"/>
         <activity android:name=".profile.SettingsActivity"/>
         <activity android:name=".profile.DeveloperNewsActivity"/>
         <activity android:name=".profile.PrivacyPolicyActivity"/>
@@ -50,7 +50,8 @@
         <activity android:name=".chat.ChatMsgView">
         </activity>
         <activity android:name=".commodity.AddCommodityActivity" />
-        <activity android:name=".profile.AddAddressActivity" />
+        <activity android:name=".profile.address.AddAddressActivity" />
+        <activity android:name=".profile.cart.CartActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"
         tools:ignore="ManifestOrder" />
