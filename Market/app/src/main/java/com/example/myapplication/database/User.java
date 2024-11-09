@@ -154,4 +154,8 @@ public class User extends LitePalSupport {
     public void delAddress(int index) {
         addresses.remove(index);
     }
+
+    public void changeAddress(int index, String address) {
+        addresses.set(index, address);
+    }
 }

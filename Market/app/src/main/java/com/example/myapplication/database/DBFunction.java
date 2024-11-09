@@ -3,6 +3,7 @@ package com.example.myapplication.database;
 import android.util.Log;
 
 import com.example.myapplication.MainActivity;
+import com.example.myapplication.profile.Address;
 
 import org.litepal.LitePal;
 
@@ -187,6 +188,17 @@ public class DBFunction {
         User user = findUserByName(userName);
         if (user != null) {
             user.addAddress(address);
+            user.save();
+        } else {
+            Log.w(DBFunction.TAG, "未找到该用户，添加地址失败， userName: " + userName);
+        }
+    }
+
+    public static void changeAddress(String userName, ArrayList<String> addresses) {
+        User user = findUserByName(userName);
+        if (user != null) {
+            user.setAddress(addresses);
+            user.save();
         } else {
             Log.w(DBFunction.TAG, "未找到该用户，添加地址失败， userName: " + userName);
         }
@@ -197,13 +209,36 @@ public class DBFunction {
         if (user != null) {
             // 查找该用户的收藏记录
             if (user.getAddress().size() > index) {
+                Address address = Address.parseAddressFromString(user.getAddress().get(index));
                 user.delAddress(index);
+                user.save();
+                // 如果删除的地址是默认地址，则将当前第一个地址设为默认地址
+                if (address.isDefault()) {
+                    ArrayList<String> addressList = user.getAddress();
+                    if (!addressList.isEmpty()) {
+                        Address address1 = Address.parseAddressFromString(addressList.get(0));
+                        address1.setDefault(true);
+                        user.changeAddress(0, address1.toString());
+                        user.save();
+                    }
+                }
             } else {
                 Log.w(DBFunction.TAG, "索引超出");
             }
         } else {
             Log.w(DBFunction.TAG, "不存在用户名为 " + userName + " 的用户");
         }
+    }
+
+    public static ArrayList<String> getAddress(String userName) {
+        User user = findUserByName(userName);
+        if (user != null) {
+            // 查找该用户的收藏记录
+            return user.getAddress();
+        } else {
+            Log.w(DBFunction.TAG, "不存在用户名为 " + userName + " 的用户");
+        }
+        return new ArrayList<>();
     }
 
     // 获取全部联系人

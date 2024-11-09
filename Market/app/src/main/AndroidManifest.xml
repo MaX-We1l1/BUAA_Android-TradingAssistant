@@ -50,6 +50,7 @@
         <activity android:name=".chat.ChatMsgView">
         </activity>
         <activity android:name=".commodity.AddCommodityActivity" />
+        <activity android:name=".profile.AddAddressActivity" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"
         tools:ignore="ManifestOrder" />
