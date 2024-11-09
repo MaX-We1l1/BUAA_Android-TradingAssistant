@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.Tools;
 import com.example.myapplication.database.DBFunction;
+import com.example.myapplication.square.CommodityDetailActivity;
 
 import java.util.List;
 
@@ -69,7 +71,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                         // cartItems.remove(position);
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position, cartItems.size());
-//                        notifyItemChanged(0);
                     }).setNegativeButton("取消", (dialog, which) -> {
                         // 如果用户取消，什么都不做
                         dialog.dismiss();

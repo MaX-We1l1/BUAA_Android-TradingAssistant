@@ -11,7 +11,9 @@ import android.widget.Toast;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.Tools;
 import com.example.myapplication.database.DBFunction;
+import com.example.myapplication.profile.cart.CartAdapter;
 
 public class AddAddressActivity extends Activity {
     private EditText editTextName, editTextPhone, editTextDetailAddress;
@@ -47,6 +49,7 @@ public class AddAddressActivity extends Activity {
                     Address.setAllAddressFalse(DBFunction.getAddress(MainActivity.getCurrentUsername()));
                 }
                 DBFunction.addAddress(MainActivity.getCurrentUsername(), newAddress.toString());
+                Tools.toastMessageShort(AddAddressActivity.this, "添加地址成功!");
                 // 返回上一页面
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("new_address", newAddress.toString());  // 把新的地址传递回去

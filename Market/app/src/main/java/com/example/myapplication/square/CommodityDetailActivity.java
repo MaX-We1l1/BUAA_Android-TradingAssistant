@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.Tools;
 import com.example.myapplication.chat.ChatListActivity;
 import com.example.myapplication.chat.ChatMsgView;
 import com.example.myapplication.database.Commodity;
@@ -126,6 +127,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
                         , commodity.getPrice()
                         , 1);
                 cartManager.addItemToCart(cartItem);
+                Tools.toastMessageShort(CommodityDetailActivity.this, "加入购物车成功!");
             });
         } else {
             Toast.makeText(this, "未找到该商品", Toast.LENGTH_SHORT).show();
