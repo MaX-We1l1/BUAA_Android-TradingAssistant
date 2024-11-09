@@ -21,7 +21,7 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        cartManager = new CartManager();
+        cartManager = CartManager.getInstance();
 
         recyclerView = findViewById(R.id.recycler_view_cart);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

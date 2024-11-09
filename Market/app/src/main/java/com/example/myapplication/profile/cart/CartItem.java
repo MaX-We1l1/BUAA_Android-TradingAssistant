@@ -9,6 +9,7 @@ public class CartItem {
     private long id;      // 商品id
     private Float price; // 商品价格
     private int quantity; // 商品数量
+    private boolean isSelected;
 
     // 构造函数
     public CartItem(String name, long id,  Float price, int quantity) {
@@ -16,6 +17,7 @@ public class CartItem {
         this.id = id;
         this.price = price;
         this.quantity = quantity;
+        isSelected = false;
     }
 
     // Getter 和 Setter 方法
@@ -49,6 +51,14 @@ public class CartItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public static CartItem parseCartItemFromString(String addressString) {

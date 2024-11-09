@@ -22,6 +22,8 @@ import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.profile.ProfileActivity;
 import com.example.myapplication.profile.cart.CartActivity;
+import com.example.myapplication.profile.cart.CartItem;
+import com.example.myapplication.profile.cart.CartManager;
 
 import org.litepal.LitePal;
 
@@ -37,7 +39,9 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private Button editButton;
     private Commodity commodity;
     private Button saveButton;
+    private Button addCartButton;
     private ImageButton cartButton;
+    private CartManager cartManager = CartManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +55,10 @@ public class CommodityDetailActivity extends AppCompatActivity {
         commoditySeller = findViewById(R.id.commodity_seller); // 绑定卖家信息
         chatButton = findViewById(R.id.button_want); // 绑定“想要”按钮
         editButton = findViewById(R.id.button_edit_commodity); //
+        addCartButton = findViewById(R.id.button_add_to_cart);
         saveButton = findViewById(R.id.button_save); //
 
+        // 重定向到自己的购物车
         cartButton = findViewById(R.id.button_cart);
         cartButton.setOnClickListener(v-> {
             Intent intent = new Intent(CommodityDetailActivity.this, CartActivity.class);
@@ -76,11 +82,17 @@ public class CommodityDetailActivity extends AppCompatActivity {
         if (isCurrentUserSeller(commodity)) {
             editButton.setVisibility(View.VISIBLE);
             chatButton.setVisibility(View.GONE);
-            cartButton.setVisibility(View.GONE);
+            addCartButton.setVisibility(View.GONE);
             editButton.setOnClickListener(v -> enableEditing());
         }
         //保存按钮
         saveButton.setOnClickListener(v -> saveChanges());
+
+        // 返回按钮
+        ImageButton backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(v -> {
+            finish();
+        });
     }
 
     private void loadCommodityDetails(long commodityId) {
@@ -105,6 +117,15 @@ public class CommodityDetailActivity extends AppCompatActivity {
                 intent.putExtra("chat_id", user2); // 传递聊天 ID
                 intent.putExtra("chat_name", commodity.getSellerName());
                 startActivity(intent);
+            });
+
+            // 加入购物车
+            addCartButton.setOnClickListener(v -> {
+                CartItem cartItem = new CartItem(commodity.getCommodityName()
+                        , commodity.getId()
+                        , commodity.getPrice()
+                        , 1);
+                cartManager.addItemToCart(cartItem);
             });
         } else {
             Toast.makeText(this, "未找到该商品", Toast.LENGTH_SHORT).show();
