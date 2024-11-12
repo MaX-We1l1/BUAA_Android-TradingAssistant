@@ -138,6 +138,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
                 hobby.setCommodityId(commodity.getId());
                 hobby.setTitle(commodity.getCommodityName());
                 hobby.setId(commodity.getId());
+                hobby.save();
                 User user1 = DBFunction.findUserByName(MainActivity.getCurrentUsername());
                 user1.addHobby(hobby);
                 user1.save();

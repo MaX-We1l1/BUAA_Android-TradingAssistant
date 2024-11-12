@@ -234,6 +234,17 @@ public class DBFunction {
         }
     }
 
+    // 收藏管理
+    public static void addHobby(String userName, Hobby hobby) {
+        User user = findUserByName(userName);
+        if (user != null) {
+            user.addHobby(hobby);
+            user.save();
+        } else {
+            Log.w(DBFunction.TAG, "未找到该用户，添加地址失败， userName: " + userName);
+        }
+    }
+
     //地址管理
     public static void addAddress(String userName, String address) {
         User user = findUserByName(userName);
