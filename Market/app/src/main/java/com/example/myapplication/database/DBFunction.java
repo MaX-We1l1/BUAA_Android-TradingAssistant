@@ -178,6 +178,16 @@ public class DBFunction {
         }
     }
 
+    public static void addHobby(Hobby hobby, String userName) {
+        User user = findUserByName(userName);
+        if (user != null) {
+            user.addHobby(hobby);
+            user.save();
+        } else {
+            Log.w(DBFunction.TAG, "未找到该用户，收藏失败， userName: " + userName);
+        }
+    }
+
     public static void delCart(String userName, int index) {
         User user = findUserByName(userName);
         if (user != null) {
