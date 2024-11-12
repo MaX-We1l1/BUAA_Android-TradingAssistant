@@ -21,6 +21,8 @@ import com.example.myapplication.chat.ChatListActivity;
 import com.example.myapplication.chat.ChatMsgView;
 import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
+import com.example.myapplication.database.Hobby;
+import com.example.myapplication.database.User;
 import com.example.myapplication.profile.ProfileActivity;
 import com.example.myapplication.profile.cart.CartActivity;
 import com.example.myapplication.profile.cart.CartItem;
@@ -40,7 +42,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private Button editButton;
     private Commodity commodity;
     private Button saveButton;
-    private Button addCartButton;
+    private Button addCartButton,addHobbyButton;
     private ImageButton cartButton;
     private CartManager cartManager = CartManager.getInstance();
 
@@ -58,6 +60,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
         editButton = findViewById(R.id.button_edit_commodity); //
         addCartButton = findViewById(R.id.button_add_to_cart);
         saveButton = findViewById(R.id.button_save); //
+        addHobbyButton = findViewById(R.id.button_add_to_hobby);
 
         // 重定向到自己的购物车
         cartButton = findViewById(R.id.button_cart);
@@ -128,6 +131,23 @@ public class CommodityDetailActivity extends AppCompatActivity {
                         , 1);
                 cartManager.addItemToCart(cartItem);
                 Tools.toastMessageShort(CommodityDetailActivity.this, "加入购物车成功!");
+            });
+
+            addHobbyButton.setOnClickListener(v -> {
+                Hobby hobby = new Hobby();
+                hobby.setCommodityId(commodity.getId());
+                hobby.setTitle(commodity.getCommodityName());
+                hobby.setId(commodity.getId());
+                User user1 = DBFunction.findUserByName(MainActivity.getCurrentUsername());
+                user1.addHobby(hobby);
+                user1.save();
+                User user = DBFunction.findUserByName(MainActivity.getCurrentUsername());
+                String s = "no";
+                if (!user1.getHobbies().isEmpty()) {
+                    s = "yes";
+                    //Tools.toastMessageShort(CommodityDetailActivity.this, DBFunction.findUserByName(MainActivity.getCurrentUsername()).getHobbies().get(0).getTitle());
+                }
+                Tools.toastMessageShort(CommodityDetailActivity.this, s);
             });
         } else {
             Toast.makeText(this, "未找到该商品", Toast.LENGTH_SHORT).show();

@@ -23,6 +23,7 @@ public class User extends LitePalSupport {
     private String sex; //性别,直接用“男”,"女"就行。 ~~男用"m"表示, 女用"f"表示~~
     private ArrayList<String> addresses = new ArrayList<>(); //地址管理
     private ArrayList<String> cart = new ArrayList<>(); // 购物车管理
+    private ArrayList<Hobby> hobbies = new ArrayList<>(); // 收藏管理
 
     //
     private List<TradeRecord> tradeRecordList = new ArrayList<TradeRecord>();
@@ -144,6 +145,10 @@ public class User extends LitePalSupport {
         return addresses;
     }
 
+    public ArrayList<Hobby> getHobbies() {
+        return hobbies;
+    }
+
     public void setAddress(ArrayList<String> addresses) {
         this.addresses = addresses;
     }
@@ -179,4 +184,9 @@ public class User extends LitePalSupport {
     public void changeCartItem(int index, String item) {
         cart.set(index, item);
     }
+
+    public void addHobby(Hobby hobby) {
+        this.hobbies.add(hobby);
+    }
+
 }

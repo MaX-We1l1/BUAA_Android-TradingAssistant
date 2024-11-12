@@ -4,7 +4,11 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.database.DBFunction;
+import com.example.myapplication.database.Hobby;
 import com.example.myapplication.profile.FavoriteItem;
 import com.example.myapplication.profile.FavoriteAdapter;
 
@@ -15,7 +19,7 @@ public class FavoriteActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private FavoriteAdapter favoriteAdapter;
-    private List<FavoriteItem> favoriteList;
+    private List<Hobby> favoriteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +31,14 @@ public class FavoriteActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this)); // 设置布局管理器为线性布局
 
         // 模拟数据（实际项目中，从数据库或API获取数据） TODO
-        favoriteList = new ArrayList<>();
-        favoriteList.add(new FavoriteItem(R.drawable.ic_favorite_placeholder, "收藏标题1", "这是收藏的描述1", "2024-10-17"));
-        favoriteList.add(new FavoriteItem(R.drawable.ic_favorite_placeholder, "收藏标题2", "这是收藏的描述2", "2024-10-16"));
-        favoriteList.add(new FavoriteItem(R.drawable.ic_favorite_placeholder, "收藏标题3", "这是收藏的描述3", "2024-10-15"));
+        favoriteList = DBFunction.findUserByName(MainActivity.getCurrentUsername()).getHobbies();
 
         // 初始化适配器并绑定数据
         favoriteAdapter = new FavoriteAdapter(this, favoriteList);
         recyclerView.setAdapter(favoriteAdapter); // 设置适配器
+    }
+
+    public void update() {
+        favoriteList = DBFunction.findUserByName(MainActivity.getCurrentUsername()).getHobbies();
     }
 }

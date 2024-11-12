@@ -9,15 +9,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R; // 确保导入正确的包
+import com.example.myapplication.database.Hobby;
 import com.example.myapplication.profile.FavoriteItem; // 模型类
 import java.util.List;
 
 public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder> {
 
     private Context context;
-    private List<FavoriteItem> favoriteList;
+    private List<Hobby> favoriteList;
 
-    public FavoriteAdapter(Context context, List<FavoriteItem> favoriteList) {
+    public FavoriteAdapter(Context context, List<Hobby> favoriteList) {
         this.context = context;
         this.favoriteList = favoriteList;
     }
@@ -32,7 +33,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
     @Override
     public void onBindViewHolder(@NonNull FavoriteViewHolder holder, int position) {
         // 获取当前位置的收藏项
-        FavoriteItem favoriteItem = favoriteList.get(position);
+        Hobby favoriteItem = favoriteList.get(position);
 
         // 设置图片（可以使用图片加载库如Glide或Picasso加载网络图片）
         holder.favoriteImage.setImageResource(favoriteItem.getImageResource());
