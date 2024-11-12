@@ -24,6 +24,15 @@ public class DBFunction {
         }
     }
 
+    public static List<Hobby> findHobbyByName(String username) {
+        List<Hobby> hobbies = LitePal.where("username = ?", username).find(Hobby.class);
+        if (!hobbies.isEmpty()) {
+            return hobbies;
+        } else {
+            return null;
+        }
+    }
+
     public static void addUser(String username, String password, String registerDate) {
         User user = new User();
         user.setUsername(username);

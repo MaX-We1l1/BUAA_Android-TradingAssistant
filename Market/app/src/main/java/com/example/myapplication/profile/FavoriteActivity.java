@@ -31,8 +31,10 @@ public class FavoriteActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this)); // 设置布局管理器为线性布局
 
         // 模拟数据（实际项目中，从数据库或API获取数据） TODO
-        favoriteList = DBFunction.findUserByName(MainActivity.getCurrentUsername()).getHobbies();
-
+        favoriteList = DBFunction.findHobbyByName(MainActivity.getCurrentUsername());
+        if (favoriteList == null) {
+            favoriteList = new ArrayList<>();
+        }
         // 初始化适配器并绑定数据
         favoriteAdapter = new FavoriteAdapter(this, favoriteList);
         recyclerView.setAdapter(favoriteAdapter); // 设置适配器
