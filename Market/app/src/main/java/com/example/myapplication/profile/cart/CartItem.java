@@ -77,9 +77,9 @@ public class CartItem {
             } else if (part.startsWith("id='")) {
                 id = Long.parseLong(part.substring(4, part.length() - 1 ));
             } else if (part.startsWith("price='")) {
-                price = Float.parseFloat(part.substring(7, part.length() - 1));  // 去掉 'detail=' 和结尾的 '
-            } else if (part.startsWith("quantity='")) {
-                quantity = Integer.parseInt(part.substring(10, part.length() - 1));  // 去掉 'phoneNumber=' 和结尾的 '
+                price = Float.parseFloat(part.substring(7, part.length() - 1));
+            } else if (part.startsWith("quantity=")) {
+                quantity = Integer.parseInt(part.substring(9));
             }
         }
         // 返回解析后的 Address 对象

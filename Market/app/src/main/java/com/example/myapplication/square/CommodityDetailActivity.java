@@ -1,5 +1,6 @@
 package com.example.myapplication.square;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.InputNumberView;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.Tools;
@@ -45,6 +47,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private Button addCartButton,addHobbyButton;
     private ImageButton cartButton;
     private CartManager cartManager = CartManager.getInstance();
+    private InputNumberView quantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
         addCartButton = findViewById(R.id.button_add_to_cart);
         saveButton = findViewById(R.id.button_save); //
         addHobbyButton = findViewById(R.id.button_add_to_hobby);
+        quantity = findViewById(R.id.commodity_num);
 
         // 重定向到自己的购物车
         cartButton = findViewById(R.id.button_cart);
@@ -87,6 +91,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
             editButton.setVisibility(View.VISIBLE);
             chatButton.setVisibility(View.GONE);
             addCartButton.setVisibility(View.GONE);
+            quantity.setVisibility(View.GONE);
             editButton.setOnClickListener(v -> enableEditing());
         }
         //保存按钮
@@ -99,6 +104,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void loadCommodityDetails(long commodityId) {
         // 使用商品 ID 获取商品详情
         Commodity commodity = LitePal.find(Commodity.class, commodityId);
@@ -123,15 +129,35 @@ public class CommodityDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             });
 
+            // 加入商品数量
+            quantity.setMaxNum(50);
+            quantity.setOnAmountChangeListener(new InputNumberView.OnAmountChangeListener() {
+                @Override
+                public void onAmountChange(View view, int amount) {
+                    if (amount > 50) {
+                        Toast.makeText(getApplicationContext(), "未找到该商品", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            CartItem cartItem = new CartItem(commodity.getCommodityName()
+                    , commodity.getId()
+                    , commodity.getPrice()
+                    , 1);
+
+            // 已添加
+            TextView already = findViewById(R.id.commodity_already_num);
+            already.setText("已添加：" + cartManager.getQuantity(cartItem));
+
             // 加入购物车
             addCartButton.setOnClickListener(v -> {
-                CartItem cartItem = new CartItem(commodity.getCommodityName()
-                        , commodity.getId()
-                        , commodity.getPrice()
-                        , 1);
+                cartItem.setQuantity(quantity.getCurrentNum());
                 cartManager.addItemToCart(cartItem);
                 Tools.toastMessageShort(CommodityDetailActivity.this, "加入购物车成功!");
+                already.setText("已添加：" + cartManager.getQuantity(cartItem));
             });
+
+
 
             addHobbyButton.setOnClickListener(v -> {
                 Hobby hobby = new Hobby();
@@ -143,7 +169,6 @@ public class CommodityDetailActivity extends AppCompatActivity {
                 User user1 = DBFunction.findUserByName(MainActivity.getCurrentUsername());
                 user1.addHobby(hobby);
                 user1.save();
-                User user = DBFunction.findUserByName(MainActivity.getCurrentUsername());
                 String s = "no";
                 if (!user1.getHobbies().isEmpty()) {
                     s = "yes";

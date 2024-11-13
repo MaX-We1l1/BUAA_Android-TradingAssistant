@@ -3,7 +3,9 @@ package com.example.myapplication.profile.cart;
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.MainActivity;
+import com.example.myapplication.Tools;
 import com.example.myapplication.database.DBFunction;
+import com.example.myapplication.square.CommodityDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +29,20 @@ public class CartManager {
 
     // 添加商品到购物车
     public void addItemToCart(CartItem item) {
-        for (CartItem cartItem: cartItems) {
-            if (cartItem.getId() == item.getId()) {
-                return;
+        boolean needupdate = false;
+        int index = 0;
+        for (int i = 0; i < cartItems.size(); i++) {
+            if (cartItems.get(i).getId() == item.getId()) {
+                int q = cartItems.get(i).getQuantity();
+                item.setQuantity(q + item.getQuantity());
+                needupdate = true;
+                index = i;
+                //cartItems.get(i).setQuantity(q + item.getQuantity());
+                break;
             }
+        }
+        if (needupdate) {
+            removeItemFromCart(index);
         }
         cartItems.add(item);
         DBFunction.addCart(MainActivity.getCurrentUsername(), item.toString());
@@ -57,6 +69,16 @@ public class CartManager {
             cartItems.add(CartItem.parseCartItemFromString(s));
         }
         return cartItems;
+    }
+
+    // 获取某一商品数量
+    public int getQuantity(CartItem item) {
+        for (int i = 0; i < cartItems.size(); i++) {
+            if (cartItems.get(i).getId() == item.getId()) {
+                return cartItems.get(i).getQuantity();
+            }
+        }
+        return 0;
     }
 
     // 计算购物车总价

@@ -1,6 +1,8 @@
 package com.example.myapplication.profile;
 
 import android.os.Bundle;
+import android.widget.ImageButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +40,11 @@ public class FavoriteActivity extends AppCompatActivity {
         // 初始化适配器并绑定数据
         favoriteAdapter = new FavoriteAdapter(this, favoriteList);
         recyclerView.setAdapter(favoriteAdapter); // 设置适配器
+
+        ImageButton backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(v -> {
+            finish();
+        });
     }
 
     public void update() {

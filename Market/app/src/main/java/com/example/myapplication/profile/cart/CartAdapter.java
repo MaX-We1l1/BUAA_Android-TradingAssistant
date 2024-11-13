@@ -8,11 +8,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.InputNumberView;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.Tools;
@@ -45,7 +47,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         CartItem cartItem = cartItems.get(position);
         holder.nameTextView.setText(cartItem.getName());
         holder.priceTextView.setText(String.format("$%.2f", cartItem.getPrice()));
-        holder.quantityTextView.setText("x" + cartItem.getQuantity());
+        holder.inputNumber.setMaxNum(50);
+
+        holder.inputNumber.setOnAmountChangeListener(new InputNumberView.OnAmountChangeListener() {
+            @Override
+            public void onAmountChange(View view, int amount) {
+
+            }
+        });
+        holder.inputNumber.setCurrentNum(cartItem.getQuantity());
+        // holder.quantityTextView.setText("x" + cartItem.getQuantity());
 
 //        holder.plusButton.setOnClickListener(v -> {
 //            cartItem.setQuantity(cartItem.getQuantity() + 1);
@@ -94,8 +105,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public static class CartViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
         TextView priceTextView;
-        TextView quantityTextView;
+        // TextView quantityTextView;
         ImageButton removeButton;
+        InputNumberView inputNumber;
         Button plusButton;
         Button minusButton;
         CheckBox checkBox;
@@ -104,8 +116,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             super(itemView);
             nameTextView = itemView.findViewById(R.id.commodity_name);
             priceTextView = itemView.findViewById(R.id.commodity_price);
-            quantityTextView = itemView.findViewById(R.id.commodity_num);
+            // quantityTextView = itemView.findViewById(R.id.commodity_num);
             removeButton = itemView.findViewById(R.id.cart_item_remove_button);
+            inputNumber = itemView.findViewById(R.id.commodity_num);
         }
     }
 }

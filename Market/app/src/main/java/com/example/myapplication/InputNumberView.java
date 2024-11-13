@@ -23,6 +23,7 @@ public class InputNumberView extends LinearLayout implements View.OnClickListene
     private int currentNum = 1; //当前数值
     private int maxNum = 1; //最大值
 
+
     private OnAmountChangeListener mListener;
 
     private EditText etAmount;
@@ -82,18 +83,31 @@ public class InputNumberView extends LinearLayout implements View.OnClickListene
         return currentNum;
     }
 
+    public void setCurrentNum(int num) {
+        if (num >= 1 && num <= maxNum) {
+            this.currentNum = num;
+            etAmount.setText(String.valueOf(currentNum));
+        }
+        etAmount.clearFocus();
+
+        if (mListener != null) {
+            mListener.onAmountChange(this, currentNum);
+        }
+    }
+
+
     @Override
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.btnDecrease) {
             if (currentNum > 1) {
                 currentNum--;
-                etAmount.setText(currentNum + "");
+                etAmount.setText(String.valueOf(currentNum));
             }
         } else if (i == R.id.btnIncrease) {
             if (currentNum < maxNum) {
                 currentNum++;
-                etAmount.setText(currentNum + "");
+                etAmount.setText(String.valueOf(currentNum));
             }
         }
 
@@ -118,9 +132,9 @@ public class InputNumberView extends LinearLayout implements View.OnClickListene
     public void afterTextChanged(Editable s) {
         if (s.toString().isEmpty())
             return;
-        currentNum = Integer.valueOf(s.toString());
+        currentNum = Integer.parseInt(s.toString());
         if (currentNum > maxNum) {
-            etAmount.setText(maxNum + "");
+            etAmount.setText(String.valueOf(maxNum));
             return;
         }
 
