@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,6 +48,8 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+
+        //RelativeLayout order = findViewById(R.id.my_order_view);
         ImageButton orderButton = findViewById(R.id.order_button);
         orderButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, OrderActivity.class);

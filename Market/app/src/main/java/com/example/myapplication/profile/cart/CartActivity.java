@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 
-public class CartActivity extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity implements CartAdapter.OnChangeListener{
 
     private RecyclerView recyclerView;
     private CartAdapter cartAdapter;
@@ -35,6 +35,7 @@ public class CartActivity extends AppCompatActivity {
         // 更新 RecyclerView
         cartAdapter = new CartAdapter(cartManager.getCartItems(), this, cartManager);
         recyclerView.setAdapter(cartAdapter);
+        cartAdapter.setOnChangeListener(this);
 
         // 显示总价
         updateTotalPrice();
@@ -48,5 +49,12 @@ public class CartActivity extends AppCompatActivity {
     private void updateTotalPrice() {
         double totalPrice = cartManager.getTotalPrice();
         totalPriceTextView.setText(String.format("总价: $%.2f", totalPrice));
+    }
+
+    @Override
+    public void onChange(String message) {
+        if (message.equals("change")) {
+            updateTotalPrice();
+        }
     }
 }

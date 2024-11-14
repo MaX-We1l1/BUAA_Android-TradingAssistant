@@ -19,7 +19,7 @@ public class CartItem extends LitePalSupport {
         this.commodityId = commodityId;
         this.price = price;
         this.quantity = quantity;
-        isSelected = false;
+        isSelected = true;
     }
 
     // Getter 和 Setter 方法

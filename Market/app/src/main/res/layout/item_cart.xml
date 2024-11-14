@@ -8,18 +8,25 @@
     android:background="?attr/selectableItemBackground"
     android:layout_marginBottom="8dp">
 
+    <!-- 地址名称 -->
+
+    <!-- 地址详情 -->
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="26dp"
+        android:layout_height="27dp"
+        android:text="Option 1" />
+
     <ImageView
         android:id="@+id/commodity_image"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/ic_order_placeholder"
-        android:scaleType="centerCrop"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
-
-    <!-- 地址名称 -->
-
-    <!-- 地址详情 -->
+        android:layout_marginLeft="33dp"
+        android:layout_toRightOf="@id/checkBox"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_order_placeholder" />
 
     <TextView
         android:id="@+id/commodity_name"

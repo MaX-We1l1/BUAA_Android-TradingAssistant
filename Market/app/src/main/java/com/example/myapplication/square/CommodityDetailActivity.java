@@ -101,6 +101,14 @@ public class CommodityDetailActivity extends AppCompatActivity {
         });
     }
 
+    protected void onResume() {
+        super.onResume();
+        // 在这里执行你希望在Activity重新回到前台后执行的逻辑
+        Intent intent = getIntent();
+        long commodityId = intent.getLongExtra("commodity_id", -1);
+        loadCommodityDetails(commodityId);
+    }
+
     @SuppressLint("SetTextI18n")
     private void loadCommodityDetails(long commodityId) {
         // 使用商品 ID 获取商品详情
