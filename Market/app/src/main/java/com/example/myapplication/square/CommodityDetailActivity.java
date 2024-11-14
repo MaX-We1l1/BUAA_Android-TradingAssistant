@@ -1,9 +1,18 @@
 package com.example.myapplication.square;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -12,8 +21,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+
+import com.bumptech.glide.Glide;
 import com.example.myapplication.InputNumberView;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
@@ -29,9 +43,15 @@ import com.example.myapplication.profile.cart.CartManager;
 
 import org.litepal.LitePal;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
 
 public class CommodityDetailActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE = 1;
     private TextView commodityName; // 商品名称
     private TextView commodityPrice; // 商品价格
     private TextView commodityDescription; // 商品描述
@@ -119,12 +139,30 @@ public class CommodityDetailActivity extends AppCompatActivity {
             commodityPrice.setText("¥ " + commodity.getPrice());
             commodityDescription.setText(commodity.getDescription());
             commoditySeller.setText("卖家: " + commodity.getSellerName()); // 显示卖家信息
-            // 使用 Glide 加载商品图片
-//            Glide.with(this)
-//                    .load(commodity.getImageUrl())
-//                    .placeholder(R.drawable.placeholder) // 占位图
-//                    .error(R.drawable.error_image) // 错误图
-//                    .into(commodityImage);
+
+            // 加载商品图片
+//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+//                    != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+//                        REQUEST_CODE);
+//            } else {
+//                loadImage();
+//            }
+            String imageBase64 = commodity.getImageUrl();
+            if (imageBase64 != null || !imageBase64.isEmpty()) {
+                byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                commodityImage.setImageBitmap(decodedByte);
+            } else {
+                Glide.with(this)
+                    .load(R.drawable.logo)
+                    .placeholder(R.drawable.wangpeng) // 占位图
+                    .error(R.drawable.logo) // 错误图
+                    .into(commodityImage);
+            }
+
+
             chatButton.setOnClickListener(v -> {
                 long user2 = DBFunction.findUserByName(commodity.getSellerName()).getId();
                 Intent intent = new Intent(CommodityDetailActivity.this, ChatMsgView.class);
@@ -245,4 +283,64 @@ public class CommodityDetailActivity extends AppCompatActivity {
         saveButton.setVisibility(View.GONE);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 权限已授予，可以执行相应的操作
+                loadImage();
+            } else {
+                // 权限被拒绝，处理相应的逻辑（例如提示用户）
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    // 用户已勾选"不再询问"，你可以引导用户去设置界面手动打开权限
+                    Toast.makeText(this, "Permission permanently denied, please enable it in settings", Toast.LENGTH_LONG).show();
+                } else {
+                    // 用户拒绝权限，显示解释并请求权限
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            REQUEST_CODE);
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private void loadImage() {
+        Uri imgUri = null;
+        if (commodity.getImageUrl() != null) {
+            imgUri = Uri.parse(commodity.getImageUrl());
+        }
+        // InputStream inputStream = getContentResolver().openInputStream(commodity.getImageUrl());
+//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+//                    != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(this,
+//                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+//            }
+        // getApplicationContext().getContentResolver().takePersistableUriPermission(imgUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+//            Glide.with(this)
+//                    .load(imgUri == null ? R.drawable.logo: imgUri)
+//                    .placeholder(R.drawable.wangpeng) // 占位图
+//                    .error(R.drawable.logo) // 错误图
+//                    .into(commodityImage);
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(imgUri, projection, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            String filePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            // 使用文件路径加载图片
+            Glide.with(this)
+                    .load(filePath)
+                    .placeholder(R.drawable.wangpeng) // 占位图
+                    .error(R.drawable.logo) // 错误图
+                    .into(commodityImage);
+        }
+
+        Log.w("from addComodity", commodity.getImageUrl());
+    }
 }

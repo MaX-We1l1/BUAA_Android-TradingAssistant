@@ -1,29 +1,50 @@
 package com.example.myapplication.commodity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.database.Type;
+import com.example.myapplication.minio.MinioUtils;
 import com.example.myapplication.square.CommodityListActivity;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+
+import io.minio.errors.MinioException;
 
 public class AddCommodityActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
+    private String base = "";
+    // private MinioUtils minioUtils = new MinioUtils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +86,22 @@ public class AddCommodityActivity extends AppCompatActivity {
             // 添加商品的逻辑
             // 保存到数据库或其他操作
             DBFunction.addCommodity(name, MainActivity.getCurrentUsername(), currentDate,
-                    type, price, description);
+                    type, price, description, base);
+
+//            // 将图片上传到云端
+//            try {
+//                String filepath = getRealPathFromURI(imageUri);
+//                String folderPath = "img/commodity/";
+//                String objectName = folderPath + commodity.getId() + "-" + commodity.getCommodityName();
+//                if (filepath != null) {
+//                    File file = new File(filepath);
+//                    minioUtils.uploadFile(file, objectName + ".jpg");
+//                }
+//                Toast.makeText(this, "图片上传成功", Toast.LENGTH_SHORT).show();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                Toast.makeText(this, "图片上传失败", Toast.LENGTH_SHORT).show();
+//            }
 
             // 返回首页
             Intent intent = new Intent(AddCommodityActivity.this, CommodityListActivity.class);
@@ -81,6 +117,37 @@ public class AddCommodityActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             // 这里可以显示选中的图片或进行其他处理
+            ImageView imageView = findViewById(R.id.commodity_image);
+            String filepath = getRealPathFromURI(imageUri);
+            imageView.setImageURI(imageUri);
+            base = encodeImageToBase64(filepath);
+            Log.w("from AddCommodityActivity", "url is " + imageUri);
         }
+    }
+
+    private String getRealPathFromURI(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            String filePath = cursor.getString(columnIndex);
+            cursor.close();
+            Log.w("from AddCommodityActivity", "path is " + imageUri);
+            return filePath;
+        }
+        return null;
+    }
+
+    public static String encodeImageToBase64(String imagePath) {
+        try {
+            FileInputStream imageStream = new FileInputStream(imagePath);
+            byte[] imageBytes = new byte[(int) imageStream.available()];
+            imageStream.read(imageBytes);
+            return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

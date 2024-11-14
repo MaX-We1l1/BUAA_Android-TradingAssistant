@@ -2,10 +2,12 @@ package com.example.myapplication.database;
 
 import org.litepal.crud.LitePalSupport;
 
+
 public class Commodity extends LitePalSupport {
     private long id; //编号
     private String commodityName; //名称
     // TODO 添加商品图片
+    private String imageUrl;
     private Float price; //价格
     private String releaseDate; //发布日期
     private String description; //商品描述
@@ -63,6 +65,14 @@ public class Commodity extends LitePalSupport {
 
     public Float getPrice() {
         return price;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public void setReleaseDate(String releaseDate) {
