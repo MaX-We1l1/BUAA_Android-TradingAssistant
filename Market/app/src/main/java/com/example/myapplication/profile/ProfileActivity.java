@@ -48,27 +48,25 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
-        //RelativeLayout order = findViewById(R.id.my_order_view);
-        ImageButton orderButton = findViewById(R.id.order_button);
+        RelativeLayout orderButton = findViewById(R.id.my_order_view);
         orderButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, OrderActivity.class);
             startActivity(intent);
         });
 
-        ImageButton favoriteButton = findViewById(R.id.favorite_button);
+        RelativeLayout favoriteButton = findViewById(R.id.my_favorite_view);
         favoriteButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, FavoriteActivity.class);
             startActivity(intent);
         });
 
-        ImageButton addressButton = findViewById(R.id.address_button);
+        RelativeLayout addressButton = findViewById(R.id.my_address_view);
         addressButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, AddressActivity.class);
             startActivity(intent);
         });
 
-        ImageButton settingsButton = findViewById(R.id.settings_button);
+        RelativeLayout settingsButton = findViewById(R.id.my_settings_view);
         settingsButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
             startActivity(intent);

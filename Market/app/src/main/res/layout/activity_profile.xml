@@ -105,19 +105,20 @@
                         android:layout_marginLeft="16dp" />
 
                     <!-- 将 ImageView 替换成 ImageButton -->
-                    <ImageButton
-                        android:id="@+id/order_button"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_right"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Arrow button" />
+<!--                    <ImageButton-->
+<!--                        android:id="@+id/order_button"-->
+<!--                        android:layout_width="24dp"-->
+<!--                        android:layout_height="24dp"-->
+<!--                        android:src="@drawable/ic_arrow_right"-->
+<!--                        android:layout_alignParentRight="true"-->
+<!--                        android:layout_centerVertical="true"-->
+<!--                        android:background="?attr/selectableItemBackgroundBorderless"-->
+<!--                        android:contentDescription="Arrow button" />-->
                 </RelativeLayout>
 
                 <!-- 我的收藏 -->
                 <RelativeLayout
+                    android:id="@+id/my_favorite_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
@@ -142,20 +143,21 @@
                         android:layout_toRightOf="@id/favorite_icon"
                         android:layout_marginLeft="16dp" />
 
-                    <ImageButton
-                        android:id="@+id/favorite_button"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_right"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Arrow button" />
+<!--                    <ImageButton-->
+<!--                        android:id="@+id/favorite_button"-->
+<!--                        android:layout_width="24dp"-->
+<!--                        android:layout_height="24dp"-->
+<!--                        android:src="@drawable/ic_arrow_right"-->
+<!--                        android:layout_alignParentRight="true"-->
+<!--                        android:layout_centerVertical="true"-->
+<!--                        android:background="?attr/selectableItemBackgroundBorderless"-->
+<!--                        android:contentDescription="Arrow button" />-->
 
                 </RelativeLayout>
 
                 <!-- 地址管理 -->
                 <RelativeLayout
+                    android:id="@+id/my_address_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
@@ -180,19 +182,20 @@
                         android:layout_toRightOf="@id/address_icon"
                         android:layout_marginLeft="16dp" />
 
-                    <ImageButton
-                        android:id="@+id/address_button"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_right"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Arrow button" />
+<!--                    <ImageButton-->
+<!--                        android:id="@+id/address_button"-->
+<!--                        android:layout_width="24dp"-->
+<!--                        android:layout_height="24dp"-->
+<!--                        android:src="@drawable/ic_arrow_right"-->
+<!--                        android:layout_alignParentRight="true"-->
+<!--                        android:layout_centerVertical="true"-->
+<!--                        android:background="?attr/selectableItemBackgroundBorderless"-->
+<!--                        android:contentDescription="Arrow button" />-->
                 </RelativeLayout>
 
                 <!-- 设置 -->
                 <RelativeLayout
+                    android:id="@+id/my_settings_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
@@ -217,15 +220,15 @@
                         android:layout_toRightOf="@id/settings_icon"
                         android:layout_marginLeft="16dp" />
 
-                    <ImageButton
-                        android:id="@+id/settings_button"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Arrow button"
-                        android:src="@drawable/ic_arrow_right" />
+<!--                    <ImageButton-->
+<!--                        android:id="@+id/settings_button"-->
+<!--                        android:layout_width="24dp"-->
+<!--                        android:layout_height="24dp"-->
+<!--                        android:layout_alignParentRight="true"-->
+<!--                        android:layout_centerVertical="true"-->
+<!--                        android:background="?attr/selectableItemBackgroundBorderless"-->
+<!--                        android:contentDescription="Arrow button"-->
+<!--                        android:src="@drawable/ic_arrow_right" />-->
                 </RelativeLayout>
             </LinearLayout>
 

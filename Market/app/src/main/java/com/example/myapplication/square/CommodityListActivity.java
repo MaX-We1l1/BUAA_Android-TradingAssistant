@@ -70,22 +70,6 @@ public class CommodityListActivity extends AppCompatActivity {
         recyclerView.setAdapter(commodityAdapter); // 设置适配器
 
         // 设置搜索框
-//        EditText searchEditText = findViewById(R.id.editTextSearch);
-//        searchEditText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                //Log.d("Search", "Text changed: " + s.toString());
-//                filter(s.toString());
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//            }
-//        });
         mSearchView.setOnLeftMenuClickListener(
                 new FloatingSearchView.OnLeftMenuClickListener() {
                     @Override
