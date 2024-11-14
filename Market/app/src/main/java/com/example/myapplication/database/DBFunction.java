@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.profile.address.Address;
-import com.example.myapplication.profile.cart.CartItem;
 
 import org.litepal.LitePal;
 
@@ -166,37 +165,37 @@ public class DBFunction {
     }
 
     // 购物车
-    public static ArrayList<String> getCart(String userName) {
+    public static List<CartItem> getCart(String userName) {
         User user = findUserByName(userName);
         if (user != null) {
             // 查找该用户的收藏记录
-            return user.getCart();
+            return LitePal.where("username = ?", userName).find(CartItem.class);
         } else {
             Log.w(DBFunction.TAG, "不存在用户名为 " + userName + " 的用户");
         }
         return new ArrayList<>();
     }
 
-    public static void addCart(String userName, String cartItem) {
+    public static void addCart(String userName, CartItem cartItem) {
         User user = findUserByName(userName);
         if (user != null) {
-            user.addCartItem(cartItem);
-            user.save();
+            cartItem.setUsername(userName);
+            cartItem.save();
         } else {
             Log.w(DBFunction.TAG, "未找到该用户，商品添加购物车失败， userName: " + userName);
         }
     }
 
-    public static void delCart(String userName, int index) {
+    public static void delCart(String userName, long commodityId) {
         User user = findUserByName(userName);
         if (user != null) {
             // 查找该用户的购物车记录
-            if (user.getCart().size() > index) {
-                // CartItem cartItem = CartItem.parseCartItemFromString(user.getCart().get(index));
-                user.delCartItem(index);
-                user.save();
+            List<CartItem> cartItems = LitePal.where("username = ? and commodityId = ?", userName, String.valueOf(commodityId)).find(CartItem.class);
+            if (!cartItems.isEmpty()) {
+                // 删除第一条找到的记录
+                LitePal.delete(CartItem.class, cartItems.get(0).getId());
             } else {
-                Log.w(DBFunction.TAG, "索引超出");
+                Log.w(DBFunction.TAG, "未找到该用户的购物车记录，cancelCart失败");
             }
         } else {
             Log.w(DBFunction.TAG, "不存在用户名为 " + userName + " 的用户");

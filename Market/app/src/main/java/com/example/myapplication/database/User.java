@@ -22,7 +22,6 @@ public class User extends LitePalSupport {
     private String birthday; //生日, yyyymmdd 的格式, 防止前导零的情况, 以字符串存
     private String sex; //性别,直接用“男”,"女"就行。 ~~男用"m"表示, 女用"f"表示~~
     private ArrayList<String> addresses = new ArrayList<>(); //地址管理
-    private ArrayList<String> cart = new ArrayList<>(); // 购物车管理
     private ArrayList<Hobby> hobbies = new ArrayList<>(); // 收藏管理
 
     //
@@ -163,26 +162,6 @@ public class User extends LitePalSupport {
 
     public void changeAddress(int index, String address) {
         addresses.set(index, address);
-    }
-
-    public ArrayList<String> getCart() {
-        return cart;
-    }
-
-    public void setCart(ArrayList<String> cart) {
-        this.cart = cart;
-    }
-
-    public void addCartItem(String item) {
-        cart.add(item);
-    }
-
-    public void delCartItem(int index) {
-        cart.remove(index);
-    }
-
-    public void changeCartItem(int index, String item) {
-        cart.set(index, item);
     }
 
     public void addHobby(Hobby hobby) {

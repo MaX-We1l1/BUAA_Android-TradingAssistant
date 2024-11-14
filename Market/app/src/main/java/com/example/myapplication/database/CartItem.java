@@ -1,26 +1,37 @@
-package com.example.myapplication.profile.cart;
+package com.example.myapplication.database;
 
 import androidx.annotation.NonNull;
 
-import com.example.myapplication.profile.address.Address;
+import org.litepal.crud.LitePalSupport;
 
-public class CartItem {
+public class CartItem extends LitePalSupport {
+    private long id;
+    private String username;
     private String name;  // 商品名称
-    private long id;      // 商品id
+    private long commodityId;      // 商品id
     private Float price; // 商品价格
     private int quantity; // 商品数量
     private boolean isSelected;
 
     // 构造函数
-    public CartItem(String name, long id,  Float price, int quantity) {
+    public CartItem(String name, long commodityId, Float price, int quantity) {
         this.name = name;
-        this.id = id;
+        this.commodityId = commodityId;
         this.price = price;
         this.quantity = quantity;
         isSelected = false;
     }
 
     // Getter 和 Setter 方法
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }
@@ -29,12 +40,20 @@ public class CartItem {
         this.name = name;
     }
 
-    public long getId() {
-        return id;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public String getUsername() {
+        return username;
+    }
+
+    public long getCommodityId() {
+        return commodityId;
+    }
+
+    public void setCommodityId(long commodityId) {
+        this.commodityId = commodityId;
     }
 
     public Float getPrice() {
@@ -91,7 +110,7 @@ public class CartItem {
     public String toString() {
         return "CartItem{" +
                 "name='" + name + '\'' +
-                ", id='" + id + '\'' +
+                ", id='" + commodityId + '\'' +
                 ", price='" + price + '\'' +
                 ", quantity=" + quantity +
                 "}";

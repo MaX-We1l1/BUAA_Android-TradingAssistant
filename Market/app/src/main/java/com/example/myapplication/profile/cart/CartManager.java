@@ -1,11 +1,8 @@
 package com.example.myapplication.profile.cart;
 
-import androidx.annotation.NonNull;
-
 import com.example.myapplication.MainActivity;
-import com.example.myapplication.Tools;
+import com.example.myapplication.database.CartItem;
 import com.example.myapplication.database.DBFunction;
-import com.example.myapplication.square.CommodityDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +10,6 @@ import java.util.List;
 public class CartManager {
     private List<CartItem> cartItems;
     private static CartManager cartManager = new CartManager(); // 单例模式
-    private static String username = MainActivity.getCurrentUsername();
 
     public static CartManager getInstance() {
         return cartManager;
@@ -21,60 +17,52 @@ public class CartManager {
 
     private CartManager() {
         cartItems = new ArrayList<>();
-        ArrayList<String> carts = DBFunction.getCart(MainActivity.getCurrentUsername());
-        for (String s: carts) {
-            cartItems.add(CartItem.parseCartItemFromString(s));
-        }
+        List<CartItem> carts = DBFunction.getCart(MainActivity.getCurrentUsername());
+        cartItems.addAll(carts);
     }
 
     // 添加商品到购物车
     public void addItemToCart(CartItem item) {
-        boolean needupdate = false;
-        int index = 0;
         for (int i = 0; i < cartItems.size(); i++) {
-            if (cartItems.get(i).getId() == item.getId()) {
+            if (cartItems.get(i).getCommodityId() == item.getCommodityId()) {
                 int q = cartItems.get(i).getQuantity();
-                item.setQuantity(q + item.getQuantity());
-                needupdate = true;
-                index = i;
+                cartItems.get(i).setQuantity(q + item.getQuantity());
+                cartItems.get(i).save();
                 //cartItems.get(i).setQuantity(q + item.getQuantity());
-                break;
+                return;
             }
         }
-        if (needupdate) {
-            removeItemFromCart(index);
-        }
         cartItems.add(item);
-        DBFunction.addCart(MainActivity.getCurrentUsername(), item.toString());
+        DBFunction.addCart(MainActivity.getCurrentUsername(), item);
     }
 
     // 从购物车中移除商品
     public void removeItemFromCart(int postion) {
-        cartItems.remove(postion);
-        DBFunction.delCart(MainActivity.getCurrentUsername(), postion);
+        CartItem cartItem = cartItems.remove(postion);
+        DBFunction.delCart(MainActivity.getCurrentUsername(), cartItem.getCommodityId());
     }
 
     // 获取购物车中所有商品
     public List<CartItem> getCartItems() {
-        if (!username.equals(MainActivity.getCurrentUsername())) {
-            return updateCartItems();
-        }
-        return cartItems;
-    }
-
-    public List<CartItem> updateCartItems() {
         cartItems.clear();
-        ArrayList<String> carts = DBFunction.getCart(MainActivity.getCurrentUsername());
-        for (String s: carts) {
-            cartItems.add(CartItem.parseCartItemFromString(s));
-        }
+        List<CartItem> carts = DBFunction.getCart(MainActivity.getCurrentUsername());
+        cartItems.addAll(carts);
         return cartItems;
     }
 
     // 获取某一商品数量
     public int getQuantity(CartItem item) {
         for (int i = 0; i < cartItems.size(); i++) {
-            if (cartItems.get(i).getId() == item.getId()) {
+            if (cartItems.get(i).getCommodityId() == item.getCommodityId()) {
+                return cartItems.get(i).getQuantity();
+            }
+        }
+        return 0;
+    }
+
+    public int getQuantity(long commodityId) {
+        for (int i = 0; i < cartItems.size(); i++) {
+            if (cartItems.get(i).getCommodityId() == commodityId) {
                 return cartItems.get(i).getQuantity();
             }
         }

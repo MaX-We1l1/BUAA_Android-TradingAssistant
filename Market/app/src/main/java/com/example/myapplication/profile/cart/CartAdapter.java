@@ -8,18 +8,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.InputNumberView;
-import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
-import com.example.myapplication.Tools;
-import com.example.myapplication.database.DBFunction;
-import com.example.myapplication.square.CommodityDetailActivity;
+import com.example.myapplication.database.CartItem;
 
 import java.util.List;
 

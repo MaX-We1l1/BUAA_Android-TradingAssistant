@@ -151,7 +151,7 @@
             android:layout_marginBottom="8dp"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/commodity_num"
-            android:text="已添加: " />
+            android:text="已添加: 0" />
 
     </RelativeLayout>
 

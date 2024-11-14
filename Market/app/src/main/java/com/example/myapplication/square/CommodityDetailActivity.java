@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -19,15 +18,13 @@ import com.example.myapplication.InputNumberView;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.Tools;
-import com.example.myapplication.chat.ChatListActivity;
 import com.example.myapplication.chat.ChatMsgView;
 import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.database.Hobby;
 import com.example.myapplication.database.User;
-import com.example.myapplication.profile.ProfileActivity;
 import com.example.myapplication.profile.cart.CartActivity;
-import com.example.myapplication.profile.cart.CartItem;
+import com.example.myapplication.database.CartItem;
 import com.example.myapplication.profile.cart.CartManager;
 
 import org.litepal.LitePal;
@@ -140,18 +137,16 @@ public class CommodityDetailActivity extends AppCompatActivity {
                 }
             });
 
-            CartItem cartItem = new CartItem(commodity.getCommodityName()
-                    , commodity.getId()
-                    , commodity.getPrice()
-                    , 1);
-
             // 已添加
             TextView already = findViewById(R.id.commodity_already_num);
-            already.setText("已添加：" + cartManager.getQuantity(cartItem));
+            already.setText("已添加：" + cartManager.getQuantity(commodity.getId()));
 
             // 加入购物车
             addCartButton.setOnClickListener(v -> {
-                cartItem.setQuantity(quantity.getCurrentNum());
+                CartItem cartItem = new CartItem(commodity.getCommodityName()
+                        , commodity.getId()
+                        , commodity.getPrice()
+                        , quantity.getCurrentNum());
                 cartManager.addItemToCart(cartItem);
                 Tools.toastMessageShort(CommodityDetailActivity.this, "加入购物车成功!");
                 already.setText("已添加：" + cartManager.getQuantity(cartItem));
