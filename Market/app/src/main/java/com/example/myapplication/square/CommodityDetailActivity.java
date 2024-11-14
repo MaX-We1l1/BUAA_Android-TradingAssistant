@@ -41,10 +41,12 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private Button editButton;
     private Commodity commodity;
     private Button saveButton;
+    private Button buyButton;
     private Button addCartButton,addHobbyButton;
     private ImageButton cartButton;
     private CartManager cartManager = CartManager.getInstance();
     private InputNumberView quantity;
+    private InputNumberView buyNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class CommodityDetailActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.button_save); //
         addHobbyButton = findViewById(R.id.button_add_to_hobby);
         quantity = findViewById(R.id.commodity_num);
+        buyButton = findViewById(R.id.button_buy);
+        buyNum = findViewById(R.id.commodity_buy_num);
 
         // 重定向到自己的购物车
         cartButton = findViewById(R.id.button_cart);
@@ -88,6 +92,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
             editButton.setVisibility(View.VISIBLE);
             chatButton.setVisibility(View.GONE);
             addCartButton.setVisibility(View.GONE);
+            buyButton.setVisibility(View.GONE);
             quantity.setVisibility(View.GONE);
             editButton.setOnClickListener(v -> enableEditing());
         }
@@ -179,6 +184,32 @@ public class CommodityDetailActivity extends AppCompatActivity {
                 }
                 Tools.toastMessageShort(CommodityDetailActivity.this, s);
             });
+
+            buyNum.setMaxNum(50);
+            buyNum.setOnAmountChangeListener(new InputNumberView.OnAmountChangeListener() {
+                @Override
+                public void onAmountChange(View view, int amount) {
+                    if (amount > 50) {
+                        Toast.makeText(getApplicationContext(), "超过最大购买上限", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            buyButton.setOnClickListener(v -> {
+                User buyer = DBFunction.findUserByName(MainActivity.getCurrentUsername());
+                if (buyer.getMoney() > commodity.getPrice() * buyNum.getCurrentNum()) {
+                    buyer.buy(commodity.getPrice() * buyNum.getCurrentNum());
+                    User seller = DBFunction.findUserByName(commodity.getSellerName());
+                    seller.sell(commodity.getPrice() * buyNum.getCurrentNum());
+                    commodity.setBuyerName(MainActivity.getCurrentUsername());
+                    buyer.save();
+                    seller.save();
+                    Toast.makeText(this, "谢谢惠顾", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "余额不足", Toast.LENGTH_SHORT).show();
+                }
+            });
+
         } else {
             Toast.makeText(this, "未找到该商品", Toast.LENGTH_SHORT).show();
         }

@@ -88,6 +88,32 @@
         android:text="收藏商品"
         android:layout_gravity="center" />
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <Button
+            android:id="@+id/button_buy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="立即购买"
+            android:layout_gravity="center" />
+
+        <com.example.myapplication.InputNumberView
+            android:id="@+id/commodity_buy_num"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_toEndOf="@id/button_buy"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:btnTextSize="14sp"
+            app:btnWidth="36dp"
+            app:tvWidth="50dp"
+            tools:ignore="MissingClass" />
+    </RelativeLayout>
+
     <Button
         android:id="@+id/button_save"
         android:layout_width="wrap_content"
