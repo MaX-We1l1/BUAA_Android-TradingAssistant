@@ -37,9 +37,9 @@ dependencies {
     implementation("com.android.support:recyclerview-v7:24.2.1")
     implementation ("com.github.bumptech.glide:glide:4.15.1")  // Glide 依赖
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")  // Glide 注解处理器
-    implementation("io.minio:minio:8.0.0")
-    implementation("io.jsonwebtoken:jjwt:0.12.6")
-    implementation("com.google.guava:guava:32.0.1-jre")
+//    implementation("io.minio:minio:8.0.0")
+//    implementation("io.jsonwebtoken:jjwt:0.12.6")
+//    implementation("com.google.guava:guava:32.0.1-jre")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

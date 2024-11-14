@@ -4,6 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +14,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.InputNumberView;
 import com.example.myapplication.R;
 import com.example.myapplication.database.CartItem;
+import com.example.myapplication.database.Commodity;
 import com.example.myapplication.square.CommodityDetailActivity;
+
+import org.litepal.LitePal;
 
 import java.util.List;
 
@@ -55,6 +63,14 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.priceTextView.setText(String.format("$%.2f", cartItem.getPrice()));
         holder.inputNumber.setMaxNum(50);
         holder.checkBox.setChecked(cartItem.isSelected());
+
+        Commodity commodity = LitePal.find(Commodity.class, cartItem.getCommodityId());
+        String imageBase64 = commodity.getImageUrl();
+        if (imageBase64 != null || !imageBase64.isEmpty()) {
+            byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.commodityImg.setImageBitmap(decodedByte);
+        }
 
         holder.inputNumber.setOnAmountChangeListener(new InputNumberView.OnAmountChangeListener() {
             @Override
@@ -113,6 +129,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public static class CartViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
         TextView priceTextView;
+        ImageView commodityImg;
         // TextView quantityTextView;
         ImageButton removeButton;
         InputNumberView inputNumber;
@@ -124,6 +141,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             super(itemView);
             nameTextView = itemView.findViewById(R.id.commodity_name);
             priceTextView = itemView.findViewById(R.id.commodity_price);
+            commodityImg = itemView.findViewById(R.id.commodity_image);
             // quantityTextView = itemView.findViewById(R.id.commodity_num);
             removeButton = itemView.findViewById(R.id.cart_item_remove_button);
             inputNumber = itemView.findViewById(R.id.commodity_num);

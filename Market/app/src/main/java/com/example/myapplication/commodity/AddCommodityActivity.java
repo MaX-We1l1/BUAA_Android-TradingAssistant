@@ -26,7 +26,6 @@ import com.example.myapplication.R;
 import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.database.Type;
-import com.example.myapplication.minio.MinioUtils;
 import com.example.myapplication.square.CommodityListActivity;
 
 import java.io.File;
@@ -37,7 +36,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import io.minio.errors.MinioException;
 
 public class AddCommodityActivity extends AppCompatActivity {
 
