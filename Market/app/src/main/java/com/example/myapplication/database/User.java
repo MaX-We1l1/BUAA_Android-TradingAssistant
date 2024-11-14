@@ -13,6 +13,7 @@ import java.util.List;
 
 public class User extends LitePalSupport {
     private long id;
+    private double money = 100.00;
     @Column(nullable = false, unique = true)
     private String username;        //primary
     private String password;
@@ -76,6 +77,10 @@ public class User extends LitePalSupport {
         return id;
     }
 
+    public double getMoney() {
+        return money;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -122,6 +127,18 @@ public class User extends LitePalSupport {
 
     public void setPersonalitySign(String personalitySign) {
         this.personalitySign = personalitySign;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public void buy(double price) {
+        this.money -= price;
+    }
+
+    public void sell(double price) {
+        this.money += price;
     }
 
     public String getBirthday() {

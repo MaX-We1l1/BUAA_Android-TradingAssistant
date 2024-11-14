@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.commodity.AddCommodityActivity;
+import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.home.HomepageActivity;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
@@ -23,6 +24,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private ImageView profileImageView;
     private TextView usernameTextView;
+    private TextView userMoney;
 
     // 假设 currentUser 是当前登录的用户名
     private final String currentUser = MainActivity.getCurrentUsername(); // 这个可以根据实际情况进行获取
@@ -38,6 +40,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         // 设置用户名
         usernameTextView.setText(currentUser);
+        userMoney = findViewById(R.id.user_money);
+        userMoney.setText("账户余额： " + DBFunction.findUserByName(MainActivity.getCurrentUsername()).getMoney());
 
         // 根据用户名设置头像
         setProfileImage(currentUser);
@@ -103,6 +107,12 @@ public class ProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(ProfileActivity.this, HomepageActivity.class);
             startActivity(intent);
         });
+    }
+
+    protected void onResume() {
+
+        super.onResume();
+        userMoney.setText("账户余额： " + DBFunction.findUserByName(MainActivity.getCurrentUsername()).getMoney());
     }
 
     /**
