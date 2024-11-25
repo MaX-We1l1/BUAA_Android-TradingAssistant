@@ -11,7 +11,7 @@ public class Commodity extends LitePalSupport {
     private Float price; //价格
     private String releaseDate; //发布日期
     private String description; //商品描述
-    private Type type; //商品类别
+    private int typeValue; //商品类别
     private String sellerName;
     private String buyerName;
 
@@ -83,11 +83,11 @@ public class Commodity extends LitePalSupport {
         return releaseDate;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setTypeValue(int typeValue) {
+        this.typeValue = typeValue;
     }
 
     public Type getType() {
-        return type;
+        return Type.getTypeByValue(typeValue);
     }
 }

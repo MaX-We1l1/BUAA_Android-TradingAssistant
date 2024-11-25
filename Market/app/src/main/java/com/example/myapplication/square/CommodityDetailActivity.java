@@ -18,6 +18,7 @@ import android.widget.Button;
 
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import com.example.myapplication.chat.ChatMsgView;
 import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.database.Hobby;
+import com.example.myapplication.database.Type;
 import com.example.myapplication.database.User;
 import com.example.myapplication.profile.cart.CartActivity;
 import com.example.myapplication.database.CartItem;
@@ -48,10 +50,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Objects;
 
 public class CommodityDetailActivity extends AppCompatActivity {
-    private static final int REQUEST_CODE = 1;
     private TextView commodityName; // 商品名称
     private TextView commodityPrice; // 商品价格
     private TextView commodityDescription; // 商品描述
@@ -67,6 +69,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private CartManager cartManager = CartManager.getInstance();
     private InputNumberView quantity;
     private InputNumberView buyNum;
+    private LinearLayout typeButtonContainer; //类型筛选按钮
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,29 @@ public class CommodityDetailActivity extends AppCompatActivity {
         quantity = findViewById(R.id.commodity_num);
         buyButton = findViewById(R.id.button_buy);
         buyNum = findViewById(R.id.commodity_buy_num);
+        typeButtonContainer = findViewById(R.id.type_button_container);
+
+        //遍历 Type 枚举，为每个类型生成一个按钮
+        for (Type type : Type.values()) {
+            Button button = new Button(this);
+            button.setText(type.name());
+            button.setTag(type); // 将类型绑定到按钮上
+            button.setPadding(20, 10, 20, 10);
+
+            // 设置按钮样式
+            //button.setBackgroundResource(R.drawable.button_background); // 可自定义样式
+            button.setTextColor(ContextCompat.getColor(this, R.color.white));
+
+            // 添加点击事件
+            button.setOnClickListener(v -> {
+                Type selectedType = (Type) v.getTag(); // 获取按钮绑定的类型
+                filterByType(selectedType);
+            });
+
+            // 将按钮添加到容器中
+            typeButtonContainer.addView(button);
+        }
+
 
         // 重定向到自己的购物车
         cartButton = findViewById(R.id.button_cart);
@@ -313,4 +339,17 @@ public class CommodityDetailActivity extends AppCompatActivity {
         commodityDescription.setEnabled(false);
         saveButton.setVisibility(View.GONE);
     }
+
+    private void filterByType(Type type) {
+        List<Commodity> filteredCommodities = LitePal.where("type = ?", type.name()).find(Commodity.class);
+        if (filteredCommodities.isEmpty()) {
+            Toast.makeText(this, "暂无该类型商品", Toast.LENGTH_SHORT).show();
+        } else {
+            // 跳转到商品列表页面并传递筛选结果
+            Intent intent = new Intent(this, CommodityListActivity.class);
+            intent.putExtra("filtered_type", type.name());
+            startActivity(intent);
+        }
+    }
+
 }

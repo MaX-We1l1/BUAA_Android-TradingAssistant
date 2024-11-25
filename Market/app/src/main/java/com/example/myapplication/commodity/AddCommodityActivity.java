@@ -28,12 +28,15 @@ import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.database.Type;
 import com.example.myapplication.square.CommodityListActivity;
 
+import org.litepal.LitePal;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -80,11 +83,17 @@ public class AddCommodityActivity extends AppCompatActivity {
             Type type = (Type) typeSpinner.getSelectedItem();
             String description = descriptionEditText.getText().toString();
             Float price = Float.valueOf(priceEditText.getText().toString());
+            //Log.d("Type", "Commodity Type: " + type);
 
-            // 添加商品的逻辑
-            // 保存到数据库或其他操作
+            // 保存到数据库
             DBFunction.addCommodity(name, MainActivity.getCurrentUsername(), currentDate,
                     type, price, description, base);
+
+            List<Commodity> commodities = LitePal.findAll(Commodity.class);
+//            for (Commodity commodity : commodities) {
+//                Log.d("CommodityList", "Commodity Name: " + commodity.getCommodityName() +
+//                        ", Type: " + commodity.getType());
+//            }
 
 //            // 将图片上传到云端
 //            try {

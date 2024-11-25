@@ -11,6 +11,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -63,84 +65,76 @@ public class CommodityListActivity extends AppCompatActivity {
         // 初始化商品列表
         commodityList = LitePal.findAll(Commodity.class); // 从数据库加载商品
         commodityAdapter = new CommodityAdapter(this, commodityList, REQUEST_CODE); // 创建适配器
-
-        commodityListClone = new ArrayList<>();
-        commodityListClone = LitePal.findAll(Commodity.class);
-
         recyclerView.setAdapter(commodityAdapter); // 设置适配器
 
-        // 设置搜索框
-        mSearchView.setOnLeftMenuClickListener(
-                new FloatingSearchView.OnLeftMenuClickListener() {
-                    @Override
-                    public void onMenuOpened() {
-                        provideSuggestions("");
-                    }
+        commodityListClone = new ArrayList<>(commodityList); // 保存原始列表
 
-                    @Override
-                    public void onMenuClosed() {
-                        mSearchView.clearSuggestions();
-                    }} );
+        // 设置类型筛选按钮
+        LinearLayout typeButtonContainer = findViewById(R.id.type_button_container);
+        for (Type type : Type.values()) {
+            Button button = new Button(this);
+            button.setText(type.name());
+            button.setTag(type);
+            button.setPadding(16, 8, 16, 8);
 
-        // 监听搜索框的查询变化
+            // 类型筛选按钮点击事件
+            button.setOnClickListener(v -> filterCommodities(mSearchView.getQuery(), (Type) v.getTag()));
+            typeButtonContainer.addView(button);
+        }
+
+        // 设置搜索框监听
         mSearchView.setOnQueryChangeListener((oldQuery, newQuery) -> {
             if (!oldQuery.isEmpty() && newQuery.isEmpty()) {
                 mSearchView.clearSuggestions();
             } else {
-                // 提供建议项
-                provideSuggestions(newQuery);
+                provideSuggestions(newQuery); // 提供建议项
             }
         });
 
         mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
             @Override
             public void onSearchAction(String currentQuery) {
-                // 执行搜索操作
                 saveSearchHistory(currentQuery);
-                performSearch(currentQuery);
+                filterCommodities(currentQuery, null); // 仅按搜索内容筛选
             }
 
             @Override
             public void onSuggestionClicked(SearchSuggestion suggestion) {
-                // 处理建议项点击事件
                 mSearchView.setSearchText(suggestion.getBody());
-                performSearch(suggestion.getBody());
+                filterCommodities(suggestion.getBody(), null); // 搜索内容来自建议项
             }
         });
 
-        Button messagesButton = findViewById(R.id.button_messages);
-        messagesButton.setOnClickListener(v -> {
+        // 其他按钮点击事件保持不变
+        findViewById(R.id.button_messages).setOnClickListener(v -> {
             Intent intent = new Intent(CommodityListActivity.this, ChatListActivity.class);
             startActivity(intent);
         });
 
-        Button userButton = findViewById(R.id.button_profile);
-        userButton.setOnClickListener(v -> {
+        findViewById(R.id.button_profile).setOnClickListener(v -> {
             Intent intent = new Intent(CommodityListActivity.this, ProfileActivity.class);
             startActivity(intent);
         });
 
-        Button sellButton = findViewById(R.id.button_sell);
-        sellButton.setOnClickListener(v -> {
+        findViewById(R.id.button_sell).setOnClickListener(v -> {
             Intent intent = new Intent(CommodityListActivity.this, AddCommodityActivity.class);
             startActivity(intent);
         });
 
-        Button squareButton = findViewById(R.id.button_square);
-        squareButton.setOnClickListener(v -> {
+        findViewById(R.id.button_square).setOnClickListener(v -> {
             Intent intent = new Intent(CommodityListActivity.this, CommodityListActivity.class);
             startActivity(intent);
         });
 
-        Button homeButton = findViewById(R.id.button_home);
-        homeButton.setOnClickListener(v -> {
+        findViewById(R.id.button_home).setOnClickListener(v -> {
             Intent intent = new Intent(CommodityListActivity.this, HomepageActivity.class);
             startActivity(intent);
         });
     }
 
+
     // 过滤商品列表
-    private void filter(String text) {
+    /*private void filter(String text) {
         List<Commodity> filteredList = new ArrayList<>();
         if (text.isEmpty()) {
             filteredList.addAll(commodityListClone); // 如果输入为空，返回全部商品
@@ -169,12 +163,31 @@ public class CommodityListActivity extends AppCompatActivity {
         //Log.d("Filter", "Filtered List Size: " + filteredList.size());
         commodityAdapter.updateList(filteredList); // 更新适配器
         //Log.d("Filter", "Filtered List Size2: " + commodityList.size());
+    }*/
+
+    private void filterCommodities(String query, Type selectedType) {
+        commodityList.clear(); // 清空当前列表
+
+        for (Commodity commodity : commodityListClone) {
+            //Log.d("CommodityType", "Commodity Type: " + commodity.getType() + ", Selected Type: " + selectedType);
+            boolean matchesQuery = query == null || query.isEmpty() || commodity.getCommodityName().toLowerCase().contains(query.toLowerCase());
+            boolean matchesType = selectedType == null || commodity.getType() == selectedType;
+            if (matchesQuery && matchesType) {
+                commodityList.add(commodity); // 添加符合条件的商品
+            }
+        }
+        if (commodityList.isEmpty()) {
+            Toast.makeText(this, "没有找到符合条件的商品", Toast.LENGTH_SHORT).show();
+        }
+        commodityAdapter.notifyDataSetChanged(); // 刷新适配器
     }
 
-    private void performSearch(String query) {
+
+
+    /*private void performSearch(String query) {
         // 实现搜索逻辑
         filter(query);
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -213,7 +226,6 @@ public class CommodityListActivity extends AppCompatActivity {
                 suggestions.add(new mySearchSuggestion(history));
             }
         }
-
         // 将建议项设置到搜索框
         mSearchView.swapSuggestions(suggestions);
     }
