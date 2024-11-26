@@ -350,4 +350,46 @@ public class DBFunction {
             return sender2;
         }
     }
+
+    public static void addCommentWithImage(long commodityId, String userName, String title, String description, String date, int imageResource) {
+        Comment comment = new Comment();
+        comment.setCommodityId(commodityId);
+        comment.setUserName(userName);
+        comment.setTitle(title);
+        comment.setDate(date);
+        comment.setDescription(description);
+        comment.setImageResource(imageResource);
+        comment.save();
+    }
+
+    public static void addCommentNoImage(long commodityId, String userName, String title, String description, String date) {
+        Comment comment = new Comment();
+        comment.setCommodityId(commodityId);
+        comment.setUserName(userName);
+        comment.setTitle(title);
+        comment.setDate(date);
+        comment.setDescription(description);
+        comment.save();
+    }
+
+    public static List<Comment> findCommentsByCommodityId(long commodityId) {
+        return LitePal.where("commodityId = ?", String.valueOf(commodityId)).find(Comment.class);
+    }
+
+    public static List<Comment> findCommentsByUserName(String userName) {
+        return LitePal.where("userName = ?", userName).find(Comment.class);
+    }
+
+    public static void delComment(String userName, long commodityId) {
+        List<Comment> comments = LitePal.where("userName = ? and commodityId = ?",
+                userName, String.valueOf(commodityId)).find(Comment.class);
+        if (comments.isEmpty()) {
+            Log.w(DBFunction.TAG, "未找到相关评论，删除评论失败");
+        } else {
+            for (Comment comment : comments) {
+                LitePal.delete(Comment.class, comment.getId());
+            }
+        }
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.example.myapplication.database;
 
-public class Comment {
+import org.litepal.crud.LitePalSupport;
+
+public class Comment extends LitePalSupport {
     private long id;
     private long commodityId;
     private String userName;
