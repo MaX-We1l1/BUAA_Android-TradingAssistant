@@ -60,7 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         RelativeLayout commentButton = findViewById(R.id.my_comment_view);
-        orderButton.setOnClickListener(v -> {
+        commentButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, CommentActivity.class);
             startActivity(intent);
         });
