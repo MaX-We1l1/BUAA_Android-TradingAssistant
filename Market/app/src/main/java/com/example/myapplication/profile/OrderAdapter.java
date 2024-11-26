@@ -1,10 +1,11 @@
 package com.example.myapplication.profile;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,17 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.example.myapplication.profile.comment.AddCommentActivity;
-import com.example.myapplication.profile.Order;
-import com.example.myapplication.square.CommodityDetailActivity;
+import com.example.myapplication.database.OrderTable;
 
 import java.util.List;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHolder> {
 
     private Context context;
-    private List<Order> orderList;
+    private List<OrderTable> orderList;
 
-    public OrderAdapter(Context context, List<Order> orderList) {
+    public OrderAdapter(Context context, List<OrderTable> orderList) {
         this.context = context;
         this.orderList = orderList;
     }
@@ -41,22 +41,28 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
-        Order order = orderList.get(position);
+        OrderTable order = orderList.get(position);
 
         // 绑定订单标题
-        holder.orderTitle.setText(order.getTitle());
+        holder.orderTitle.setText(order.getCommodityName());
 
         // 绑定订单状态
-        holder.orderStatus.setText(order.getStatus());
+        holder.orderStatus.setText(order.getCommodityStatus());
 
         // 绑定订单价格
-        holder.orderPrice.setText(String.format("¥%.2f", order.getPrice()));
+        holder.orderPrice.setText(String.format("¥%.2f", order.getCommodityPrice()));
 
         // 绑定订单图片
-        holder.orderImage.setImageResource(order.getImageResourceId());
+        // holder.orderImage.setImageResource(order.getImageResourceId());
+        String imageBase64 = order.getImageUrl();
+        if (imageBase64 != null || !imageBase64.isEmpty()) {
+            byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.orderImage.setImageBitmap(decodedByte);
+        }
 
         // 动态设置状态颜色（如“待发货”是黄色，“已完成”是绿色）
-        switch (order.getStatus()) {
+        switch (order.getCommodityStatus()) {
             case "待发货":
                 holder.orderStatus.setTextColor(context.getResources().getColor(android.R.color.holo_orange_light));
                 break;
@@ -73,7 +79,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         holder.addComment.setOnClickListener(v -> {
             // 根据你的需要实现点击后的逻辑，比如跳转到详情页
-            Log.d("CommodityAdapter", "点击的商品名字: " + order.getTitle());
+            Log.d("CommodityAdapter", "点击的商品名字: " + order.getCommodityName());
             Intent intent = new Intent(context, AddCommentActivity.class);
             intent.putExtra("commodity_id", order.getCommodityId());
             //context.startActivity(intent);

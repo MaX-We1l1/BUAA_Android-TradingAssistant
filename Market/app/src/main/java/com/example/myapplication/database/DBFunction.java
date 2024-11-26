@@ -393,4 +393,24 @@ public class DBFunction {
         }
     }
 
+    // order
+    public static void addBuyOrder(long commodityId, long userId, String title, Float prize, String imgUrl) {
+        OrderTable order = new OrderTable();
+        order.setCommodityId(commodityId);
+        order.setCommodityPrice(prize);
+        order.setCommodityStatus("待发货");
+        order.setUserId(userId);
+        order.setCommodityName(title);
+        order.setImageUrl(imgUrl);
+        order.save();
+    }
+
+    public static List<OrderTable> getOrdersFromUser(long userId) {
+        List<OrderTable> orderList = LitePal.where("userId = ?", String.valueOf(userId)).find(OrderTable.class);
+        if (orderList.isEmpty()) {
+            Log.w(DBFunction.TAG, "订单为空");
+        }
+        return orderList;
+    }
+
 }

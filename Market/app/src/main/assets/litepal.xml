@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <litepal>
     <dbname value="BUAATrade"></dbname>
-    <version value="8"></version>
+    <version value="9"></version>
 
     <list>
         <mapping class="com.example.myapplication.database.Commodity"></mapping>
@@ -12,5 +12,6 @@
         <mapping class="com.example.myapplication.database.Contact"></mapping>
         <mapping class="com.example.myapplication.database.CartItem"></mapping>
         <mapping class="com.example.myapplication.database.Comment"></mapping>
+        <mapping class="com.example.myapplication.database.OrderTable"></mapping>
     </list>
 </litepal>
