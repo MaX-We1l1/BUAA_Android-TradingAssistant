@@ -362,8 +362,9 @@ public class DBFunction {
         comment.save();
     }
 
-    public static void addCommentNoImage(long commodityId, String userName, String title, String description, String date) {
+    public static void addCommentNoImage(float rating,long commodityId, String userName, String title, String description, String date) {
         Comment comment = new Comment();
+        comment.setStar(rating);
         comment.setCommodityId(commodityId);
         comment.setUserName(userName);
         comment.setTitle(title);

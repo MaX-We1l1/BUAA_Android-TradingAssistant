@@ -12,8 +12,11 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.database.Comment;
 import com.example.myapplication.database.Commodity;
+import com.example.myapplication.database.DBFunction;
 
 import org.litepal.LitePal;
 
@@ -63,7 +66,7 @@ public class AddCommentActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitComment();
+                submitComment(commodity);
             }
         });
     }
@@ -93,7 +96,7 @@ public class AddCommentActivity extends AppCompatActivity {
     /**
      * 提交评论
      */
-    private void submitComment() {
+    private void submitComment(Commodity commodity) {
         float rating = ratingBar.getRating();
         String comment = commentInput.getText().toString().trim();
 
@@ -107,8 +110,9 @@ public class AddCommentActivity extends AppCompatActivity {
             return;
         }
 
-        // 模拟提交评论
-        Log.d("AddCommentActivity", "Submitting comment: Rating=" + rating + ", Comment=" + comment);
+        // 提交评论
+        DBFunction.addCommentNoImage(rating, commodity.getId(), MainActivity.getCurrentUsername()
+                ,commodity.getCommodityName(), comment, "2024-11-26");
         Toast.makeText(this, "评论提交成功！", Toast.LENGTH_SHORT).show();
 
         // 提交完成后清空输入

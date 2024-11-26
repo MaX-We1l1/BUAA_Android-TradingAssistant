@@ -18,6 +18,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.chat.ChatListActivity;
 import com.example.myapplication.profile.address.AddressActivity;
 import com.example.myapplication.profile.cart.CartActivity;
+import com.example.myapplication.profile.comment.CommentActivity;
 import com.example.myapplication.square.CommodityListActivity;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -55,6 +56,12 @@ public class ProfileActivity extends AppCompatActivity {
         RelativeLayout orderButton = findViewById(R.id.my_order_view);
         orderButton.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, OrderActivity.class);
+            startActivity(intent);
+        });
+
+        RelativeLayout commentButton = findViewById(R.id.my_comment_view);
+        orderButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, CommentActivity.class);
             startActivity(intent);
         });
 

@@ -6,9 +6,10 @@ public class Comment extends LitePalSupport {
     private long id;
     private long commodityId;
     private String userName;
-    private String title;      // 收藏标题
-    private String description;// 收藏描述
-    private String date;       // 收藏日期
+    private String title;      // 标题
+    private String description;// 描述
+    private String date;       // 日期
+    private float star;          // 评星
     private int imageResource;
 
     public Comment() {
@@ -25,6 +26,15 @@ public class Comment extends LitePalSupport {
     }
 
     // 普通 get & set 方法
+
+
+    public void setStar(float star) {
+        this.star = star;
+    }
+
+    public float getStar() {
+        return star;
+    }
 
     public long getId() {
         return id;
