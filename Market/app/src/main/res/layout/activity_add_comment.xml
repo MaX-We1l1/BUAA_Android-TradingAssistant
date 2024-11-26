@@ -31,7 +31,7 @@
             android:numStars="5"
             android:stepSize="1.0"
             android:rating="0"
-            android:theme="@style/Widget.AppCompat.RatingBar.Small" />
+            />
     </LinearLayout>
 
     <!-- 评论输入框 -->
