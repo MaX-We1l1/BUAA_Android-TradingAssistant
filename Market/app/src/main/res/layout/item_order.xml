@@ -49,10 +49,23 @@
         android:id="@+id/order_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="¥123.00"
-        android:textSize="16sp"
-        android:textColor="#FF0000"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true" />
+        android:layout_marginRight="15dp"
+        android:text="¥123.00"
+        android:textColor="#FF0000"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/add_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/order_price"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="53dp"
+        android:layout_marginBottom="-81dp"
+        android:text="评价订单"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
 
 </RelativeLayout>

@@ -1,16 +1,24 @@
 package com.example.myapplication.profile;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.profile.comment.AddCommentActivity;
 import com.example.myapplication.profile.Order;
+import com.example.myapplication.square.CommodityDetailActivity;
 
 import java.util.List;
 
@@ -62,6 +70,15 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 holder.orderStatus.setTextColor(context.getResources().getColor(android.R.color.darker_gray));
                 break;
         }
+
+        holder.addComment.setOnClickListener(v -> {
+            // 根据你的需要实现点击后的逻辑，比如跳转到详情页
+            Log.d("CommodityAdapter", "点击的商品名字: " + order.getTitle());
+            Intent intent = new Intent(context, AddCommentActivity.class);
+            intent.putExtra("commodity_id", order.getCommodityId());
+            //context.startActivity(intent);
+            ((Activity) context).startActivityForResult(intent, 1); // 使用传递的请求码
+        });
     }
 
     @Override
@@ -73,6 +90,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         ImageView orderImage;
         TextView orderTitle, orderStatus, orderPrice;
+        Button addComment;
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,6 +98,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             orderTitle = itemView.findViewById(R.id.order_title);
             orderStatus = itemView.findViewById(R.id.order_status);
             orderPrice = itemView.findViewById(R.id.order_price);
+            addComment = itemView.findViewById(R.id.add_comment);
         }
     }
 }
