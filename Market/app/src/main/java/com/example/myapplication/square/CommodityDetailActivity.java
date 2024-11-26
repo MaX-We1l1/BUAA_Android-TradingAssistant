@@ -26,6 +26,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bumptech.glide.Glide;
@@ -34,6 +36,7 @@ import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.Tools;
 import com.example.myapplication.chat.ChatMsgView;
+import com.example.myapplication.database.Comment;
 import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.database.Hobby;
@@ -42,6 +45,7 @@ import com.example.myapplication.database.User;
 import com.example.myapplication.profile.cart.CartActivity;
 import com.example.myapplication.database.CartItem;
 import com.example.myapplication.profile.cart.CartManager;
+import com.example.myapplication.profile.comment.CommentAdapter;
 
 import org.litepal.LitePal;
 
@@ -71,6 +75,10 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private InputNumberView buyNum;
     private LinearLayout typeButtonContainer; //类型筛选按钮
 
+    private RecyclerView commentRecyclerView;
+    private CommentAdapter commentAdapter;
+    private List<Comment> commentList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,35 +92,13 @@ public class CommodityDetailActivity extends AppCompatActivity {
         chatButton = findViewById(R.id.button_want); // 绑定“想要”按钮
         editButton = findViewById(R.id.button_edit_commodity); //
         addCartButton = findViewById(R.id.button_add_to_cart);
-        saveButton = findViewById(R.id.button_save); //
+        saveButton = findViewById(R.id.button_save);
         addHobbyButton = findViewById(R.id.button_add_to_hobby);
         quantity = findViewById(R.id.commodity_num);
         buyButton = findViewById(R.id.button_buy);
         buyNum = findViewById(R.id.commodity_buy_num);
-        typeButtonContainer = findViewById(R.id.type_button_container);
-
-        //遍历 Type 枚举，为每个类型生成一个按钮
-        for (Type type : Type.values()) {
-            Button button = new Button(this);
-            button.setText(type.name());
-            button.setTag(type); // 将类型绑定到按钮上
-            button.setPadding(20, 10, 20, 10);
-
-            // 设置按钮样式
-            //button.setBackgroundResource(R.drawable.button_background); // 可自定义样式
-            button.setTextColor(ContextCompat.getColor(this, R.color.white));
-
-            // 添加点击事件
-            button.setOnClickListener(v -> {
-                Type selectedType = (Type) v.getTag(); // 获取按钮绑定的类型
-                filterByType(selectedType);
-            });
-
-            // 将按钮添加到容器中
-            typeButtonContainer.addView(button);
-        }
-
-
+        commentRecyclerView = findViewById(R.id.comment_recycler_view);
+        commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // 重定向到自己的购物车
         cartButton = findViewById(R.id.button_cart);
         cartButton.setOnClickListener(v-> {
@@ -127,8 +113,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
 
         // 确保 ID 有效并执行后续逻辑
         if (commodityId != -1) {
-            // 根据 ID 加载商品详情
-            loadCommodityDetails(commodityId);
+            loadCommodityDetails(commodityId); // 根据 ID 加载商品详情
         } else {
             Toast.makeText(this, "商品 ID 无效", Toast.LENGTH_SHORT).show();
         }
@@ -150,6 +135,8 @@ public class CommodityDetailActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> {
             finish();
         });
+
+        loadComments(); //添加评论
     }
 
     protected void onResume() {
@@ -279,13 +266,11 @@ public class CommodityDetailActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isCurrentUserSeller(Commodity commodity) {
-        // 检查当前用户是否为卖家
+    private boolean isCurrentUserSeller(Commodity commodity) { // 检查当前用户是否为卖家
         return Objects.equals(commodity.getSellerName(), MainActivity.getCurrentUsername()); // 替换为实际逻辑
     }
 
-    private void enableEditing() {
-        // 只有卖家能编辑
+    private void enableEditing() { // 只有卖家能编辑
         if (isCurrentUserSeller(commodity)) {
             commodityPrice.setEnabled(true);
             commodityDescription.setEnabled(true);
@@ -333,22 +318,23 @@ public class CommodityDetailActivity extends AppCompatActivity {
         finish(); // 关闭当前活动
     }
 
-
     private void disableEditing() {
         commodityPrice.setEnabled(false);
         commodityDescription.setEnabled(false);
         saveButton.setVisibility(View.GONE);
     }
 
-    private void filterByType(Type type) {
-        List<Commodity> filteredCommodities = LitePal.where("type = ?", type.name()).find(Commodity.class);
-        if (filteredCommodities.isEmpty()) {
-            Toast.makeText(this, "暂无该类型商品", Toast.LENGTH_SHORT).show();
-        } else {
-            // 跳转到商品列表页面并传递筛选结果
-            Intent intent = new Intent(this, CommodityListActivity.class);
-            intent.putExtra("filtered_type", type.name());
-            startActivity(intent);
+    private void loadComments() {
+        try {
+            commentList = DBFunction.findCommentsByCommodityId(commodity.getId());
+            if (commentList != null && !commentList.isEmpty()) {
+                commentAdapter = new CommentAdapter(this, commentList);
+                commentRecyclerView.setAdapter(commentAdapter);
+            } else {
+                Toast.makeText(this, "没有评论", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "加载评论失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 

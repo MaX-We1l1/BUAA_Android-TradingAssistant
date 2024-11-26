@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -56,7 +57,7 @@ public class CommodityListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_commodity_list);
-
+        LinearLayout typeButtonContainer = findViewById(R.id.type_button_container);
         mSearchView = findViewById(R.id.commodity_search_view);
 
         recyclerView = findViewById(R.id.recycler_view);
@@ -70,15 +71,28 @@ public class CommodityListActivity extends AppCompatActivity {
         commodityListClone = new ArrayList<>(commodityList); // 保存原始列表
 
         // 设置类型筛选按钮
-        LinearLayout typeButtonContainer = findViewById(R.id.type_button_container);
+        Button buttonForAll = new Button(this);
+        String text = "All";
+        buttonForAll.setText(text);
+        buttonForAll.setTag(null);
+        buttonForAll.setPadding(16, 8, 16, 8);
+        buttonForAll.setOnClickListener(v -> filterCommodities(mSearchView.getQuery(), (Type) v.getTag()));
+        // 设置按钮的布局参数，以确保它在父容器的顶部
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        params.gravity = Gravity.TOP | Gravity.START; // 确保按钮在父容器的最上方，左对齐
+        buttonForAll.setLayoutParams(params);
+        typeButtonContainer.addView(buttonForAll);
         for (Type type : Type.values()) {
             Button button = new Button(this);
             button.setText(type.name());
             button.setTag(type);
             button.setPadding(16, 8, 16, 8);
-
             // 类型筛选按钮点击事件
             button.setOnClickListener(v -> filterCommodities(mSearchView.getQuery(), (Type) v.getTag()));
+            button.setLayoutParams(params);
             typeButtonContainer.addView(button);
         }
 
