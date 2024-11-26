@@ -255,6 +255,8 @@ public class CommodityDetailActivity extends AppCompatActivity {
                     commodity.setBuyerName(MainActivity.getCurrentUsername());
                     buyer.save();
                     seller.save();
+                    DBFunction.addBuyOrder(commodityId, buyer.getId(), commodity.getCommodityName(),
+                            commodity.getPrice(), commodity.getImageUrl());
                     Toast.makeText(this, "谢谢惠顾", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "余额不足", Toast.LENGTH_SHORT).show();
