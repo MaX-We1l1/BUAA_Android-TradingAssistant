@@ -32,6 +32,7 @@ public class BuyCommodityActivity extends AppCompatActivity {
     private Button decrementButton;
     private TextView quantityText;
     private Button buyButton;
+    private TextView exitButton;
 
     private Commodity commodity;
     private int quantity = 1; // 默认数量为 1
@@ -51,6 +52,11 @@ public class BuyCommodityActivity extends AppCompatActivity {
         decrementButton = findViewById(R.id.decrement_button);
         quantityText = findViewById(R.id.quantity_text);
         buyButton = findViewById(R.id.buy_button);
+        exitButton = findViewById(R.id.exit_text);
+
+        exitButton.setOnClickListener(v -> {
+            finish();
+        });
 
         // 从 Intent 中获取商品 ID
         Intent intent = getIntent();

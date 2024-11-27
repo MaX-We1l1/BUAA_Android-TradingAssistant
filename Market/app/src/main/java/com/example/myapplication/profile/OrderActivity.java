@@ -1,6 +1,7 @@
 package com.example.myapplication.profile;
 
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,5 +41,11 @@ public class OrderActivity extends AppCompatActivity {
         // 设置适配器
         orderAdapter = new OrderAdapter(this, orderList);
         recyclerViewOrders.setAdapter(orderAdapter);
+
+        // 返回按钮
+        ImageButton returnButton = findViewById(R.id.back_button);
+        returnButton.setOnClickListener(v -> {
+            finish();
+        });
     }
 }

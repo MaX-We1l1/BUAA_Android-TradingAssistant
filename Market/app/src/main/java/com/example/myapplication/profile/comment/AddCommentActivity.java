@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class AddCommentActivity extends AppCompatActivity {
     private Button uploadImageButton;
     private Button submitButton;
     private Commodity commodity;
+    private ImageButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class AddCommentActivity extends AppCompatActivity {
         commentInput = findViewById(R.id.comment_input);
         uploadImageButton = findViewById(R.id.upload_image_button);
         submitButton = findViewById(R.id.submit_button);
+        backButton = findViewById(R.id.back_button);
 
         // 上传图片按钮点击事件
         uploadImageButton.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +71,10 @@ public class AddCommentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 submitComment(commodity);
             }
+        });
+
+        backButton.setOnClickListener(v -> {
+            finish(); // 返回上一页
         });
     }
 

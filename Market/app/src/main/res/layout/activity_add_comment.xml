@@ -6,6 +6,15 @@
     android:padding="16dp"
     android:background="#FFFFFF">
 
+    <ImageButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_margin="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
     <!-- 星级评价 -->
     <LinearLayout
         android:id="@+id/rating_section"
