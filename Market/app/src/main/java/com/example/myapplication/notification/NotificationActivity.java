@@ -1,6 +1,7 @@
 package com.example.myapplication.notification;
 
 import android.os.Bundle;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -16,6 +17,7 @@ public class NotificationActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
     private NotificationPagerAdapter pagerAdapter;
+    private ImageButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,10 @@ public class NotificationActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.view_pager);
+        backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(v -> {
+            finish(); // 返回上一页
+        });
 
         pagerAdapter = new NotificationPagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
