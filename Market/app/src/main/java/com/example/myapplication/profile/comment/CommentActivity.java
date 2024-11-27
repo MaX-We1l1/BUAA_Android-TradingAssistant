@@ -1,6 +1,7 @@
 package com.example.myapplication.profile.comment;
 
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,12 @@ public class CommentActivity extends AppCompatActivity {
 
         initViews();
         loadComments();
+
+        // 返回按钮
+        ImageButton returnButton = findViewById(R.id.back_button);
+        returnButton.setOnClickListener(v -> {
+            finish();
+        });
     }
 
     private void initViews() {
