@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <ImageButton
         android:id="@+id/back_button"
         android:layout_width="48dp"
@@ -18,7 +19,6 @@
         android:src="@drawable/ic_return" />
 
     <!-- 顶部标题栏 -->
-
     <TextView
         android:id="@+id/favorite_title"
         android:layout_width="wrap_content"
@@ -39,8 +39,20 @@
         android:id="@+id/text_view_total_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="总价: $0.00"
-        android:textSize="18sp"
         android:layout_gravity="center"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:text="总价: $0.00"
+        android:textSize="18sp" />
+
+    <!-- 新增立即购买按钮 -->
+    <Button
+        android:id="@+id/button_buy_now"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="立即购买"
+        android:backgroundTint="#FF5722"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
 </LinearLayout>

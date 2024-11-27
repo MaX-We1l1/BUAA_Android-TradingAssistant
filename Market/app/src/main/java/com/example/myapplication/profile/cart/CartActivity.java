@@ -1,6 +1,8 @@
 package com.example.myapplication.profile.cart;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.database.CartItem;
+import com.example.myapplication.square.BuyCommodityActivity;
+import com.example.myapplication.square.CommodityDetailActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartActivity extends AppCompatActivity implements CartAdapter.OnChangeListener{
 
@@ -15,6 +23,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCha
     private CartAdapter cartAdapter;
     private CartManager cartManager;
     private TextView totalPriceTextView;
+    private Button buyButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +36,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCha
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         totalPriceTextView = findViewById(R.id.text_view_total_price);
+        buyButton = findViewById(R.id.button_buy_now);
 
         // 添加示例商品到购物车
 //        CartItem cartItem = new CartItem("商品1", 1L, 20.00F, 2);
@@ -43,6 +53,25 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCha
         ImageButton backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(v -> {
             finish();
+        });
+
+        buyButton.setOnClickListener(v -> {
+            // 创建 Intent 跳转到 BuyCommodityActivity
+            Intent intent = new Intent(CartActivity.this, BuyCommodityActivity.class);
+
+            // 传递商品 ID 和其他相关数据（例如价格、商品名等）
+            ArrayList<Long> commodities = new ArrayList<>();
+            ArrayList<Integer> quantityList = new ArrayList<>();
+            List<CartItem> cartItems = cartManager.getCartItems();
+            for (CartItem cartItem : cartItems) {
+                commodities.add(cartItem.getCommodityId());
+                quantityList.add(cartItem.getQuantity());
+            }
+            intent.putExtra("commodity_list", commodities);
+            intent.putExtra("quantity_list", quantityList);
+
+            // 启动 BuyCommodityActivity
+            startActivity(intent);
         });
     }
 
