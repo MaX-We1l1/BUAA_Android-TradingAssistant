@@ -65,7 +65,8 @@
         android:layout_marginBottom="-81dp"
         android:text="评价"
         android:textColor="#FFFFFF"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/del_order"
@@ -78,6 +79,19 @@
         android:text="删除"
         android:textColor="#FFFFFF"
         android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/confirm_receipt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/order_price"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="101dp"
+        android:layout_marginBottom="-81dp"
+        android:text="确认收货"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:visibility="gone" />
 
 
 </RelativeLayout>

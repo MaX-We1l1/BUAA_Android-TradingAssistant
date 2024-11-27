@@ -80,6 +80,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                 break;
         }
 
+        //“已完成”才显示“评论”按钮
+        if ("已完成".equals(order.getCommodityStatus())) {
+            holder.addComment.setVisibility(View.VISIBLE);
+        } else {
+            holder.addComment.setVisibility(View.GONE);
+        }
         holder.addComment.setOnClickListener(v -> {
             // 根据你的需要实现点击后的逻辑，比如跳转到详情页
             Log.d("CommodityAdapter", "点击的商品名字: " + order.getCommodityName());
@@ -109,6 +115,27 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     .show();
         });
 
+        //已发货才显示 ”确认收货“ 按钮
+        if (order.getCommodityStatus().equals("待发货") || order.getCommodityStatus().equals("已发货")) {
+            holder.confirmReceipt.setVisibility(View.VISIBLE);
+        } else {
+            holder.confirmReceipt.setVisibility(View.GONE);
+        }
+        holder.confirmReceipt.setOnClickListener(v -> {
+            new AlertDialog.Builder(context)
+                    .setTitle("确认收货")
+                    .setMessage("您确定已收到此商品吗？")
+                    .setPositiveButton("确认", (dialog, which) -> {
+                        // 在这里处理确认收货的逻辑，例如更新订单状态
+                        order.setCommodityStatus("已完成");
+                        order.save();
+                        notifyItemChanged(position); // 更新UI
+                    })
+                    .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                    .create()
+                    .show();
+        });
+
     }
 
     @Override
@@ -120,7 +147,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         ImageView orderImage;
         TextView orderTitle, orderStatus, orderPrice;
-        Button addComment, delOrder;
+        Button addComment, delOrder, confirmReceipt;
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -130,6 +157,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             orderPrice = itemView.findViewById(R.id.order_price);
             addComment = itemView.findViewById(R.id.add_comment);
             delOrder = itemView.findViewById(R.id.del_order);
+            confirmReceipt = itemView.findViewById(R.id.confirm_receipt);
         }
     }
 }
