@@ -54,6 +54,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -247,8 +248,13 @@ public class CommodityDetailActivity extends AppCompatActivity {
             buyButton.setOnClickListener(v -> {
                 // 创建 Intent 跳转到 BuyCommodityActivity
                 Intent intent = new Intent(CommodityDetailActivity.this, BuyCommodityActivity.class);
-
                 // 传递商品 ID 和其他相关数据（例如价格、商品名等）
+                ArrayList<Long> commodities = new ArrayList<>();
+                ArrayList<Integer> quantityList = new ArrayList<>();
+                commodities.add(commodity.getId());
+                quantityList.add(buyNum.getCurrentNum());
+                intent.putExtra("commodity_list", commodities);
+                intent.putExtra("quantity_list", quantityList);
                 intent.putExtra("commodity_id", commodity.getId());
                 intent.putExtra("commodity_name", commodity.getCommodityName());
                 intent.putExtra("commodity_price", commodity.getPrice());
