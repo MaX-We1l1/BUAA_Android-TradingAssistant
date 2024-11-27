@@ -61,9 +61,21 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/order_price"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="53dp"
+        android:layout_marginRight="101dp"
         android:layout_marginBottom="-81dp"
-        android:text="评价订单"
+        android:text="评价"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/del_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/order_price"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="-81dp"
+        android:text="删除"
         android:textColor="#FFFFFF"
         android:textSize="16sp" />
 

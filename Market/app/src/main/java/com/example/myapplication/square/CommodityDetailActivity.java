@@ -254,7 +254,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
                 intent.putExtra("commodity_id", commodity.getId());
                 intent.putExtra("commodity_name", commodity.getCommodityName());
                 intent.putExtra("commodity_price", commodity.getPrice());
-                intent.putExtra("commodity_image_url", commodity.getImageUrl());
+                // intent.putExtra("commodity_image_url", commodity.getImageUrl());
 
                 // 启动 BuyCommodityActivity
                 startActivity(intent);

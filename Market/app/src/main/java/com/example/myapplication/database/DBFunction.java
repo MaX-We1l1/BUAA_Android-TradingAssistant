@@ -23,6 +23,11 @@ public class DBFunction {
         }
     }
 
+    public static String findUserNameById(long id) {
+        User user = LitePal.find(User.class, id);
+        return user.getUsername();
+    }
+
     public static List<Hobby> findHobbyByName(String username) {
         List<Hobby> hobbies = LitePal.where("username = ?", username).find(Hobby.class);
         if (!hobbies.isEmpty()) {
@@ -394,7 +399,7 @@ public class DBFunction {
     }
 
     // order
-    public static void addBuyOrder(long commodityId, long userId, String title, Float prize, String imgUrl) {
+    public static OrderTable addBuyOrder(long commodityId, long userId, String title, Float prize, String imgUrl) {
         OrderTable order = new OrderTable();
         order.setCommodityId(commodityId);
         order.setCommodityPrice(prize);
@@ -403,6 +408,15 @@ public class DBFunction {
         order.setCommodityName(title);
         order.setImageUrl(imgUrl);
         order.save();
+        return order;
+    }
+
+    public static void delOrder(long orderId) {
+        OrderTable orderTable = LitePal.find(OrderTable.class, orderId);  // 查找 ID 为 1 的记录
+        if (orderTable != null) {
+            orderTable.delete();  // 删除该记录
+        }
+
     }
 
     public static List<OrderTable> getOrdersFromUser(long userId) {
@@ -411,6 +425,55 @@ public class DBFunction {
             Log.w(DBFunction.TAG, "订单为空");
         }
         return orderList;
+    }
+
+    public static void changeOrderStatus(long id, String status) {
+        OrderTable orderTable = LitePal.find(OrderTable.class, id);
+        orderTable.setCommodityStatus(status);
+        orderTable.save();
+    }
+
+    // notification
+    public static void sendNotification2Seller(String title, long orderId, long recipientId, long senderId, String message) {
+        Notification notification = new Notification();
+        notification.setTitle(title);
+        notification.setRecipientId(recipientId);
+        notification.setSenderId(senderId);
+        notification.setMessage(message);
+        notification.setOrderId(orderId);
+        notification.save();
+    }
+
+    public static void changeCommodityStatus(long notificationId, String message) {
+        Notification notification = LitePal.find(Notification.class, notificationId);
+        notification.setMessage(message);
+        notification.save();
+    }
+
+    public static void delNotification(long id) {
+        Notification notification = LitePal.find(Notification.class, id);
+        if (notification != null) {
+            notification.delete();
+        }
+    }
+
+    // 未发货
+    public static List<Notification> getUnshippedNotification(long recipientId) {
+        List<Notification> notifications = LitePal.where("recipientId = ? and message = ?",
+                String.valueOf(recipientId), "待发货").find(Notification.class);
+        if (notifications.isEmpty()) {
+            Log.w(DBFunction.TAG, "待发货为空");
+        }
+        return notifications;
+    }
+
+    public static List<Notification> getShippedNotification(long recipientId) {
+        List<Notification> notifications = LitePal.where("recipientId = ? and message = ?",
+                String.valueOf(recipientId), "已发货").find(Notification.class);
+        if (notifications.isEmpty()) {
+            Log.w(DBFunction.TAG, "已发货为空");
+        }
+        return notifications;
     }
 
 }

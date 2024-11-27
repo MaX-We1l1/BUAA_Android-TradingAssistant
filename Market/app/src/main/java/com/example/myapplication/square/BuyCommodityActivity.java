@@ -15,6 +15,7 @@ import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
+import com.example.myapplication.database.OrderTable;
 import com.example.myapplication.database.User;
 import com.example.myapplication.profile.address.Address;
 
@@ -124,8 +125,9 @@ public class BuyCommodityActivity extends AppCompatActivity {
                 commodity.setBuyerName(MainActivity.getCurrentUsername());
                 buyer.save();
                 seller.save();
-                DBFunction.addBuyOrder(commodity.getId(), buyer.getId(), commodity.getCommodityName(),
+                OrderTable order = DBFunction.addBuyOrder(commodity.getId(), buyer.getId(), commodity.getCommodityName(),
                         commodity.getPrice(), commodity.getImageUrl());
+                DBFunction.sendNotification2Seller(commodity.getCommodityName(), order.getId(), seller.getId(), buyer.getId(), "待发货");
                 Toast.makeText(this, "购买成功！", Toast.LENGTH_SHORT).show();
                 finish();
             } else {

@@ -19,6 +19,7 @@ import com.example.myapplication.database.Contact;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.home.HomepageActivity;
 import com.example.myapplication.mySearchSuggestion;
+import com.example.myapplication.notification.NotificationActivity;
 import com.example.myapplication.profile.ProfileActivity;
 import com.example.myapplication.square.CommodityListActivity;
 
@@ -119,11 +120,16 @@ public class ChatListActivity extends AppCompatActivity {
 
         // 点击聊天列表项跳转到具体聊天界面
         chatListView.setOnItemClickListener((parent, view, position, id) -> {
-            // TODO: 跳转到聊天界面
-            Intent intent = new Intent(ChatListActivity.this, ChatMsgView.class);
-            intent.putExtra("chat_id", lastChatList.get(position).getId()); // 传递聊天 ID
-            intent.putExtra("chat_name", lastChatList.get(position).getName());
-            startActivity(intent);
+            if (position == 0) {
+                Intent intent = new Intent(ChatListActivity.this, NotificationActivity.class);
+                startActivity(intent);
+            } else {
+                // TODO: 跳转到聊天界面
+                Intent intent = new Intent(ChatListActivity.this, ChatMsgView.class);
+                intent.putExtra("chat_id", lastChatList.get(position).getId()); // 传递聊天 ID
+                intent.putExtra("chat_name", lastChatList.get(position).getName());
+                startActivity(intent);
+            }
         });
 
         // 这里可以设置其他初始化逻辑，比如加载数据等
@@ -165,6 +171,7 @@ public class ChatListActivity extends AppCompatActivity {
 
 
     private void loadChatItem(String userId) {
+        lastChatList.add(new ChatItem(Long.parseLong(userId), "系统通知", "点击查看"));
         List<Contact> contacts = DBFunction.getAllContacts(userId);
         for (Contact contact: contacts) {
             lastChatList.add(new ChatItem(contact.getContactsId(), contact.getContactsName(), contact.getLastContent()));

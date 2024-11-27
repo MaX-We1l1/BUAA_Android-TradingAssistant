@@ -14,9 +14,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.profile.comment.AddCommentActivity;
 import com.example.myapplication.database.OrderTable;
 
@@ -85,6 +88,27 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             //context.startActivity(intent);
             ((Activity) context).startActivityForResult(intent, 1); // 使用传递的请求码
         });
+
+        holder.delOrder.setEnabled(order.getCommodityStatus().equals("待发货"));
+
+        holder.delOrder.setOnClickListener(v -> {
+            new AlertDialog.Builder(context)
+                    .setTitle("确认删除")
+                    .setMessage("您确定要删除这个订单吗？")
+                    .setPositiveButton("删除", (dialog, which) -> {
+                        DBFunction.delOrder(order.getId());
+                        orderList.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(0, orderList.size());
+//                        notifyItemChanged(0);
+                    }).setNegativeButton("取消", (dialog, which) -> {
+                        // 如果用户取消，什么都不做
+                        dialog.dismiss();
+                    })
+                    .create()
+                    .show();
+        });
+
     }
 
     @Override
@@ -96,7 +120,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         ImageView orderImage;
         TextView orderTitle, orderStatus, orderPrice;
-        Button addComment;
+        Button addComment, delOrder;
 
         public OrderViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -105,6 +129,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             orderStatus = itemView.findViewById(R.id.order_status);
             orderPrice = itemView.findViewById(R.id.order_price);
             addComment = itemView.findViewById(R.id.add_comment);
+            delOrder = itemView.findViewById(R.id.del_order);
         }
     }
 }
