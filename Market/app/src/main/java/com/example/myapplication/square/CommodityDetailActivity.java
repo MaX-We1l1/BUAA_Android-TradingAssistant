@@ -245,20 +245,17 @@ public class CommodityDetailActivity extends AppCompatActivity {
             });
 
             buyButton.setOnClickListener(v -> {
-                User buyer = DBFunction.findUserByName(MainActivity.getCurrentUsername());
-                if (buyer.getMoney() > commodity.getPrice() * buyNum.getCurrentNum()) {
-                    buyer.buy(commodity.getPrice() * buyNum.getCurrentNum());
-                    User seller = DBFunction.findUserByName(commodity.getSellerName());
-                    seller.sell(commodity.getPrice() * buyNum.getCurrentNum());
-                    commodity.setBuyerName(MainActivity.getCurrentUsername());
-                    buyer.save();
-                    seller.save();
-                    DBFunction.addBuyOrder(commodityId, buyer.getId(), commodity.getCommodityName(),
-                            commodity.getPrice(), commodity.getImageUrl());
-                    Toast.makeText(this, "谢谢惠顾", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "余额不足", Toast.LENGTH_SHORT).show();
-                }
+                // 创建 Intent 跳转到 BuyCommodityActivity
+                Intent intent = new Intent(CommodityDetailActivity.this, BuyCommodityActivity.class);
+
+                // 传递商品 ID 和其他相关数据（例如价格、商品名等）
+                intent.putExtra("commodity_id", commodity.getId());
+                intent.putExtra("commodity_name", commodity.getCommodityName());
+                intent.putExtra("commodity_price", commodity.getPrice());
+                intent.putExtra("commodity_image_url", commodity.getImageUrl());
+
+                // 启动 BuyCommodityActivity
+                startActivity(intent);
             });
 
         } else {
