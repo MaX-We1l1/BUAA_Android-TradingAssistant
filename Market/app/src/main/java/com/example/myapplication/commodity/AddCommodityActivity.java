@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -59,6 +60,10 @@ public class AddCommodityActivity extends AppCompatActivity {
         EditText priceEditText = findViewById(R.id.editTextCommodityPrice);
         Button selectImageButton = findViewById(R.id.button_select_image);
         Button addButton = findViewById(R.id.button_add_commodity);
+        ImageButton backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(v -> {
+            finish(); // 返回上一页
+        });
 
         //设置当天日期
         String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Calendar.getInstance().getTime());

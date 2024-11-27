@@ -73,8 +73,6 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private CartManager cartManager = CartManager.getInstance();
     private InputNumberView quantity;
     private InputNumberView buyNum;
-    private LinearLayout typeButtonContainer; //类型筛选按钮
-
     private RecyclerView commentRecyclerView;
     private CommentAdapter commentAdapter;
     private List<Comment> commentList;
