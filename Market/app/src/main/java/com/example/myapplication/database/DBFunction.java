@@ -170,11 +170,15 @@ public class DBFunction {
         }
     }
 
+    public static Commodity getCommodity(long commodityId) {
+        return LitePal.find(Commodity.class, commodityId);
+    }
+
     // 购物车
     public static List<CartItem> getCart(String userName) {
         User user = findUserByName(userName);
         if (user != null) {
-            // 查找该用户的收藏记录
+            // 查找该用户的购物车信息
             return LitePal.where("username = ?", userName).find(CartItem.class);
         } else {
             Log.w(DBFunction.TAG, "不存在用户名为 " + userName + " 的用户");

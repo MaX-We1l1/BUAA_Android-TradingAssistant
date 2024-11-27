@@ -94,7 +94,7 @@ public class CartItem extends LitePalSupport {
             if (part.startsWith("name='")) {
                 name = part.substring(6, part.length() - 1);  // 去掉 'name=' 和结尾的 '
             } else if (part.startsWith("id='")) {
-                id = Long.parseLong(part.substring(4, part.length() - 1 ));
+                id = Long.parseLong(part.substring(4, part.length() - 1));
             } else if (part.startsWith("price='")) {
                 price = Float.parseFloat(part.substring(7, part.length() - 1));
             } else if (part.startsWith("quantity=")) {
@@ -116,4 +116,3 @@ public class CartItem extends LitePalSupport {
                 "}";
     }
 }
-
