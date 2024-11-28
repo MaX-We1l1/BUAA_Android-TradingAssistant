@@ -162,11 +162,13 @@ public class HomepageActivity extends AppCompatActivity {
                 textRecommendations.setText("userFeatureJSON Error: " + e.getMessage());
                 e.printStackTrace();
             }
+            Log.e("FUCK", userFeatureJSON.toString());
             String prompt = null;
             try {
                 prompt = buildModelInput(userFeatureJSON);
             } catch (JSONException e) {
                 textRecommendations.setText("prompt Error: " + e.getMessage());
+                Log.e("SUCK", e.getMessage());
             }
             Log.e("prompt : ", prompt);
             // 调用模型接口，获取推荐列表
@@ -237,7 +239,6 @@ public class HomepageActivity extends AppCompatActivity {
             commodityJson.put("价格", commodity.getPrice());
             commodityJson.put("类别", commodity.getType().name());
             commodityJson.put("描述", commodity.getDescription());
-            commodityJson.put("卖家", commodity.getSellerName());
             commodityJson.put("ID", commodity.getId());
             commodityArray.put(commodityJson);
         }
@@ -303,7 +304,7 @@ public class HomepageActivity extends AppCompatActivity {
         prompt.append("    {\"商品ID\": \"123\"},\n");
         prompt.append("    {\"商品ID\": \"456\"}\n");
         prompt.append("]\n");
-        prompt.append("请确保返回 JSON 格式化的推荐结果。商品id必须在系统中所有商品中出现。\n");
+        prompt.append("请确保返回 JSON 格式化的推荐结果。商品id必须在系统中所有商品中出现。严格按照以上JSON格式，不要有任何注释，数量不够可以不用五个\n");
 
         return prompt.toString();
     }
@@ -316,7 +317,6 @@ public class HomepageActivity extends AppCompatActivity {
             formattedList.append("  价格: ").append(commodity.getDouble("价格")).append("\n");
             formattedList.append("  类别: ").append(commodity.getString("类别")).append("\n");
             formattedList.append("  描述: ").append(commodity.getString("描述")).append("\n");
-            formattedList.append("  卖家: ").append(commodity.getString("卖家")).append("\n");
             formattedList.append("  ID: ").append(commodity.getInt("ID")).append("\n\n");
         }
         return formattedList.toString();

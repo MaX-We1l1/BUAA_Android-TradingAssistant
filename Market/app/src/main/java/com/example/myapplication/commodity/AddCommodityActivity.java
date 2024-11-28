@@ -87,9 +87,27 @@ public class AddCommodityActivity extends AppCompatActivity {
             String name = nameEditText.getText().toString();
             Type type = (Type) typeSpinner.getSelectedItem();
             String description = descriptionEditText.getText().toString();
-            Float price = Float.valueOf(priceEditText.getText().toString());
-            //Log.d("Type", "Commodity Type: " + type);
+            String priceStr = priceEditText.getText().toString().trim();
 
+            if (name.isEmpty()){
+                Toast.makeText(this, "商品名称不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (description.isEmpty()) {
+                Toast.makeText(this, "商品描述不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (priceStr.isEmpty()) {
+                Toast.makeText(this, "商品价格不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Float price;
+            try {
+                price = Float.parseFloat(priceStr);
+            } catch (NumberFormatException e) {
+                Toast.makeText(this, "请输入有效的价格", Toast.LENGTH_SHORT).show();
+                return;
+            }
             // 保存到数据库
             DBFunction.addCommodity(name, MainActivity.getCurrentUsername(), currentDate,
                     type, price, description, base);
