@@ -93,11 +93,13 @@ public class HomepageActivity extends AppCompatActivity {
         textRecommendations = findViewById(R.id.text_recommendation);
 
         SensitiveWordManager sensitiveWordManager = new SensitiveWordManager(this);
-        String[] wordFiles = {"COVID-19词库.txt", "GFW补充词库.txt", "其他词库.txt",
+        String[] wordFiles = {"COVID-19词库.txt", "其他词库.txt",
                  "民生词库.txt", "补充词库.txt", "贪腐词库.txt", "零时-Tencent.txt"};
         for (String file : wordFiles) {
             sensitiveWordManager.loadSensitiveWords(file);
         }
+
+        sensitiveWordTEST(sensitiveWordManager);
 
         buttonCallApi.setOnClickListener(v -> {
             String query = editQueryInput.getText().toString();
@@ -162,13 +164,11 @@ public class HomepageActivity extends AppCompatActivity {
                 textRecommendations.setText("userFeatureJSON Error: " + e.getMessage());
                 e.printStackTrace();
             }
-            Log.e("FUCK", userFeatureJSON.toString());
             String prompt = null;
             try {
                 prompt = buildModelInput(userFeatureJSON);
             } catch (JSONException e) {
                 textRecommendations.setText("prompt Error: " + e.getMessage());
-                Log.e("SUCK", e.getMessage());
             }
             Log.e("prompt : ", prompt);
             // 调用模型接口，获取推荐列表
@@ -209,6 +209,11 @@ public class HomepageActivity extends AppCompatActivity {
             Intent intent = new Intent(HomepageActivity.this, HomepageActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void sensitiveWordTEST(SensitiveWordManager sensitiveWordManager) {
+        String text1 = "你好，这里是学院路37号";
+        Log.e("TEST1", sensitiveWordManager.containsSensitiveWord(text1) ? "YES" : "NO");
     }
 
     private JSONObject buildUserFeatureJson(
@@ -373,7 +378,6 @@ public class HomepageActivity extends AppCompatActivity {
                 mainHandler.post(() -> {
                     updateRecylerView();
                 });
-                Log.e("recommendListFUCK : ", recommendList.toString());
 //                mainHandler.post(() -> textRecommendations.setText("CommodityRecommendationSystem : " + content));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -403,7 +407,7 @@ public class HomepageActivity extends AppCompatActivity {
 
                 Choice firstChoice = modelData.getChoices().get(0);
                 String content = (String) firstChoice.getMessage().getContent();
-                mainHandler.post(() -> textApiResult.setText("model output: " + content));
+                mainHandler.post(() -> textApiResult.setText("OUTPUT: " + content));
             } catch (Exception e) {
                 e.printStackTrace();
                 mainHandler.post(() -> textApiResult.setText("Error: " + e.getMessage()));

@@ -21,7 +21,7 @@
         android:layout_below="@id/edit_query_input"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="ZhipuAI"
+        android:text="查询AI"
         android:textStyle="bold"
         />
 
