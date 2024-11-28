@@ -71,26 +71,28 @@ public class HomepageActivity extends AppCompatActivity {
     private TextView textApiResult;
     private TextView textRecommendations;
     private RecyclerView recyclerView;
+    private RecyclerView recyclerView1;
     private List<Commodity> recommendList = new ArrayList<>();
+    private List<Commodity> queryList = new ArrayList<>();
     private CommodityAdapter commodityAdapter;
     ClientV4 client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_homepage);
+        setContentView(layout.activity_homepage);
 
-        String apiKey = getString(R.string.api_key);
+        String apiKey = getString(string.api_key);
         client = new ClientV4.Builder(apiKey)
                 .enableTokenCache()
                 .networkConfig(300, 100, 100, 100, TimeUnit.SECONDS)
                 .connectionPool(new ConnectionPool(8, 1, TimeUnit.SECONDS))
                 .build();
 
-        EditText editQueryInput = findViewById(R.id.edit_query_input);
-        Button buttonCallApi = findViewById(R.id.button_call_api);
-        textApiResult = findViewById(R.id.text_api_result);
-        textRecommendations = findViewById(R.id.text_recommendation);
+        EditText editQueryInput = findViewById(id.edit_query_input);
+        Button buttonCallApi = findViewById(id.button_call_api);
+        textApiResult = findViewById(id.text_api_result);
+        textRecommendations = findViewById(id.text_recommendation);
 
         SensitiveWordManager sensitiveWordManager = new SensitiveWordManager(this);
         String[] wordFiles = {"COVID-19词库.txt", "其他词库.txt",
@@ -99,23 +101,40 @@ public class HomepageActivity extends AppCompatActivity {
             sensitiveWordManager.loadSensitiveWords(file);
         }
 
-        sensitiveWordTEST(sensitiveWordManager);
+        //sensitiveWordTEST(sensitiveWordManager);
+
+        List<Commodity> allCommodities = LitePal.findAll(Commodity.class);
+        StringBuilder queryPrompt = new StringBuilder();
+        if (!allCommodities.isEmpty()) {
+            JSONObject queryJson = null;
+            try {
+                queryJson = buildQueryJson(allCommodities);
+            } catch (JSONException e) {
+                textApiResult.setText("Error JSON: " + e.getMessage());
+                Log.e("queryJSON ERROR ", e.getMessage());
+            }
+            try {
+                queryPrompt.append(buildQueryPrompt(queryJson));
+            } catch (JSONException e) {
+                textApiResult.setText("Error JSON: " + e.getMessage());
+                Log.e("queryPrompt ERROR ", e.getMessage());
+            }
+        }
 
         buttonCallApi.setOnClickListener(v -> {
             String query = editQueryInput.getText().toString();
-
             if (query.isEmpty()) {
                 Toast.makeText(HomepageActivity.this, "输入不能为空" , Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            queryPrompt.append(query);
             if (sensitiveWordManager.containsSensitiveWord(query)) {
                 Toast.makeText(HomepageActivity.this, "输入内容包含敏感信息，请修改后再试",Toast.LENGTH_SHORT).show();
                 return;
             }
-
+            queryList.clear();
             try {
-                callZhipuApi(query);
+                callZhipuApi(queryPrompt.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
                 textApiResult.setText("Error JSON: " + e.getMessage());
@@ -123,11 +142,10 @@ public class HomepageActivity extends AppCompatActivity {
         });
 
         if (LitePal.findAll(Commodity.class).isEmpty()) {
-//            Log.e("Fuck" , "Empty Commodity List");
             textRecommendations.setText("商品列表中暂时为空");
         }
         else {
-            textRecommendations.setText("推荐商品列表：\n");
+            textRecommendations.setText("正在为您推荐商品：\n");
             String userName = getCurrentUsername();
             Long userId = getCurrentUserId();
 
@@ -153,7 +171,6 @@ public class HomepageActivity extends AppCompatActivity {
             for (OrderTable orderTable : orderTables) {
                 orderTableCommodities.add(getCommodity(orderTable.getCommodityId()));
             }
-            List<Commodity> allCommodities = LitePal.findAll(Commodity.class);
 
             JSONObject userFeatureJSON = null;
 
@@ -180,31 +197,31 @@ public class HomepageActivity extends AppCompatActivity {
             }
         }
         // 这里可以设置其他初始化逻辑，比如加载数据等
-        Button messagesButton = findViewById(R.id.button_messages);
+        Button messagesButton = findViewById(id.button_messages);
         messagesButton.setOnClickListener(v -> {
             Intent intent = new Intent(HomepageActivity.this, ChatListActivity.class);
             startActivity(intent);
         });
 
-        Button userButton = findViewById(R.id.button_profile);
+        Button userButton = findViewById(id.button_profile);
         userButton.setOnClickListener(v -> {
             Intent intent = new Intent(HomepageActivity.this, ProfileActivity.class);
             startActivity(intent);
         });
 
-        Button sellButton = findViewById(R.id.button_sell);
+        Button sellButton = findViewById(id.button_sell);
         sellButton.setOnClickListener(v -> {
             Intent intent = new Intent(HomepageActivity.this, AddCommodityActivity.class);
             startActivity(intent);
         });
 
-        Button squareButton = findViewById(R.id.button_square);
+        Button squareButton = findViewById(id.button_square);
         squareButton.setOnClickListener(v -> {
             Intent intent = new Intent(HomepageActivity.this, CommodityListActivity.class);
             startActivity(intent);
         });
 
-        Button homeButton = findViewById(R.id.button_home);
+        Button homeButton = findViewById(id.button_home);
         homeButton.setOnClickListener(v -> {
             Intent intent = new Intent(HomepageActivity.this, HomepageActivity.class);
             startActivity(intent);
@@ -214,6 +231,13 @@ public class HomepageActivity extends AppCompatActivity {
     private void sensitiveWordTEST(SensitiveWordManager sensitiveWordManager) {
         String text1 = "你好，这里是学院路37号";
         Log.e("TEST1", sensitiveWordManager.containsSensitiveWord(text1) ? "YES" : "NO");
+    }
+
+    private JSONObject buildQueryJson(List<Commodity> allCommodities) throws JSONException {
+        JSONObject queryJson = new JSONObject();
+        JSONArray commoditiesArray = buildCommodityJsonArray(allCommodities);
+        queryJson.put("系统中所有商品", commoditiesArray);
+        return queryJson;
     }
 
     private JSONObject buildUserFeatureJson(
@@ -284,6 +308,22 @@ public class HomepageActivity extends AppCompatActivity {
         return preferredCategories;
     }
 
+    private String buildQueryPrompt(JSONObject queryJson) throws JSONException {
+        StringBuilder prompt = new StringBuilder();
+        prompt.append("您是一位智能购物助手。根据系统中的商品信息，为用户的查询提供相关商品\n");
+        prompt.append("下面是系统中所有商品的相关信息：\n");
+        prompt.append(formatrecommendList(queryJson.getJSONArray("系统中所有商品"))).append("\n");
+        prompt.append("如果用户查询的是系统中商品相关的信息，进行推荐，严格按照如下格式。如果是其他问题，正常回答即可。\n");
+        prompt.append("[\n");
+        prompt.append("    {\"商品ID\": \"123\"},\n");
+        prompt.append("    {\"商品ID\": \"456\"}\n");
+        prompt.append("]\n");
+        prompt.append("请确保返回 JSON 格式化的推荐结果。商品id必须在系统中所有商品中出现。严格按照以上JSON格式，不要有任何注释。\n");
+        prompt.append("如果查询的是最。。的商品，只返回一个推荐结果即可。");
+        prompt.append("以下是用户输入的查询内容：\n");
+        return prompt.toString();
+    }
+
     private String buildModelInput(JSONObject userFeature) throws JSONException {
         StringBuilder prompt = new StringBuilder();
         prompt.append("您是智能购物助手。根据用户的行为数据和详细的产品信息，推荐他们可能喜欢的 5 款产品，如果系统中所有商品的数量不够则推荐系统中所有商品。\n");
@@ -327,11 +367,20 @@ public class HomepageActivity extends AppCompatActivity {
         return formattedList.toString();
     }
 
+    private void updateCommoditySearchView() {
+        Log.e("recommendListBefore : ", queryList.toString());
+
+        recyclerView1 = findViewById(id.recycler_view_query_result);
+        recyclerView1.setLayoutManager(new LinearLayoutManager(this));
+        commodityAdapter = new CommodityAdapter(this, queryList, REQUEST_CODE); // 创建适配器
+        recyclerView1.setAdapter(commodityAdapter); // 设置适配器
+    }
+
     private void updateRecylerView() {
 
         Log.e("recommendListAfter : ", recommendList.toString());
 
-        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         commodityAdapter = new CommodityAdapter(this, recommendList, REQUEST_CODE); // 创建适配器
         recyclerView.setAdapter(commodityAdapter); // 设置适配器
@@ -369,7 +418,7 @@ public class HomepageActivity extends AppCompatActivity {
 //                Log.e("jsonArray : ", jsonArray.toString());
                 if (jsonArray.isArray()) {
                     for (JsonNode jsonNode : jsonArray) {
-                        Commodity commodity = DBFunction.getCommodity(Long.parseLong(jsonNode.get("商品ID").asText()));
+                        Commodity commodity = getCommodity(Long.parseLong(jsonNode.get("商品ID").asText()));
                         recommendList.add(commodity);
                         //Log.e("NOTICE : ", commodity.toString());
                     }
@@ -407,7 +456,26 @@ public class HomepageActivity extends AppCompatActivity {
 
                 Choice firstChoice = modelData.getChoices().get(0);
                 String content = (String) firstChoice.getMessage().getContent();
-                mainHandler.post(() -> textApiResult.setText("OUTPUT: " + content));
+                int startIndex = content.indexOf('[');
+                int endIndex = content.lastIndexOf(']');
+                content = content.substring(startIndex, endIndex + 1);
+                content = content.substring(startIndex, endIndex + 1);
+                String finalContent = content;
+//                mainHandler.post(() -> textApiResult.setText("OUTPUT: " + finalContent));
+//                mainHandler.post(() -> textRecommendations.setText("model output: " + finalContent));
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode jsonArray = mapper.readTree(finalContent);
+                Log.e("jsonArray : ", jsonArray.toString());
+                if (jsonArray.isArray()) {
+                    for (JsonNode jsonNode : jsonArray) {
+                        Commodity commodity = getCommodity(Long.parseLong(jsonNode.get("商品ID").asText()));
+                        queryList.add(commodity);
+                        //Log.e("NOTICE : ", commodity.toString());
+                    }
+                }
+                mainHandler.post(() -> {
+                    updateCommoditySearchView();
+                });
             } catch (Exception e) {
                 e.printStackTrace();
                 mainHandler.post(() -> textApiResult.setText("Error: " + e.getMessage()));
