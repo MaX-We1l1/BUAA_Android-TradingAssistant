@@ -10,7 +10,7 @@ public class Comment extends LitePalSupport {
     private String description;// 描述
     private String date;       // 日期
     private float star;          // 评星
-    private int imageResource;
+    private String imageResource;
 
     public Comment() {
 
@@ -84,11 +84,11 @@ public class Comment extends LitePalSupport {
         this.title = title;
     }
 
-    public int getImageResource() {
+    public String getImageResource() {
         return imageResource;
     }
 
-    public void setImageResource(int imageResource) {
+    public void setImageResource(String imageResource) {
         this.imageResource = imageResource;
     }
 

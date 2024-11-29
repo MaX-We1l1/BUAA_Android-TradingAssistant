@@ -1,12 +1,16 @@
 package com.example.myapplication.profile.comment;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -33,10 +37,13 @@ public class AddCommentActivity extends AppCompatActivity {
     private Button submitButton;
     private Commodity commodity;
     private ImageButton backButton;
+    private Uri imageUri;
+    private String base = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        base = "";
         setContentView(R.layout.activity_add_comment);
 
         //从 Intent 中获取商品 ID
@@ -84,22 +91,43 @@ public class AddCommentActivity extends AppCompatActivity {
      * 打开图片选择器
      */
     private void openImagePicker() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
+        Intent intent = new Intent();
         intent.setType("image/*");
-        startActivityForResult(intent, REQUEST_IMAGE_PICK);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "选择图片"), REQUEST_IMAGE_PICK);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
+        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null && data.getData() != null) {
             // 获取用户选择的图片
+            imageUri = data.getData();
+            // 这里可以显示选中的图片或进行其他处理
+            ImageView imageView = findViewById(R.id.comment_image);
+            String filepath = getRealPathFromURI(imageUri);
+            imageView.setImageURI(imageUri);
+            base = encodeImageToBase64(filepath);
             Log.d("AddCommentActivity", "Image selected: " + data.getData());
             Toast.makeText(this, "图片上传成功！", Toast.LENGTH_SHORT).show();
         } else if (requestCode == REQUEST_IMAGE_PICK) {
             Toast.makeText(this, "未选择图片", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private String getRealPathFromURI(Uri uri) {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            String filePath = cursor.getString(columnIndex);
+            cursor.close();
+            Log.w("from AddCommodityActivity", "path is " + imageUri);
+            return filePath;
+        }
+        return null;
     }
 
     /**
@@ -136,13 +164,19 @@ public class AddCommentActivity extends AppCompatActivity {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             formattedDate = today.format(formatter);
         }
-        DBFunction.addCommentNoImage(rating, commodity.getId(), MainActivity.getCurrentUsername()
-                ,commodity.getCommodityName(), comment, formattedDate);
+        if (base.isEmpty()) {
+            DBFunction.addCommentNoImage(rating, commodity.getId(), MainActivity.getCurrentUsername()
+                    , commodity.getCommodityName(), comment, formattedDate);
+        } else {
+            DBFunction.addCommentWithImage(rating, commodity.getId(), MainActivity.getCurrentUsername()
+                    , commodity.getCommodityName(), comment, formattedDate, base);
+        }
         Toast.makeText(this, "评论提交成功！", Toast.LENGTH_SHORT).show();
 
         // 提交完成后清空输入
         ratingBar.setRating(0);
         commentInput.setText("");
+        base = "";
         finish();
     }
 }

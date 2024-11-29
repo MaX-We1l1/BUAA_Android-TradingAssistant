@@ -51,6 +51,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         holder.message.setText(notification.getMessage());
         holder.buyer.setText("收件人：" + DBFunction.findUserNameById(notification.getSenderId()));
 
+
         if (notification.getMessage().equals("已发货")) {
             holder.actionButton.setVisibility(View.GONE);
         }
@@ -60,6 +61,14 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             notification.save();
             holder.actionButton.setText("删除记录");
             holder.message.setText(notification.getMessage());
+        }
+
+        if (orderTable != null) {
+            if (orderTable.getCommodityNum() == 0) {
+                orderTable.setCommodityNum(1);
+                orderTable.save();
+            }
+            holder.quantity.setText("x" + orderTable.getCommodityNum());
         }
 
         holder.actionButton.setOnClickListener(v -> {
@@ -94,7 +103,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView title, message, buyer;
+        TextView title, message, buyer, quantity;
         Button actionButton;
 
         public ViewHolder(@NonNull View itemView) {
@@ -103,6 +112,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             message = itemView.findViewById(R.id.notification_message);
             buyer = itemView.findViewById(R.id.notification_buyer);
             actionButton = itemView.findViewById(R.id.notification_action_button);
+            quantity = itemView.findViewById(R.id.notification_quantity);
         }
     }
 }
