@@ -83,10 +83,7 @@ public class BuyCommodityActivity extends AppCompatActivity {
                 User buyer = DBFunction.findUserByName(MainActivity.getCurrentUsername());
                 if (buyer.getMoney() >= commodity.getPrice() * quantity) {
                     buyer.buy(commodity.getPrice() * quantity);
-                    User seller = DBFunction.findUserByName(commodity.getSellerName());
-                    seller.sell(commodity.getPrice() * quantity);
                     buyer.save();
-                    seller.save();
                     DBFunction.addBuyOrder(commodity.getId(), buyer.getId(), commodity.getCommodityName(),
                             commodity.getPrice(), commodity.getImageUrl());
                 } else {
