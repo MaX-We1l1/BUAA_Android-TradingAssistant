@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.database.DBFunction;
+import com.example.myapplication.database.User;
 import com.example.myapplication.profile.comment.AddCommentActivity;
 import com.example.myapplication.database.OrderTable;
 
@@ -116,7 +117,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         });
 
         //已发货才显示 ”确认收货“ 按钮
-        if (order.getCommodityStatus().equals("待发货") || order.getCommodityStatus().equals("已发货")) {
+        if (order.getCommodityStatus().equals("已发货")) {
             holder.confirmReceipt.setVisibility(View.VISIBLE);
         } else {
             holder.confirmReceipt.setVisibility(View.GONE);
@@ -129,6 +130,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                         // 在这里处理确认收货的逻辑，例如更新订单状态
                         order.setCommodityStatus("已完成");
                         order.save();
+                        User user = DBFunction.findUserByName(MainActivity.getCurrentUsername());
+                        assert user != null;
+                        user.sell(order.getCommodityPrice());
+                        user.save();
                         notifyItemChanged(position); // 更新UI
                     })
                     .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
