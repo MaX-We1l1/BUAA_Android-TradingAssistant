@@ -1,5 +1,7 @@
 package com.example.myapplication.profile.comment;
 
+import static com.example.myapplication.commodity.AddCommodityActivity.encodeImageToBase64;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
