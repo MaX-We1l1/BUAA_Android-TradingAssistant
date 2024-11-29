@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.database.User;
 import com.example.myapplication.profile.comment.AddCommentActivity;
@@ -143,9 +144,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                         // 在这里处理确认收货的逻辑，例如更新订单状态
                         order.setCommodityStatus("已完成");
                         order.save();
-                        User user = DBFunction.findUserByName(MainActivity.getCurrentUsername());
+                        Commodity commodity = DBFunction.getCommodity(order.getCommodityId());
+                        User user = DBFunction.findUserByName(commodity.getSellerName());
                         assert user != null;
-                        user.sell(order.getCommodityPrice());
+                        user.sell(order.getCommodityPrice() * order.getCommodityNum());
                         user.save();
                         notifyItemChanged(position); // 更新UI
                     })
