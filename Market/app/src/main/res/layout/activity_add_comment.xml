@@ -90,5 +90,11 @@
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:paddingVertical="10dp" />
+    <ImageView
+        android:id="@+id/comment_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="8dp" />
 
 </LinearLayout>

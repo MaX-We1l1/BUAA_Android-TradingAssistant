@@ -360,8 +360,9 @@ public class DBFunction {
         }
     }
 
-    public static void addCommentWithImage(long commodityId, String userName, String title, String description, String date, int imageResource) {
+    public static void addCommentWithImage(float rating,long commodityId, String userName, String title, String description, String date, String imageResource) {
         Comment comment = new Comment();
+        comment.setStar(rating);
         comment.setCommodityId(commodityId);
         comment.setUserName(userName);
         comment.setTitle(title);
@@ -379,6 +380,7 @@ public class DBFunction {
         comment.setTitle(title);
         comment.setDate(date);
         comment.setDescription(description);
+        comment.setImageResource("");
         comment.save();
     }
 
