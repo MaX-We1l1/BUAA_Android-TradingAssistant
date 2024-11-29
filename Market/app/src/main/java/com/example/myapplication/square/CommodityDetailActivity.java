@@ -158,16 +158,8 @@ public class CommodityDetailActivity extends AppCompatActivity {
             commoditySeller.setText("卖家: " + commodity.getSellerName()); // 显示卖家信息
 
             // 加载商品图片
-//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-//                    != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(this,
-//                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-//                        REQUEST_CODE);
-//            } else {
-//                loadImage();
-//            }
             String imageBase64 = commodity.getImageUrl();
-            if (imageBase64 != null || !imageBase64.isEmpty()) {
+            if (imageBase64 != null && !imageBase64.isEmpty()) {
                 byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
                 Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                 commodityImage.setImageBitmap(decodedByte);
