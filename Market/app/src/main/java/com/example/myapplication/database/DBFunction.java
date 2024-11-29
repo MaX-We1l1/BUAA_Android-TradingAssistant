@@ -403,7 +403,7 @@ public class DBFunction {
     }
 
     // order
-    public static OrderTable addBuyOrder(long commodityId, long userId, String title, Float prize, String imgUrl) {
+    public static OrderTable addBuyOrder(long commodityId, long userId, String title, Float prize, String imgUrl, int quantity) {
         OrderTable order = new OrderTable();
         order.setCommodityId(commodityId);
         order.setCommodityPrice(prize);
@@ -411,6 +411,7 @@ public class DBFunction {
         order.setUserId(userId);
         order.setCommodityName(title);
         order.setImageUrl(imgUrl);
+        order.setCommodityNum(quantity);
         order.save();
         return order;
     }

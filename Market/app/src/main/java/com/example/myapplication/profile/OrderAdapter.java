@@ -1,5 +1,6 @@
 package com.example.myapplication.profile;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.database.DBFunction;
+import com.example.myapplication.database.User;
 import com.example.myapplication.profile.comment.AddCommentActivity;
 import com.example.myapplication.database.OrderTable;
 
@@ -42,6 +44,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
         return new OrderViewHolder(view);
     }
 
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
         OrderTable order = orderList.get(position);
@@ -54,6 +57,13 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
 
         // 绑定订单价格
         holder.orderPrice.setText(String.format("¥%.2f", order.getCommodityPrice()));
+
+        // 显示订单数量
+        if (order.getCommodityNum() == 0) {
+            order.setCommodityNum(1);
+            order.save();
+        }
+        holder.orderQuantity.setText("x" + order.getCommodityNum());
 
         // 绑定订单图片
         // holder.orderImage.setImageResource(order.getImageResourceId());
@@ -102,6 +112,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
                     .setTitle("确认删除")
                     .setMessage("您确定要删除这个订单吗？")
                     .setPositiveButton("删除", (dialog, which) -> {
+                        User user = DBFunction.findUserByName(MainActivity.getCurrentUsername());
+                        assert user != null;
+                        user.sell(order.getCommodityPrice() * order.getCommodityNum());
+                        user.save();
                         DBFunction.delOrder(order.getId());
                         orderList.remove(position);
                         notifyItemRemoved(position);
@@ -146,7 +160,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
     public static class OrderViewHolder extends RecyclerView.ViewHolder {
 
         ImageView orderImage;
-        TextView orderTitle, orderStatus, orderPrice;
+        TextView orderTitle, orderStatus, orderPrice, orderQuantity;
         Button addComment, delOrder, confirmReceipt;
 
         public OrderViewHolder(@NonNull View itemView) {
@@ -155,6 +169,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             orderTitle = itemView.findViewById(R.id.order_title);
             orderStatus = itemView.findViewById(R.id.order_status);
             orderPrice = itemView.findViewById(R.id.order_price);
+            orderQuantity = itemView.findViewById(R.id.order_quantity);
             addComment = itemView.findViewById(R.id.add_comment);
             delOrder = itemView.findViewById(R.id.del_order);
             confirmReceipt = itemView.findViewById(R.id.confirm_receipt);

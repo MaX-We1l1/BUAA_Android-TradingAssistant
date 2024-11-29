@@ -8,6 +8,7 @@ public class OrderTable extends LitePalSupport {
     //Title 目前就是商品的名字
     private String commodityStatus;
     private Float commodityPrice;
+    private int commodityNum;
     // private int imageResourceId;// 假设图片是资源 ID
     private String imageUrl;
     private long commodityId;
@@ -31,6 +32,14 @@ public class OrderTable extends LitePalSupport {
 
     public long getId() {
         return id;
+    }
+
+    public void setCommodityNum(int commodityNum) {
+        this.commodityNum = commodityNum;
+    }
+
+    public int getCommodityNum() {
+        return commodityNum;
     }
 
     public void setCommodityName(String commodityName) {
