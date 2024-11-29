@@ -66,7 +66,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         Commodity commodity = LitePal.find(Commodity.class, cartItem.getCommodityId());
         String imageBase64 = commodity.getImageUrl();
-        if (imageBase64 != null || !imageBase64.isEmpty()) {
+        if (imageBase64 != null && !imageBase64.isEmpty()) {
             byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.commodityImg.setImageBitmap(decodedByte);
@@ -133,8 +133,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         // TextView quantityTextView;
         ImageButton removeButton;
         InputNumberView inputNumber;
-        Button plusButton;
-        Button minusButton;
         CheckBox checkBox;
 
         public CartViewHolder(View itemView) {

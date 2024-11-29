@@ -3,6 +3,9 @@ package com.example.myapplication.profile;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +15,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.R; // 确保导入正确的包
+import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.Hobby;
 import com.example.myapplication.profile.FavoriteItem; // 模型类
 import com.example.myapplication.square.CommodityDetailActivity;
+
+import org.litepal.LitePal;
 
 import java.util.List;
 
@@ -41,7 +47,13 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Favori
         Hobby favoriteItem = favoriteList.get(position);
 
         // 设置图片（可以使用图片加载库如Glide或Picasso加载网络图片）
-        holder.favoriteImage.setImageResource(favoriteItem.getImageResource());
+        Commodity commodity = LitePal.find(Commodity.class, favoriteItem.getCommodityId());
+        String imageBase64 = commodity.getImageUrl();
+        if (imageBase64 != null && !imageBase64.isEmpty()) {
+            byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            holder.favoriteImage.setImageBitmap(decodedByte);
+        }
 
         // 设置标题
         holder.favoriteTitle.setText(favoriteItem.getTitle());
