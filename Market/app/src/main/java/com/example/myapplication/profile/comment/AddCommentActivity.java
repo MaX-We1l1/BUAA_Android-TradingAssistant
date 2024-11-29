@@ -20,6 +20,8 @@ import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
 
 import org.litepal.LitePal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class AddCommentActivity extends AppCompatActivity {
 
@@ -118,12 +120,29 @@ public class AddCommentActivity extends AppCompatActivity {
         }
 
         // 提交评论
+        LocalDate today = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            today = LocalDate.now();
+        }
+
+        // 定义日期格式
+        DateTimeFormatter formatter = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        }
+
+        // 将日期转换为字符串
+        String formattedDate = "2024-12-11";
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            formattedDate = today.format(formatter);
+        }
         DBFunction.addCommentNoImage(rating, commodity.getId(), MainActivity.getCurrentUsername()
-                ,commodity.getCommodityName(), comment, "2024-11-26");
+                ,commodity.getCommodityName(), comment, formattedDate);
         Toast.makeText(this, "评论提交成功！", Toast.LENGTH_SHORT).show();
 
         // 提交完成后清空输入
         ratingBar.setRating(0);
         commentInput.setText("");
+        finish();
     }
 }

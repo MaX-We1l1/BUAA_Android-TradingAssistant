@@ -1,22 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="16dp"
     android:background="?attr/selectableItemBackground">
 
+    <!-- 图片放到顶部并增大 -->
     <ImageView
         android:id="@+id/comment_image"
-        android:layout_width="64dp"
-        android:layout_height="66dp"
-        android:layout_marginRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="199dp"
+        android:layout_marginBottom="16dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_comment_placeholder" />
 
     <LinearLayout
-        android:layout_width="248dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
@@ -32,7 +32,7 @@
         <TextView
             android:id="@+id/comment_description"
             android:layout_width="match_parent"
-            android:layout_height="61dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:lineSpacingExtra="4dp"
@@ -41,19 +41,18 @@
             android:textColor="#666666"
             android:textSize="16sp" />
 
+        <!-- 调整 RatingBar 确保不被遮挡 -->
         <RatingBar
             android:id="@+id/comment_rating_bar"
             android:layout_width="wrap_content"
-            android:layout_height="46dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:numStars="5"
-            android:scaleX="0.8"
-            android:scaleY="0.8"
             android:stepSize="0.5"
-            android:isIndicator="true"
-            />
+            android:isIndicator="true" />
     </LinearLayout>
 
+    <!-- 日期显示 -->
     <TextView
         android:id="@+id/comment_date"
         android:layout_width="wrap_content"
