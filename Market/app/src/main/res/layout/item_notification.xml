@@ -24,6 +24,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"/>
 
+    <TextView
+        android:id="@+id/notification_quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="x1" />
+
     <Button
         android:id="@+id/notification_action_button"
         android:layout_width="wrap_content"

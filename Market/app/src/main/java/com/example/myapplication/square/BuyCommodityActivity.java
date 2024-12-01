@@ -14,6 +14,7 @@ import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
+import com.example.myapplication.database.OrderTable;
 import com.example.myapplication.database.User;
 
 import org.litepal.LitePal;
@@ -81,14 +82,13 @@ public class BuyCommodityActivity extends AppCompatActivity {
                 }
 
                 User buyer = DBFunction.findUserByName(MainActivity.getCurrentUsername());
+                User seller = DBFunction.findUserByName(commodity.getSellerName());
                 if (buyer.getMoney() >= commodity.getPrice() * quantity) {
                     buyer.buy(commodity.getPrice() * quantity);
-                    User seller = DBFunction.findUserByName(commodity.getSellerName());
-                    seller.sell(commodity.getPrice() * quantity);
                     buyer.save();
-                    seller.save();
-                    DBFunction.addBuyOrder(commodity.getId(), buyer.getId(), commodity.getCommodityName(),
-                            commodity.getPrice(), commodity.getImageUrl());
+                    OrderTable order = DBFunction.addBuyOrder(commodity.getId(), buyer.getId(), commodity.getCommodityName(),
+                            commodity.getPrice(), commodity.getImageUrl(), quantity);
+                    DBFunction.sendNotification2Seller(commodity.getCommodityName(), order.getId(), seller.getId(), buyer.getId(), "待发货");
                 } else {
                     Toast.makeText(this, "购买 "+ commodity.getCommodityName()+" * " + quantity+ " 余额不足", Toast.LENGTH_SHORT).show();
                     return;

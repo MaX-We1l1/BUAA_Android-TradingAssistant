@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -64,14 +66,20 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCha
             ArrayList<Integer> quantityList = new ArrayList<>();
             List<CartItem> cartItems = cartManager.getCartItems();
             for (CartItem cartItem : cartItems) {
-                commodities.add(cartItem.getCommodityId());
-                quantityList.add(cartItem.getQuantity());
+                if (cartItem.isSelected()) {
+                    commodities.add(cartItem.getCommodityId());
+                    quantityList.add(cartItem.getQuantity());
+                }
             }
-            intent.putExtra("commodity_list", commodities);
-            intent.putExtra("quantity_list", quantityList);
+            if (commodities.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "请选择至少一件商品", Toast.LENGTH_SHORT).show();
+            } else {
+                intent.putExtra("commodity_list", commodities);
+                intent.putExtra("quantity_list", quantityList);
 
-            // 启动 BuyCommodityActivity
-            startActivity(intent);
+                // 启动 BuyCommodityActivity
+                startActivity(intent);
+            }
         });
     }
 
