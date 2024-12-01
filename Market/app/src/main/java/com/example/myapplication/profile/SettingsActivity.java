@@ -30,6 +30,11 @@ public class SettingsActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        RelativeLayout backButton = findViewById(R.id.relative_back);
+        backButton.setOnClickListener(v -> {
+            finish();
+        });
+
         RelativeLayout exitLoginButton = findViewById(R.id.relative_exit);
         exitLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override

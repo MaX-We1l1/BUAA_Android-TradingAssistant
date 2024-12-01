@@ -458,24 +458,29 @@ public class HomepageActivity extends AppCompatActivity {
                 String content = (String) firstChoice.getMessage().getContent();
                 int startIndex = content.indexOf('[');
                 int endIndex = content.lastIndexOf(']');
-                content = content.substring(startIndex, endIndex + 1);
-                content = content.substring(startIndex, endIndex + 1);
-                String finalContent = content;
+                if (startIndex == -1 || endIndex == -1) {
+                    String finalContent = content;
+                    mainHandler.post(() -> textApiResult.setText("OUTPUT: " + finalContent));
+                } else {
+                    content = content.substring(startIndex, endIndex + 1);
+                    content = content.substring(startIndex, endIndex + 1);
+                    String finalContent = content;
 //                mainHandler.post(() -> textApiResult.setText("OUTPUT: " + finalContent));
 //                mainHandler.post(() -> textRecommendations.setText("model output: " + finalContent));
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode jsonArray = mapper.readTree(finalContent);
-                Log.e("jsonArray : ", jsonArray.toString());
-                if (jsonArray.isArray()) {
-                    for (JsonNode jsonNode : jsonArray) {
-                        Commodity commodity = getCommodity(Long.parseLong(jsonNode.get("商品ID").asText()));
-                        queryList.add(commodity);
-                        //Log.e("NOTICE : ", commodity.toString());
+                    ObjectMapper mapper = new ObjectMapper();
+                    JsonNode jsonArray = mapper.readTree(finalContent);
+                    Log.e("jsonArray : ", jsonArray.toString());
+                    if (jsonArray.isArray()) {
+                        for (JsonNode jsonNode : jsonArray) {
+                            Commodity commodity = getCommodity(Long.parseLong(jsonNode.get("商品ID").asText()));
+                            queryList.add(commodity);
+                            //Log.e("NOTICE : ", commodity.toString());
+                        }
                     }
+                    mainHandler.post(() -> {
+                        updateCommoditySearchView();
+                    });
                 }
-                mainHandler.post(() -> {
-                    updateCommoditySearchView();
-                });
             } catch (Exception e) {
                 e.printStackTrace();
                 mainHandler.post(() -> textApiResult.setText("Error: " + e.getMessage()));

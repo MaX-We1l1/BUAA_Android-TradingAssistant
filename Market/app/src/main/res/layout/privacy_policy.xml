@@ -10,7 +10,7 @@
         android:id="@+id/privacy_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="隐私政策摘要"
+        android:text="隐私政策"
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
@@ -61,7 +61,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:srcCompat="@drawable/data_collection"
+            app:srcCompat="@drawable/personal_information"
             android:layout_marginEnd="8dp"
             />
 
@@ -71,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
             android:text="我们会收集您的基本信息用于改进我们的服务"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -91,7 +92,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:srcCompat="@drawable/data_sharing"
+            app:srcCompat="@drawable/collaborate"
             android:layout_marginEnd="8dp"
             />
 
@@ -101,6 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
             android:text="您的数据在特定情况下可能会共享给合作伙伴"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -121,7 +123,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:srcCompat="@drawable/user_agreement"
+            app:srcCompat="@drawable/personal_privacy"
             android:layout_marginEnd="8dp"/>
 
         <!-- 用户权利文本 -->
@@ -130,6 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center_vertical"
+            android:layout_gravity="center_vertical"
             android:text="您有权访问、修改或删除您的个人数据"
             android:textColor="@color/black"
             android:textSize="16sp" />
@@ -140,7 +143,7 @@
         android:id="@+id/agree_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Agree"
+        android:text="同意"
         android:backgroundTint="#4CAF50"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
@@ -154,7 +157,7 @@
         android:id="@+id/exit_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Exit"
+        android:text="退出"
         android:backgroundTint="#F44336"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
