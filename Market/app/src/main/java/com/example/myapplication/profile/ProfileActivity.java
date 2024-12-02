@@ -1,7 +1,11 @@
 package com.example.myapplication.profile;
 
+
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -45,7 +49,14 @@ public class ProfileActivity extends AppCompatActivity {
         userMoney.setText("账户余额： " + DBFunction.findUserByName(MainActivity.getCurrentUsername()).getMoney());
 
         // 根据用户名设置头像
-        setProfileImage(currentUser);
+        String userImageUrl = MainActivity.getCurrentImageUrl();
+
+        if (userImageUrl != null && !userImageUrl.isEmpty()) {
+            byte[] decodedString = Base64.decode(userImageUrl, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0 , decodedString.length);
+            profileImageView.setImageBitmap(decodedByte);
+        }
+        //profileImageView.setImageResource(avatarResId);
 
         ImageButton cartButton = findViewById(R.id.button_cart);
         cartButton.setOnClickListener(v-> {
@@ -121,27 +132,4 @@ public class ProfileActivity extends AppCompatActivity {
         super.onResume();
         userMoney.setText("账户余额： " + DBFunction.findUserByName(MainActivity.getCurrentUsername()).getMoney());
     }
-
-    /**
-     * 根据用户名动态设置头像
-     * @param username 当前用户的用户名
-     */
-    private void setProfileImage(String username) {
-        int avatarResId;
-
-        // 根据用户名来选择头像资源
-        switch (username) {
-            default:
-                avatarResId = R.drawable.default_avatar; // 如果用户名没有匹配的头像，使用默认头像
-                break;
-        }
-
-        // 设置头像
-        profileImageView.setImageResource(avatarResId);
-    }
-
-    //TODO 根据用户名选择地址
-
-
-
 }

@@ -18,14 +18,20 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
+        ImageButton personalInfoButton = findViewById(R.id.personal_info_button);
+        personalInfoButton.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, PersonalInfoActivity.class);
+            startActivity(intent);
+        });
+
         ImageButton settingsButton = findViewById(R.id.developer_news_button);
         settingsButton.setOnClickListener(v -> {
             Intent intent = new Intent(SettingsActivity.this, DeveloperNewsActivity.class);
             startActivity(intent);
         });
 
-        ImageButton addressButton = findViewById(R.id.address_button);
-        addressButton.setOnClickListener(v -> {
+        ImageButton privacyPolicyButton = findViewById(R.id.privacy_policy_button);
+        privacyPolicyButton.setOnClickListener(v -> {
             Intent intent = new Intent(SettingsActivity.this, PrivacyPolicyActivity.class);
             startActivity(intent);
         });

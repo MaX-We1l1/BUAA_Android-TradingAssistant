@@ -37,11 +37,12 @@ public class DBFunction {
         }
     }
 
-    public static void addUser(String username, String password, String registerDate) {
+    public static void addUser(String username, String password, String registerDate,String url) {
         User user = new User();
         user.setUsername(username);
         user.setPassword(password);
         user.setRegisterTime(registerDate);
+        user.setImageUrl(url);
         user.save();
     }
 
@@ -423,7 +424,6 @@ public class DBFunction {
         if (orderTable != null) {
             orderTable.delete();  // 删除该记录
         }
-
     }
 
     public static List<OrderTable> getOrdersFromUser(long userId) {

@@ -18,6 +18,7 @@ public class User extends LitePalSupport {
     private String username;        //primary
     private String password;
     private String registerTime;
+    private String imageUrl;
     //private int headImage = R.drawable.user; // 头像
     private String personalitySign; // 个性签名, 不超过20个字
     private String birthday; //生日, yyyymmdd 的格式, 防止前导零的情况, 以字符串存
@@ -85,6 +86,8 @@ public class User extends LitePalSupport {
         return username;
     }
 
+    public String getImageUrl() { return imageUrl; }
+
     public void setUsername(String username) {
 //        if (DBFunction.isUsernameExist(username)) {
 //            Log.w(DBFunction.TAG, "用户名重复");
@@ -132,6 +135,8 @@ public class User extends LitePalSupport {
     public void setMoney(double money) {
         this.money = money;
     }
+
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public void buy(double price) {
         this.money -= price;

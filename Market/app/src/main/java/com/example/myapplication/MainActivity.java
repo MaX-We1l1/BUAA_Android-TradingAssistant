@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.home.HomepageActivity;
+import com.example.myapplication.database.User;
 
 import org.litepal.LitePal;
 
@@ -34,6 +35,20 @@ public class MainActivity extends AppCompatActivity {
         if (DBFunction.isUsernameExist(currentUsername)) {
             return DBFunction.findUserByName(currentUsername).getId();
         } return 0;
+    }
+
+    public static String getCurrentImageUrl() {
+        if (DBFunction.isUsernameExist(currentUsername)) {
+            return DBFunction.findUserByName(currentUsername).getImageUrl();
+        } return "";
+    }
+
+    public static void setCurrentImageUrl(String imageUrl) {
+        if (DBFunction.isUsernameExist(currentUsername)) {
+            User user = DBFunction.findUserByName(currentUsername);
+            user.setImageUrl(imageUrl);
+            user.save();
+        }
     }
 
     private enum LoginCheckResult {
