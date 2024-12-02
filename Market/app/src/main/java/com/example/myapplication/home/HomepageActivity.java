@@ -5,12 +5,14 @@ import static com.example.myapplication.MainActivity.getCurrentUsername;
 import static com.example.myapplication.R.*;
 import static com.example.myapplication.database.DBFunction.getCommodity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -94,6 +96,16 @@ public class HomepageActivity extends AppCompatActivity {
         textApiResult = findViewById(id.text_api_result);
         textRecommendations = findViewById(id.text_recommendation);
 
+        recyclerView = findViewById(id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        commodityAdapter = new CommodityAdapter(this, recommendList, REQUEST_CODE); // 创建适配器
+        recyclerView.setAdapter(commodityAdapter); // 设置适配器
+
+        recyclerView1 = findViewById(id.recycler_view_query_result);
+        recyclerView1.setLayoutManager(new LinearLayoutManager(this));
+        commodityAdapter = new CommodityAdapter(this, queryList, REQUEST_CODE); // 创建适配器
+        recyclerView1.setAdapter(commodityAdapter); // 设置适配器
+
         SensitiveWordManager sensitiveWordManager = new SensitiveWordManager(this);
         String[] wordFiles = {"COVID-19词库.txt", "其他词库.txt",
                  "民生词库.txt", "补充词库.txt", "贪腐词库.txt", "零时-Tencent.txt"};
@@ -132,7 +144,6 @@ public class HomepageActivity extends AppCompatActivity {
                 Toast.makeText(HomepageActivity.this, "输入内容包含敏感信息，请修改后再试",Toast.LENGTH_SHORT).show();
                 return;
             }
-            queryList.clear();
             try {
                 callZhipuApi(queryPrompt.toString());
             } catch (JSONException e) {
@@ -174,7 +185,6 @@ public class HomepageActivity extends AppCompatActivity {
 
             JSONObject userFeatureJSON = null;
 
-            recommendList.clear();
             try {
                 userFeatureJSON = buildUserFeatureJson(hobbyCommodities, cartItemCommodities, orderTableCommodities, allCommodities);
             } catch (JSONException e) {
@@ -320,6 +330,7 @@ public class HomepageActivity extends AppCompatActivity {
         prompt.append("]\n");
         prompt.append("请确保返回 JSON 格式化的推荐结果。商品id必须在系统中所有商品中出现。严格按照以上JSON格式，不要有任何注释。\n");
         prompt.append("如果查询的是最。。的商品，只返回一个推荐结果即可。");
+        prompt.append("如果查询与商品无关内容，正常回复它的问题即可。\n");
         prompt.append("以下是用户输入的查询内容：\n");
         return prompt.toString();
     }
@@ -367,25 +378,6 @@ public class HomepageActivity extends AppCompatActivity {
         return formattedList.toString();
     }
 
-    private void updateCommoditySearchView() {
-        Log.e("recommendListBefore : ", queryList.toString());
-
-        recyclerView1 = findViewById(id.recycler_view_query_result);
-        recyclerView1.setLayoutManager(new LinearLayoutManager(this));
-        commodityAdapter = new CommodityAdapter(this, queryList, REQUEST_CODE); // 创建适配器
-        recyclerView1.setAdapter(commodityAdapter); // 设置适配器
-    }
-
-    private void updateRecylerView() {
-
-        Log.e("recommendListAfter : ", recommendList.toString());
-
-        recyclerView = findViewById(id.recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        commodityAdapter = new CommodityAdapter(this, recommendList, REQUEST_CODE); // 创建适配器
-        recyclerView.setAdapter(commodityAdapter); // 设置适配器
-    }
-
     private void commodityRecommendationSystem(String prompt) throws JSONException {
         executorService.execute(() -> {
             try {
@@ -414,7 +406,8 @@ public class HomepageActivity extends AppCompatActivity {
 //                mainHandler.post(() -> textRecommendations.setText("model output: " + finalContent));
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode jsonArray = mapper.readTree(finalContent);
-
+                recommendList.clear();
+                Log.e("recommendList_before : ", recommendList.toString());
 //                Log.e("jsonArray : ", jsonArray.toString());
                 if (jsonArray.isArray()) {
                     for (JsonNode jsonNode : jsonArray) {
@@ -423,10 +416,8 @@ public class HomepageActivity extends AppCompatActivity {
                         //Log.e("NOTICE : ", commodity.toString());
                     }
                 }
-
-                mainHandler.post(() -> {
-                    updateRecylerView();
-                });
+                Log.e("recommendList : ", recommendList.toString());
+                mainHandler.post(() -> commodityAdapter.notifyDataSetChanged());
 //                mainHandler.post(() -> textRecommendations.setText("CommodityRecommendationSystem : " + content));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -462,6 +453,7 @@ public class HomepageActivity extends AppCompatActivity {
                     String finalContent = content;
                     mainHandler.post(() -> textApiResult.setText("OUTPUT: " + finalContent));
                 } else {
+                    mainHandler.post(() -> textApiResult.setText("以下是查询结果：\n"));
                     content = content.substring(startIndex, endIndex + 1);
                     content = content.substring(startIndex, endIndex + 1);
                     String finalContent = content;
@@ -470,6 +462,8 @@ public class HomepageActivity extends AppCompatActivity {
                     ObjectMapper mapper = new ObjectMapper();
                     JsonNode jsonArray = mapper.readTree(finalContent);
                     Log.e("jsonArray : ", jsonArray.toString());
+                    queryList.clear();
+                    Log.e("queryList_before :", queryList.toString());
                     if (jsonArray.isArray()) {
                         for (JsonNode jsonNode : jsonArray) {
                             Commodity commodity = getCommodity(Long.parseLong(jsonNode.get("商品ID").asText()));
@@ -477,13 +471,12 @@ public class HomepageActivity extends AppCompatActivity {
                             //Log.e("NOTICE : ", commodity.toString());
                         }
                     }
-                    mainHandler.post(() -> {
-                        updateCommoditySearchView();
-                    });
+                    Log.e("queryList : ", queryList.toString());
+                    mainHandler.post(() -> commodityAdapter.notifyDataSetChanged());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                mainHandler.post(() -> textApiResult.setText("Error: " + e.getMessage()));
+                mainHandler.post(() -> textApiResult.setText("Error: 输入了与商品无关的内容，请重新输入。\n" + e.getMessage()));
             }
         });
     }
