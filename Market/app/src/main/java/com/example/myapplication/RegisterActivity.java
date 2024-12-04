@@ -1,9 +1,13 @@
 package com.example.myapplication;
 
+import static com.example.myapplication.commodity.AddCommodityActivity.encodeImageToBase64;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +15,9 @@ import android.widget.EditText;
 
 import com.example.myapplication.database.DBFunction;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Base64;
 import java.util.Calendar;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -80,13 +87,29 @@ public class RegisterActivity extends AppCompatActivity {
                 int month = calendar.get(Calendar.MONTH) + 1;
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 String date = String.format("%04d-%02d-%02d", year, month, day);
+                String base = encodeImageResourceToBase64(R.drawable.default_avatar);
                 //TODO 加入进去 ok
-                DBFunction.addUser(username, password1, date);
+                DBFunction.addUser(username, password1, date , base);
                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                 toastThis("注册成功!");
                 finish();
             }
         }
+    }
+
+    public String encodeImageResourceToBase64(int resId) {
+        try {
+            InputStream inputStream = getResources().openRawResource(resId);
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes);
+            inputStream.close();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                return Base64.getEncoder().encodeToString(bytes);
+            }
+        } catch (IOException e) {
+            Log.e("EncodeImageResourseToBase64Error : ", e.getMessage());
+        }
+        return null;
     }
 
     public void initAttribute() {

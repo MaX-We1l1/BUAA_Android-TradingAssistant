@@ -62,15 +62,10 @@
         <activity android:name=".profile.cart.CartActivity"/>
         <activity android:name=".profile.comment.AddCommentActivity"/>
         <activity android:name=".profile.comment.CommentActivity"/>
+        <activity android:name=".profile.PersonalInfoActivity"/>
         <activity android:name=".square.BuyCommodityActivity"/>
         <activity android:name=".notification.NotificationActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"
         tools:ignore="ManifestOrder" />
-
-
-
-
-
 </manifest>
-
