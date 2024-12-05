@@ -64,12 +64,13 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private TextView commodityDescription; // 商品描述
     private ImageView commodityImage; // 商品图片
     private TextView commoditySeller;
-    private Button chatButton; //想要，跳转到聊天界面
+    private ImageButton chatButton; // 将Button改为ImageButton
     private Button editButton;
     private Commodity commodity;
     private Button saveButton;
     private Button buyButton;
-    private Button addCartButton,addHobbyButton;
+    private Button addCartButton;
+    private ImageButton addHobbyButton;
     private ImageButton cartButton;
     private CartManager cartManager = CartManager.getInstance();
     private InputNumberView quantity;
