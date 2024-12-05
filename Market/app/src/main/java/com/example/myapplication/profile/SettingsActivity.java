@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.square.CommodityListActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -38,7 +39,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         RelativeLayout backButton = findViewById(R.id.relative_back);
         backButton.setOnClickListener(v -> {
-            finish();
+            Intent intent = new Intent(SettingsActivity.this, ProfileActivity.class);
+            startActivity(intent);
         });
 
         RelativeLayout exitLoginButton = findViewById(R.id.relative_exit);
