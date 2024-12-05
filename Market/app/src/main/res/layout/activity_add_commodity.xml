@@ -68,6 +68,7 @@
         android:padding="12dp"/>
 
     <Button
+        android:backgroundTint="@color/yellow"
         android:id="@+id/button_select_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -77,6 +78,7 @@
         android:padding="12dp"/>
 
     <Button
+        android:backgroundTint="@color/yellow"
         android:id="@+id/button_add_commodity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

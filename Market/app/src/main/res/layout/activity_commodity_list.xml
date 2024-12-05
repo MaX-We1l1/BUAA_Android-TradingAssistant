@@ -58,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="首页"
+            android:backgroundTint="@color/yellow"
             android:textColor="@android:color/white" />
 
         <Button
@@ -66,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="广场"
+            android:backgroundTint="@color/yellow"
             android:textColor="@android:color/white" />
 
         <Button
@@ -73,6 +75,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/yellow"
             android:text="售卖" />
 
         <Button
@@ -81,6 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="消息"
+            android:backgroundTint="@color/yellow"
             android:textColor="@android:color/white" />
 
         <Button
@@ -89,6 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="我的"
+            android:backgroundTint="@color/yellow"
             android:textColor="@android:color/white" />
     </LinearLayout>
 

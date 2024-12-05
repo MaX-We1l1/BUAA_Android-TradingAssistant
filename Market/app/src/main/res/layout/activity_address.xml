@@ -22,6 +22,7 @@
         android:src="@drawable/ic_return" />
 
     <Button
+        android:backgroundTint="@color/yellow"
         android:id="@+id/button_add_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
