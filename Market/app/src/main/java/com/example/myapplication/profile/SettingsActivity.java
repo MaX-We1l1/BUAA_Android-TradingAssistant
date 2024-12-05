@@ -34,13 +34,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         RelativeLayout settingsButton = findViewById(R.id.privacy_policy);
         settingsButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SettingsActivity.this, DeveloperNewsActivity.class);
+            Intent intent = new Intent(SettingsActivity.this, PrivacyPolicyActivity.class);
             startActivity(intent);
         });
 
         RelativeLayout privacyPolicyButton = findViewById(R.id.about_developer);
         privacyPolicyButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SettingsActivity.this, PrivacyPolicyActivity.class);
+            Intent intent = new Intent(SettingsActivity.this, DeveloperNewsActivity.class);
             startActivity(intent);
         });
 
