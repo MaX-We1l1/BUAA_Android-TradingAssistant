@@ -54,5 +54,11 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        RelativeLayout userInfoListButton = findViewById(R.id.relative_user_info);
+        userInfoListButton.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, UserInfoListActivity.class);
+            startActivity(intent);
+        });
+
     }
 }

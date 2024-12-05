@@ -65,6 +65,8 @@
         <activity android:name=".profile.PersonalInfoActivity"/>
         <activity android:name=".square.BuyCommodityActivity"/>
         <activity android:name=".notification.NotificationActivity"/>
+        <activity android:name=".profile.UserInfoListActivity"
+            android:exported="false" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"
         tools:ignore="ManifestOrder" />

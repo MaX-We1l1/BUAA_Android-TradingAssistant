@@ -53,8 +53,8 @@
                         android:contentDescription="Arrow button" />
                 </RelativeLayout>
 
-                <!-- 我的收藏 -->
                 <RelativeLayout
+                    android:id="@+id/relative_user_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
@@ -62,7 +62,6 @@
                     android:background="?attr/selectableItemBackground">
 
                     <TextView
-                        android:id="@+id/favorite_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="个人信息收集清单"
