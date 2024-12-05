@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.RegisterActivity;
 import com.example.myapplication.square.CommodityListActivity;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -19,19 +20,25 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        ImageButton personalInfoButton = findViewById(R.id.personal_info_button);
+        RelativeLayout personalInfoButton = findViewById(R.id.personal_info);
         personalInfoButton.setOnClickListener(v -> {
             Intent intent = new Intent(SettingsActivity.this, PersonalInfoActivity.class);
             startActivity(intent);
         });
 
-        ImageButton settingsButton = findViewById(R.id.developer_news_button);
+        RelativeLayout userInfoListButton = findViewById(R.id.personal_info_collect_list);
+        userInfoListButton.setOnClickListener(v -> {
+            Intent intent = new Intent(SettingsActivity.this, UserInfoListActivity.class);
+            startActivity(intent);
+        });
+
+        RelativeLayout settingsButton = findViewById(R.id.privacy_policy);
         settingsButton.setOnClickListener(v -> {
             Intent intent = new Intent(SettingsActivity.this, DeveloperNewsActivity.class);
             startActivity(intent);
         });
 
-        ImageButton privacyPolicyButton = findViewById(R.id.privacy_policy_button);
+        RelativeLayout privacyPolicyButton = findViewById(R.id.about_developer);
         privacyPolicyButton.setOnClickListener(v -> {
             Intent intent = new Intent(SettingsActivity.this, PrivacyPolicyActivity.class);
             startActivity(intent);
@@ -53,12 +60,5 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        RelativeLayout userInfoListButton = findViewById(R.id.relative_user_info);
-        userInfoListButton.setOnClickListener(v -> {
-            Intent intent = new Intent(SettingsActivity.this, UserInfoListActivity.class);
-            startActivity(intent);
-        });
-
     }
 }
