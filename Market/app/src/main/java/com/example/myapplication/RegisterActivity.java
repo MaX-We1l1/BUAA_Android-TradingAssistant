@@ -25,6 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText inputUsername;
     private EditText inputPassword1;
     private EditText inputPassword2;
+    private Button backButton;
     private final String NO_USERNAME_TOAST = "请输入用户名";
     private final String NO_PASSWORD_TOAST = "请输入密码";
     private final String NO_AGAIN_PASSWORD_TOAST = "请确认密码";
@@ -50,6 +51,9 @@ public class RegisterActivity extends AppCompatActivity {
                 String password2 = inputPassword2.getText().toString();
                 tryRegister(username, password1, password2);
             }
+        });
+        backButton.setOnClickListener(v -> {
+            finish();
         });
     }
 
@@ -117,6 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
         this.inputUsername = findViewById(R.id.reg_inputUserName);
         this.inputPassword1 = findViewById(R.id.reg_inputPassword);
         this.inputPassword2 = findViewById(R.id.reg_inputPassword_again);
+        this.backButton = findViewById(R.id.back);
     }
 
     @Override
