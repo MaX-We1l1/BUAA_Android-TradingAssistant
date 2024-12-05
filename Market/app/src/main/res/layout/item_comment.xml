@@ -5,13 +5,14 @@
     android:padding="16dp"
     android:background="?attr/selectableItemBackground">
 
-    <!-- 图片放到顶部并增大 -->
+    <!-- 修改 ImageView，默认隐藏 -->
     <ImageView
         android:id="@+id/comment_image"
         android:layout_width="match_parent"
         android:layout_height="199dp"
         android:layout_marginBottom="16dp"
         android:scaleType="centerCrop"
+        android:visibility="gone"
         android:src="@drawable/ic_comment_placeholder" />
 
     <LinearLayout

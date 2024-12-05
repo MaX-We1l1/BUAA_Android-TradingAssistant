@@ -68,6 +68,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             holder.commentImage.setImageBitmap(decodedByte);
+            holder.commentImage.setVisibility(View.VISIBLE);
+        } else {
+            holder.commentImage.setVisibility(View.GONE);
         }
     }
 
