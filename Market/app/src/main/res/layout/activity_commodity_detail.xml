@@ -123,6 +123,7 @@
         android:layout_gravity="center">
 
         <Button
+            android:backgroundTint="@color/yellow"
             android:id="@+id/button_buy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -144,6 +145,7 @@
     </RelativeLayout>
 
     <Button
+        android:backgroundTint="@color/yellow"
         android:id="@+id/button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -152,6 +154,7 @@
         android:visibility="gone"/>
 
     <Button
+        android:backgroundTint="@color/yellow"
         android:id="@+id/button_edit_commodity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -166,6 +169,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:backgroundTint="@color/yellow"
             android:id="@+id/button_add_to_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
