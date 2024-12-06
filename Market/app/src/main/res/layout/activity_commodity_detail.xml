@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
@@ -80,13 +82,14 @@
         android:layout_marginBottom="8dp" />
 
     <!-- 添加商品库存数量显示 -->
-    <TextView
+    <EditText
         android:id="@+id/commodity_stock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="库存数量: "
         android:textSize="16sp"
         android:textColor="#666666"
+        android:enabled="false"
         android:layout_marginBottom="16dp"/>
 
     <!-- 水平LinearLayout来容纳三个图片按钮 -->
@@ -144,8 +147,8 @@
             android:id="@+id/commodity_buy_num"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
+            android:layout_marginStart="0dp"
             android:layout_toEndOf="@id/button_buy"
-            android:layout_centerVertical="true"
             android:ellipsize="end"
             android:maxLines="1"
             app:btnTextSize="14sp"

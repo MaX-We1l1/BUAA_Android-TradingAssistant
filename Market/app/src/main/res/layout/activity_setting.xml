@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:background="#ffffff"
                     android:text="返回"
-                    android:textColor="#3265E6"
+                    android:textColor="#FFcc00"
                     android:textSize="19dp"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"/>
