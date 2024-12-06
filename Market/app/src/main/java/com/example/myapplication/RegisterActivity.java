@@ -31,6 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
     private final String NO_AGAIN_PASSWORD_TOAST = "请确认密码";
     private final String PASSWORD_NOT_SAME_TOAST = "两次输入的密码不一致, 请重新输入";
     private final String PASSWORD_TOO_SHORT_TOAST = "密码长度应至少为8个字符";
+    private final String USERNAME_EXIST_TOAST = "用户名已被注册";
 
     private enum RegisterCheckResult {
         NO_USERNAME,
@@ -84,6 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
             case NO_AGAIN_PASSWORD: toastThis(NO_AGAIN_PASSWORD_TOAST); break;
             case PASSWORD_NOT_SAME: toastThis(PASSWORD_NOT_SAME_TOAST); break;
             case PASSWORD_TOO_SHORT: toastThis(PASSWORD_TOO_SHORT_TOAST); break;
+            case USERNAME_EXIST: toastThis(USERNAME_EXIST_TOAST); break;
             default: {
                 // 跳转到登录界面
                 Calendar calendar = Calendar.getInstance();
