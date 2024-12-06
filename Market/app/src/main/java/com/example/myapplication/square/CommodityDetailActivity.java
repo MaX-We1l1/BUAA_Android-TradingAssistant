@@ -130,6 +130,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
             addCartButton.setVisibility(View.GONE);
             buyButton.setVisibility(View.GONE);
             quantity.setVisibility(View.GONE);
+            buyNum.setVisibility(View.GONE);
             editButton.setOnClickListener(v -> enableEditing());
             delButton.setVisibility(View.VISIBLE);
             delButton.setOnClickListener(view -> delCommodity());
@@ -298,6 +299,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
         if (isCurrentUserSeller(commodity)) {
             commodityPrice.setEnabled(true);
             commodityDescription.setEnabled(true);
+            commodityStock.setEnabled(true);
             saveButton.setVisibility(View.VISIBLE);
         } else {
             Toast.makeText(this, "无法编辑商品信息", Toast.LENGTH_SHORT).show();
@@ -318,17 +320,15 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private void saveChanges() {
         String description = commodityDescription.getText().toString();
         String priceString = commodityPrice.getText().toString();
+        String stockString = commodityStock.getText().toString();
         float price;
-
         // 检查价格输入是否为空
         if (priceString.isEmpty()) {
             Toast.makeText(this, "价格不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
-
         // 移除非数字和小数点字符
         priceString = priceString.replaceAll("[^\\d.]", "");
-
         try {
             price = Float.parseFloat(priceString);
         } catch (NumberFormatException e) {
@@ -336,9 +336,18 @@ public class CommodityDetailActivity extends AppCompatActivity {
             return;
         }
 
+        int num;
+        stockString = stockString.replaceAll("[^\\d.]", "");
+        try {
+            num = Integer.parseInt(stockString);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "请输入有效的数量", Toast.LENGTH_SHORT).show();
+            return;
+        }
         // 更新商品对象
         commodity.setDescription(description);
         commodity.setPrice(price);
+        commodity.setNumber(num);
         commodity.save(); // 保存更新到数据库
 
         Toast.makeText(this, "商品信息已更新", Toast.LENGTH_SHORT).show();
