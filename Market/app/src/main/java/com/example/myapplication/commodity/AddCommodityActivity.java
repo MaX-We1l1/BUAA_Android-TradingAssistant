@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplication.InputNumberView;
@@ -29,6 +30,7 @@ import com.example.myapplication.database.Commodity;
 import com.example.myapplication.database.DBFunction;
 import com.example.myapplication.database.Type;
 import com.example.myapplication.square.CommodityListActivity;
+import com.example.myapplication.square.MyImageSliderAdapter;
 
 import org.litepal.LitePal;
 
@@ -37,6 +39,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -46,7 +49,11 @@ public class AddCommodityActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri imageUri;
+    private String first = "";
     private String base = "";
+    private ArrayList<String> pictures = new ArrayList<>();
+    private ViewPager2 imageView;
+    private MyImageSliderAdapter adapter;
     // private MinioUtils minioUtils = new MinioUtils();
     private InputNumberView quantityView;
     private static final int MAX_QUANTITY = 999;
@@ -64,6 +71,7 @@ public class AddCommodityActivity extends AppCompatActivity {
         Button selectImageButton = findViewById(R.id.button_select_image);
         Button addButton = findViewById(R.id.button_add_commodity);
         ImageButton backButton = findViewById(R.id.back_button);
+        imageView = findViewById(R.id.commodity_image);
         backButton.setOnClickListener(v -> {
             finish(); // 返回上一页
         });
@@ -131,7 +139,7 @@ public class AddCommodityActivity extends AppCompatActivity {
 
             // 保存到数据库，添加数量参数
             DBFunction.addCommodity(name, MainActivity.getCurrentUsername(), currentDate,
-                    type, price, description, base, quantity);
+                    type, price, description, first, quantity, pictures);
 
             // 返回首页
             Intent intent = new Intent(AddCommodityActivity.this, CommodityListActivity.class);
@@ -147,10 +155,15 @@ public class AddCommodityActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             // 这里可以显示选中的图片或进行其他处理
-            ImageView imageView = findViewById(R.id.commodity_image);
+
             String filepath = getRealPathFromURI(imageUri);
-            imageView.setImageURI(imageUri);
             base = encodeImageToBase64(filepath);
+            if (first.isEmpty()) {
+                first = base;
+            }
+            pictures.add(base);
+            adapter = new MyImageSliderAdapter(pictures);
+            imageView.setAdapter(adapter);
             Log.w("from AddCommodityActivity", "url is " + imageUri);
         }
     }

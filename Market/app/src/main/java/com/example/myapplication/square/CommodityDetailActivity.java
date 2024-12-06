@@ -28,6 +28,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 
 import com.bumptech.glide.Glide;
@@ -62,7 +63,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private TextView commodityName; // 商品名称
     private TextView commodityPrice; // 商品价格
     private TextView commodityDescription; // 商品描述
-    private ImageView commodityImage; // 商品图片
+    private ViewPager2 commodityImage; // 商品图片
     private TextView commoditySeller;
     private ImageButton chatButton; // 将Button改为ImageButton
     private Button editButton;
@@ -188,17 +189,15 @@ public class CommodityDetailActivity extends AppCompatActivity {
 
             // 加载商品图片
             String imageBase64 = commodity.getImageUrl();
-            if (imageBase64 != null && !imageBase64.isEmpty()) {
-                byte[] decodedString = Base64.decode(imageBase64, Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                commodityImage.setImageBitmap(decodedByte);
-            } else {
-                Glide.with(this)
-                    .load(R.drawable.logo)
-                    .placeholder(R.drawable.wangpeng) // 占位图
-                    .error(R.drawable.logo) // 错误图
-                    .into(commodityImage);
+            List<String> pictures = commodity.getPictures();
+            if (pictures.isEmpty() && (imageBase64 != null && !imageBase64.isEmpty())) {
+                pictures.add(imageBase64);
+                commodity.addPicture(imageBase64);
+                commodity.save();
             }
+            List<String> base64ImageList = new ArrayList<>(pictures);
+            MyImageSliderAdapter adapter = new MyImageSliderAdapter(base64ImageList);
+            commodityImage.setAdapter(adapter);
 
 
             chatButton.setOnClickListener(v -> {

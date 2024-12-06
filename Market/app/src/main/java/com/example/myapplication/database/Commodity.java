@@ -2,12 +2,15 @@ package com.example.myapplication.database;
 
 import org.litepal.crud.LitePalSupport;
 
+import java.util.ArrayList;
+
 
 public class Commodity extends LitePalSupport {
     private long id; //编号
     private String commodityName; //名称
     // TODO 添加商品图片
     private String imageUrl;
+    private ArrayList<String> pictures = new ArrayList<>();
     private Float price; //价格
     private String releaseDate; //发布日期
     private String description; //商品描述
@@ -98,5 +101,21 @@ public class Commodity extends LitePalSupport {
 
     public Type getType() {
         return Type.getTypeByValue(typeValue);
+    }
+
+    public ArrayList<String> getPictures() {
+        if (pictures == null) {
+            pictures = new ArrayList<>();
+            this.save();
+        }
+        return pictures;
+    }
+
+    public void setPictures(ArrayList<String> pictures) {
+        this.pictures = pictures;
+    }
+
+    public void addPicture(String picture) {
+        pictures.add(picture);
     }
 }
