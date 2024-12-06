@@ -78,6 +78,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private RecyclerView commentRecyclerView;
     private CommentAdapter commentAdapter;
     private List<Comment> commentList;
+    private TextView commodityStock; // 添加库存数量显示控件
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +99,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
         buyButton = findViewById(R.id.button_buy);
         buyNum = findViewById(R.id.commodity_buy_num);
         commentRecyclerView = findViewById(R.id.comment_recycler_view);
+        commodityStock = findViewById(R.id.commodity_stock);
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         // 重定向到自己的购物车
         cartButton = findViewById(R.id.button_cart);
@@ -158,6 +160,27 @@ public class CommodityDetailActivity extends AppCompatActivity {
             commodityDescription.setText(commodity.getDescription());
             commoditySeller.setText("卖家: " + commodity.getSellerName()); // 显示卖家信息
 
+            // 添加库存数量显示
+            commodityStock.setText("库存数量: " + commodity.getNumber());
+
+            // 限制购买数量不能超过库存
+            buyNum.setMaxNum(commodity.getNumber());
+            buyNum.setOnAmountChangeListener((view, amount) -> {
+                if (amount > commodity.getNumber()) {
+                    Toast.makeText(getApplicationContext(), "超过库存数量", Toast.LENGTH_SHORT).show();
+                    buyNum.setCurrentNum(commodity.getNumber());
+                }
+            });
+
+            // 限制加入购物车数量不能超过库存
+            quantity.setMaxNum(commodity.getNumber());
+            quantity.setOnAmountChangeListener((view, amount) -> {
+                if (amount > commodity.getNumber()) {
+                    Toast.makeText(getApplicationContext(), "超过库存数量", Toast.LENGTH_SHORT).show();
+                    quantity.setCurrentNum(commodity.getNumber());
+                }
+            });
+
             // 加载商品图片
             String imageBase64 = commodity.getImageUrl();
             if (imageBase64 != null && !imageBase64.isEmpty()) {
@@ -182,16 +205,16 @@ public class CommodityDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             });
 
-            // 加入商品数量
-            quantity.setMaxNum(50);
-            quantity.setOnAmountChangeListener(new InputNumberView.OnAmountChangeListener() {
-                @Override
-                public void onAmountChange(View view, int amount) {
-                    if (amount > 50) {
-                        Toast.makeText(getApplicationContext(), "未找到该商品", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+//            // 加入商品数量
+//            quantity.setMaxNum(50);
+//            quantity.setOnAmountChangeListener(new InputNumberView.OnAmountChangeListener() {
+//                @Override
+//                public void onAmountChange(View view, int amount) {
+//                    if (amount > 50) {
+//                        Toast.makeText(getApplicationContext(), "未找到该商品", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            });
 
             // 已添加
             TextView already = findViewById(R.id.commodity_already_num);
@@ -228,15 +251,15 @@ public class CommodityDetailActivity extends AppCompatActivity {
                 Tools.toastMessageShort(CommodityDetailActivity.this, s);
             });
 
-            buyNum.setMaxNum(50);
-            buyNum.setOnAmountChangeListener(new InputNumberView.OnAmountChangeListener() {
-                @Override
-                public void onAmountChange(View view, int amount) {
-                    if (amount > 50) {
-                        Toast.makeText(getApplicationContext(), "超过最大购买上限", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+//            buyNum.setMaxNum(50);
+//            buyNum.setOnAmountChangeListener(new InputNumberView.OnAmountChangeListener() {
+//                @Override
+//                public void onAmountChange(View view, int amount) {
+//                    if (amount > 50) {
+//                        Toast.makeText(getApplicationContext(), "超过最大购买上限", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            });
 
             buyButton.setOnClickListener(v -> {
                 // 创建 Intent 跳转到 BuyCommodityActivity
