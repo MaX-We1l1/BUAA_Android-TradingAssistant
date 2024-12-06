@@ -176,6 +176,10 @@ public class DBFunction {
         return LitePal.find(Commodity.class, commodityId);
     }
 
+    public static List<Commodity> findCommodityNotEmpty() {
+        return LitePal.where("number > ?", "0").find(Commodity.class);
+    }
+
     // 购物车
     public static List<CartItem> getCart(String userName) {
         User user = findUserByName(userName);

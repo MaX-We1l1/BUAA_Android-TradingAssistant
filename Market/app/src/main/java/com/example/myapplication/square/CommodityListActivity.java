@@ -64,7 +64,7 @@ public class CommodityListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // 初始化商品列表
-        commodityList = LitePal.findAll(Commodity.class); // 从数据库加载商品
+        commodityList = LitePal.where("number > ?", "0").find(Commodity.class); // 从数据库加载商品
         commodityAdapter = new CommodityAdapter(this, commodityList, REQUEST_CODE); // 创建适配器
         recyclerView.setAdapter(commodityAdapter); // 设置适配器
 
@@ -186,7 +186,7 @@ public class CommodityListActivity extends AppCompatActivity {
             //Log.d("CommodityType", "Commodity Type: " + commodity.getType() + ", Selected Type: " + selectedType);
             boolean matchesQuery = query == null || query.isEmpty() || commodity.getCommodityName().toLowerCase().contains(query.toLowerCase());
             boolean matchesType = selectedType == null || commodity.getType() == selectedType;
-            if (matchesQuery && matchesType) {
+            if (matchesQuery && matchesType && commodity.getNumber() > 0) {
                 commodityList.add(commodity); // 添加符合条件的商品
             }
         }
@@ -215,7 +215,7 @@ public class CommodityListActivity extends AppCompatActivity {
     // 加载商品的方法
     private void loadCommodityList() {
         commodityList.clear();
-        commodityList = LitePal.findAll(Commodity.class); // 从数据库加载商品
+        commodityList = LitePal.where("number > ?", "0").find(Commodity.class); // 从数据库加载商品
         commodityAdapter.updateList(commodityList);
     }
 

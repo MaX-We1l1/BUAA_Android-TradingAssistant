@@ -79,6 +79,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private CommentAdapter commentAdapter;
     private List<Comment> commentList;
     private TextView commodityStock; // 添加库存数量显示控件
+    private Button delButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +102,8 @@ public class CommodityDetailActivity extends AppCompatActivity {
         commentRecyclerView = findViewById(R.id.comment_recycler_view);
         commodityStock = findViewById(R.id.commodity_stock);
         commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        delButton = findViewById(R.id.button_del_commodity);
+
         // 重定向到自己的购物车
         cartButton = findViewById(R.id.button_cart);
         cartButton.setOnClickListener(v-> {
@@ -120,7 +123,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "商品 ID 无效", Toast.LENGTH_SHORT).show();
         }
 
-        //检测当前是否是卖家，是就显示修改按钮,不显示聊天按钮
+        //检测当前是否是卖家，是就显示修改和下架按钮,不显示聊天按钮
         if (isCurrentUserSeller(commodity)) {
             editButton.setVisibility(View.VISIBLE);
             chatButton.setVisibility(View.GONE);
@@ -128,6 +131,8 @@ public class CommodityDetailActivity extends AppCompatActivity {
             buyButton.setVisibility(View.GONE);
             quantity.setVisibility(View.GONE);
             editButton.setOnClickListener(v -> enableEditing());
+            delButton.setVisibility(View.VISIBLE);
+            delButton.setOnClickListener(view -> delCommodity());
         }
         //保存按钮
         saveButton.setOnClickListener(v -> saveChanges());
@@ -296,6 +301,17 @@ public class CommodityDetailActivity extends AppCompatActivity {
             saveButton.setVisibility(View.VISIBLE);
         } else {
             Toast.makeText(this, "无法编辑商品信息", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void delCommodity() {
+        if (isCurrentUserSeller(commodity)) {
+            commodity.setNumber(0);
+            commodity.save();
+            setResult(RESULT_OK);
+            finish();
+        } else {
+            Toast.makeText(this, "无法下架商品", Toast.LENGTH_SHORT).show();
         }
     }
 

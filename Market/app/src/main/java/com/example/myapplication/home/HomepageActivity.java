@@ -3,6 +3,8 @@ package com.example.myapplication.home;
 import static com.example.myapplication.MainActivity.getCurrentUserId;
 import static com.example.myapplication.MainActivity.getCurrentUsername;
 import static com.example.myapplication.R.*;
+import static com.example.myapplication.database.DBFunction.findCommodityNotEmpty;
+import static com.example.myapplication.database.DBFunction.findCommodityNotEmpty;
 import static com.example.myapplication.database.DBFunction.getCommodity;
 
 import android.annotation.SuppressLint;
@@ -115,7 +117,8 @@ public class HomepageActivity extends AppCompatActivity {
 
         //sensitiveWordTEST(sensitiveWordManager);
 
-        List<Commodity> allCommodities = LitePal.findAll(Commodity.class);
+        //List<Commodity> allCommodities = LitePal.findAll(Commodity.class);
+        List<Commodity> allCommodities = findCommodityNotEmpty();
         StringBuilder queryPrompt = new StringBuilder();
         if (!allCommodities.isEmpty()) {
             JSONObject queryJson = null;
@@ -152,7 +155,7 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
-        if (LitePal.findAll(Commodity.class).isEmpty()) {
+        if (findCommodityNotEmpty().isEmpty()) {
             textRecommendations.setText("商品列表中暂时为空");
         }
         else {
