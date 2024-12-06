@@ -14,6 +14,7 @@ public class Commodity extends LitePalSupport {
     private int typeValue; //商品类别
     private String sellerName;
     private String buyerName;
+    private int number;//商品数量
 
     public Commodity() {
     }
@@ -41,6 +42,14 @@ public class Commodity extends LitePalSupport {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public void setCommodityName(String commodityName) {

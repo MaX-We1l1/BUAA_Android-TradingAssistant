@@ -84,11 +84,18 @@ public class BuyCommodityActivity extends AppCompatActivity {
                 User buyer = DBFunction.findUserByName(MainActivity.getCurrentUsername());
                 User seller = DBFunction.findUserByName(commodity.getSellerName());
                 if (buyer.getMoney() >= commodity.getPrice() * quantity) {
-                    buyer.buy(commodity.getPrice() * quantity);
-                    buyer.save();
-                    OrderTable order = DBFunction.addBuyOrder(commodity.getId(), buyer.getId(), commodity.getCommodityName(),
-                            commodity.getPrice(), commodity.getImageUrl(), quantity);
-                    DBFunction.sendNotification2Seller(commodity.getCommodityName(), order.getId(), seller.getId(), buyer.getId(), "待发货");
+                    if (commodity.getNumber() >= quantity) {
+                        buyer.buy(commodity.getPrice() * quantity);
+                        buyer.save();
+                        commodity.setNumber(commodity.getNumber() - quantity);
+                        commodity.save();
+                        OrderTable order = DBFunction.addBuyOrder(commodity.getId(), buyer.getId(), commodity.getCommodityName(),
+                                commodity.getPrice(), commodity.getImageUrl(), quantity);
+                        DBFunction.sendNotification2Seller(commodity.getCommodityName(), order.getId(), seller.getId(), buyer.getId(), "待发货");
+                    } else {
+                        Toast.makeText(this, commodity.getCommodityName() + " 商品余量不足", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 } else {
                     Toast.makeText(this, "购买 "+ commodity.getCommodityName()+" * " + quantity+ " 余额不足", Toast.LENGTH_SHORT).show();
                     return;

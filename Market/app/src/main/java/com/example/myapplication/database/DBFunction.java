@@ -149,7 +149,7 @@ public class DBFunction {
     }
 
     public static void addCommodity(String name, String sellerName, String releaseDate,
-                                    Type type, Float price, String description, String url) {
+                                    Type type, Float price, String description, String url, int number) {
         Commodity commodity = new Commodity();
         commodity.setTypeValue(type.getValue());
         commodity.setReleaseDate(releaseDate);
@@ -158,6 +158,7 @@ public class DBFunction {
         commodity.setDescription(description);
         commodity.setSellerName(sellerName);
         commodity.setImageUrl(url);
+        commodity.setNumber(number);
         commodity.save();
     }
 

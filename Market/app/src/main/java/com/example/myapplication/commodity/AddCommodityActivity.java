@@ -22,6 +22,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication.InputNumberView;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.database.Commodity;
@@ -47,6 +48,8 @@ public class AddCommodityActivity extends AppCompatActivity {
     private Uri imageUri;
     private String base = "";
     // private MinioUtils minioUtils = new MinioUtils();
+    private InputNumberView quantityView;
+    private static final int MAX_QUANTITY = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,13 +85,25 @@ public class AddCommodityActivity extends AppCompatActivity {
             startActivityForResult(Intent.createChooser(intent, "选择图片"), PICK_IMAGE_REQUEST);
         });
 
+        // 初始化数量选择器
+        quantityView = findViewById(R.id.commodity_quantity);
+        quantityView.setMaxNum(MAX_QUANTITY);
+        quantityView.setOnAmountChangeListener((view, amount) -> {
+            if (amount > MAX_QUANTITY) {
+                Toast.makeText(getApplicationContext(), "超过最大库存限制", Toast.LENGTH_SHORT).show();
+                quantityView.setCurrentNum(MAX_QUANTITY);
+            }
+        });
+
         addButton.setOnClickListener(v -> {
             // 获取输入的商品信息
             String name = nameEditText.getText().toString();
             Type type = (Type) typeSpinner.getSelectedItem();
             String description = descriptionEditText.getText().toString();
             String priceStr = priceEditText.getText().toString().trim();
+            int quantity = quantityView.getCurrentNum();
 
+            // 验证输入
             if (name.isEmpty()){
                 Toast.makeText(this, "商品名称不能为空", Toast.LENGTH_SHORT).show();
                 return;
@@ -101,6 +116,11 @@ public class AddCommodityActivity extends AppCompatActivity {
                 Toast.makeText(this, "商品价格不能为空", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (quantity <= 0) {
+                Toast.makeText(this, "商品数量必须大于0", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Float price;
             try {
                 price = Float.parseFloat(priceStr);
@@ -108,36 +128,16 @@ public class AddCommodityActivity extends AppCompatActivity {
                 Toast.makeText(this, "请输入有效的价格", Toast.LENGTH_SHORT).show();
                 return;
             }
-            // 保存到数据库
+
+            // 保存到数据库，添加数量参数
             DBFunction.addCommodity(name, MainActivity.getCurrentUsername(), currentDate,
-                    type, price, description, base);
-
-            List<Commodity> commodities = LitePal.findAll(Commodity.class);
-//            for (Commodity commodity : commodities) {
-//                Log.d("CommodityList", "Commodity Name: " + commodity.getCommodityName() +
-//                        ", Type: " + commodity.getType());
-//            }
-
-//            // 将图片上传到云端
-//            try {
-//                String filepath = getRealPathFromURI(imageUri);
-//                String folderPath = "img/commodity/";
-//                String objectName = folderPath + commodity.getId() + "-" + commodity.getCommodityName();
-//                if (filepath != null) {
-//                    File file = new File(filepath);
-//                    minioUtils.uploadFile(file, objectName + ".jpg");
-//                }
-//                Toast.makeText(this, "图片上传成功", Toast.LENGTH_SHORT).show();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                Toast.makeText(this, "图片上传失败", Toast.LENGTH_SHORT).show();
-//            }
+                    type, price, description, base, quantity);
 
             // 返回首页
             Intent intent = new Intent(AddCommodityActivity.this, CommodityListActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-            finish(); // 结束当前活动
+            finish();
         });
     }
 
