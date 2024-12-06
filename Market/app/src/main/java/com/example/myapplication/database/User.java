@@ -19,10 +19,11 @@ public class User extends LitePalSupport {
     private String password;
     private String registerTime;
     private String imageUrl;
+    private String phoneNumber = "";
     //private int headImage = R.drawable.user; // 头像
-    private String personalitySign; // 个性签名, 不超过20个字
-    private String birthday; //生日, yyyymmdd 的格式, 防止前导零的情况, 以字符串存
-    private String sex; //性别,直接用“男”,"女"就行。 ~~男用"m"表示, 女用"f"表示~~
+    private String personalitySign = ""; // 个性签名, 不超过20个字
+    private String birthday = ""; //生日, yyyymmdd 的格式, 防止前导零的情况, 以字符串存
+    private String sex = ""; //性别,直接用“男”,"女"就行。 ~~男用"m"表示, 女用"f"表示~~
     private ArrayList<String> addresses = new ArrayList<>(); //地址管理
     private ArrayList<Hobby> hobbies = new ArrayList<>(); // 收藏管理
 
@@ -87,6 +88,14 @@ public class User extends LitePalSupport {
     }
 
     public String getImageUrl() { return imageUrl; }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public void setUsername(String username) {
 //        if (DBFunction.isUsernameExist(username)) {
