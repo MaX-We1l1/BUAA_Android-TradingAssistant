@@ -119,6 +119,9 @@ public class HomepageActivity extends AppCompatActivity {
 
         //List<Commodity> allCommodities = LitePal.findAll(Commodity.class);
         List<Commodity> allCommodities = findCommodityNotEmpty();
+        for (Commodity commodity : allCommodities) {
+            Log.e("commodity : ", commodity.getCommodityName());
+        }
         StringBuilder queryPrompt = new StringBuilder();
         if (!allCommodities.isEmpty()) {
             JSONObject queryJson = null;
@@ -340,7 +343,9 @@ public class HomepageActivity extends AppCompatActivity {
 
     private String buildModelInput(JSONObject userFeature) throws JSONException {
         StringBuilder prompt = new StringBuilder();
-        prompt.append("您是智能购物助手。根据用户的行为数据和详细的产品信息，推荐他们可能喜欢的 5 款产品，如果系统中所有商品的数量不够则推荐系统中所有商品。\n");
+        prompt.append("您是智能购物助手。根据用户的行为数据和详细的产品信息，从\"系统中所有商品\"中推荐他们可能喜欢的 5 款产品。");
+        prompt.append("请注意不要从\"用户的收藏\"、\"用户的购物车中商品\"、\"用户订单中商品\"中推荐，他们只是用来预测用户喜好的。");
+        prompt.append("如果系统中\"系统中所有商品\"数量不足五个则推荐\"系统中所有商品\"的全部。\n");
         prompt.append("下面是产品相关数据：\n");
 
         prompt.append("### 用户的收藏:\n");
@@ -353,11 +358,12 @@ public class HomepageActivity extends AppCompatActivity {
         prompt.append(formatrecommendList(userFeature.getJSONArray("订单中的商品"))).append("\n");
 
         prompt.append("### 用户喜欢的类别:\n");
-        prompt.append(userFeature.getJSONArray("喜欢的类别")).append("\n");
+        prompt.append(userFeature.getJSONArray("喜欢的类别")).append("\n\n");
 
         prompt.append("### 系统中所有商品:\n");
         prompt.append(formatrecommendList(userFeature.getJSONArray("系统中所有商品"))).append("\n");
 
+        prompt.append("请注意推荐的商品只能是\"系统中所有商品\"中的，如果系统中没有，则不推荐。\n");
         prompt.append("不要重复输出商品id，如果商品数量不够不用输出五个，输出推荐结果时，遵循以下JSON格式，例如：\n");
         prompt.append("[\n");
         prompt.append("    {\"商品ID\": \"123\"},\n");
@@ -402,6 +408,7 @@ public class HomepageActivity extends AppCompatActivity {
 
                 Choice firstChoice = modelData.getChoices().get(0);
                 String content = (String) firstChoice.getMessage().getContent();
+                Log.e("Content : " , content);
                 int startIndex = content.indexOf('[');
                 int endIndex = content.lastIndexOf(']');
                 content = content.substring(startIndex, endIndex + 1);
