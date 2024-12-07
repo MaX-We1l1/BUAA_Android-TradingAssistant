@@ -88,6 +88,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="-81dp"
+        android:backgroundTint="@color/yellow"
         android:text="删除"
         android:textColor="#FFFFFF"
         android:textSize="16sp" />
