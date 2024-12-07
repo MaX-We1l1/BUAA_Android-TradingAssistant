@@ -13,7 +13,7 @@ import java.util.List;
 
 public class User extends LitePalSupport {
     private long id;
-    private double money = 100.00;
+    private double money = 1000.00;
     @Column(nullable = false, unique = true)
     private String username;        //primary
     private String password;
