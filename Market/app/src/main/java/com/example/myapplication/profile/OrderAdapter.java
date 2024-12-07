@@ -106,7 +106,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderViewHol
             ((Activity) context).startActivityForResult(intent, 1); // 使用传递的请求码
         });
 
-        holder.delOrder.setEnabled(order.getCommodityStatus().equals("待发货"));
+//        holder.delOrder.setEnabled(order.getCommodityStatus().equals("待发货"));
 
         holder.delOrder.setOnClickListener(v -> {
             new AlertDialog.Builder(context)
