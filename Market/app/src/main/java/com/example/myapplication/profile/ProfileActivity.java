@@ -30,6 +30,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView profileImageView;
     private TextView usernameTextView;
     private TextView userMoney;
+    private TextView userSignature;
 
     // 假设 currentUser 是当前登录的用户名
     private final String currentUser = MainActivity.getCurrentUsername(); // 这个可以根据实际情况进行获取
@@ -47,6 +48,14 @@ public class ProfileActivity extends AppCompatActivity {
         usernameTextView.setText(currentUser);
         userMoney = findViewById(R.id.user_money);
         userMoney.setText("账户余额： " + DBFunction.findUserByName(MainActivity.getCurrentUsername()).getMoney());
+
+        userSignature = findViewById(R.id.user_signature);
+        String signature = DBFunction.findUserByName(MainActivity.getCurrentUsername()).getPersonalitySign();
+        if (signature != null) {
+            userSignature.setText(signature);
+        } else {
+            userSignature.setText("^_^");
+        }
 
         // 根据用户名设置头像
         String userImageUrl = MainActivity.getCurrentImageUrl();

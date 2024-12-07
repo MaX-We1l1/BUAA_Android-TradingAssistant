@@ -50,12 +50,20 @@
                     android:id="@+id/user_money"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="普通会员"
                     android:textSize="14sp"
                     android:textColor="#999999"
                     android:layout_toRightOf="@id/profile_image"
                     android:layout_marginLeft="16dp"
                     android:layout_below="@id/username" />
+                <TextView
+                    android:id="@+id/user_signature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="#999999"
+                    android:layout_toRightOf="@id/profile_image"
+                    android:layout_below="@id/user_money"
+                    android:layout_marginLeft="16dp" />
                 <ImageButton
                     android:id="@+id/button_cart"
                     android:layout_width="48dp"
