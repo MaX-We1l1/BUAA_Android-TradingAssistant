@@ -26,10 +26,6 @@ public class User extends LitePalSupport {
     private String sex = ""; //性别,直接用“男”,"女"就行。 ~~男用"m"表示, 女用"f"表示~~
     private ArrayList<String> addresses = new ArrayList<>(); //地址管理
     private ArrayList<Hobby> hobbies = new ArrayList<>(); // 收藏管理
-
-    //
-    private List<TradeRecord> tradeRecordList = new ArrayList<TradeRecord>();
-    public List<Type> commodityHobbyList = new ArrayList<>();
     /*
         函数部分
      */
@@ -55,21 +51,6 @@ public class User extends LitePalSupport {
                 ", birthday='" + birthday + '\'' +
                 ", sex='" + sex + '\'' +
                 '}';
-    }
-
-
-    public void setDeletedFlag() {
-        setUsername("用户已注销_" + String.valueOf(id));
-    }
-
-
-    //  外键约束
-    public List<TradeRecord> getTradeRecordList() {
-        return LitePal.where("user_id = ?", String.valueOf(id)).find(TradeRecord.class);
-    }
-
-    public List<Hobby> getcommodityHobbyList() {
-        return LitePal.where("user_id = ?", String.valueOf(id)).find(Hobby.class);
     }
 
 
@@ -124,14 +105,6 @@ public class User extends LitePalSupport {
     public void setRegisterTime(String registerTime) {
         this.registerTime = registerTime;
     }
-
-//    public int getHeadImage() {
-//        return headImage;
-//    }
-
-//    public void setHeadImage(int headImage) {
-//        this.headImage = headImage;
-//    }
 
     public String getPersonalitySign() {
         return personalitySign;

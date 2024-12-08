@@ -63,91 +63,6 @@ public class DBFunction {
         updateUser.updateAll("username = ?", username);
     }
 
-    public static void cancelUser(String username) {
-        long num = 0;
-        User user = findUserByName(username);
-        if (user != null) {
-            User updateUser = new User();
-            updateUser.setUsername("用户已注销_" + user.getId());
-            updateUser.updateAll("username = ?", username);
-        }
-    }
-
-    public static String getUserBirthday(String username) {
-        return LitePal.where("username = ?", username).find(User.class).get(0).getBirthday();
-    }
-
-
-    //拿到username的当前性别，返回"男"或者"女"
-    public static String getGender(String username) {
-        return LitePal.where("username = ?", username).find(User.class).get(0).getSex();
-    }
-
-    //个性签名
-    public static String getPersonalSign(String username) {
-        return LitePal.where("username = ?", username).find(User.class).get(0).getPersonalitySign();
-    }
-
-    public static String getUserRegisterTime(String username) {
-        return LitePal.where("username = ?", username).find(User.class).get(0).getRegisterTime();
-    }
-
-    public static void setUserGender(String username, String newGender) {
-        User updateUser = new User();
-        updateUser.setSex(newGender);
-        updateUser.updateAll("username = ?", username);
-    }
-
-
-    //将用户的出生日期设置为参数date（是类似于“2023-11-28”这样的格式的，不需要再进行格式解析，直接set即可）
-    public static void setUserBirthday(String username, String date) {
-        User updateUser = new User();
-        updateUser.setBirthday(date);
-        updateUser.updateAll("username = ?", username);
-    }
-
-    //设置一个用户的个性签名为newSign
-    public static void setPersonalSign(String username, String newSign) {
-        User updateUser = new User();
-        updateUser.setPersonalitySign(newSign);
-        updateUser.updateAll("username = ?", username);
-    }
-
-    //收藏某件商品
-    public static void addStar(String userName, long commodityId) {
-        Hobby hobby = new Hobby();
-        hobby.setUserName(userName);
-        hobby.setCommodityId(commodityId);
-        hobby.save();
-    }
-
-    //取消用户对某个商品的收藏，保证这个商品在收藏列表里
-    public static void cancelStar(String username, long commodityId) {
-        User user = findUserByName(username);
-        if (user != null) {
-            // 查找该用户的收藏记录
-            List<Hobby> hobbies = LitePal.where("username = ? and commodityId = ?", username, String.valueOf(commodityId)).find(Hobby.class);
-            if (!hobbies.isEmpty()) {
-                // 删除第一条找到的记录
-                LitePal.delete(Hobby.class, hobbies.get(0).getId());
-            } else {
-                Log.w(DBFunction.TAG, "未找到该用户的收藏记录，cancelStar失败");
-            }
-        } else {
-            Log.w(DBFunction.TAG, "不存在用户名为 " + username + " 的用户，cancelStar失败");
-        }
-    }
-
-
-    public static void addRecordToDB(TradeRecord oneTradeRecord) {
-        TradeRecord tradeRecord = new TradeRecord();
-        tradeRecord.setBuyer(oneTradeRecord.getBuyer());
-        tradeRecord.setSeller(oneTradeRecord.getSeller());
-        tradeRecord.setDate(oneTradeRecord.getDate());
-        tradeRecord.setNote(oneTradeRecord.getNote());
-        tradeRecord.save();
-    }
-
     public static void addCommodity(String name, String sellerName, String releaseDate,
                                     Type type, Float price, String description, String url, int number, ArrayList<String> pictures) {
         Commodity commodity = new Commodity();
@@ -161,16 +76,6 @@ public class DBFunction {
         commodity.setNumber(number);
         commodity.setPictures(pictures);
         commodity.save();
-    }
-
-    //删除某项商品
-    public static void delCommodity(long commodityId) {
-        int rowsAffected = LitePal.delete(Commodity.class, commodityId);
-        if (rowsAffected > 0) {
-            Log.d(DBFunction.TAG, "成功删除商品，ID: " + commodityId);
-        } else {
-            Log.w(DBFunction.TAG, "未找到该商品，删除失败，ID: " + commodityId);
-        }
     }
 
     public static Commodity getCommodity(long commodityId) {
@@ -250,15 +155,6 @@ public class DBFunction {
     }
 
     // 收藏管理
-    public static void addHobby(String userName, Hobby hobby) {
-        User user = findUserByName(userName);
-        if (user != null) {
-            user.addHobby(hobby);
-            user.save();
-        } else {
-            Log.w(DBFunction.TAG, "未找到该用户，添加地址失败， userName: " + userName);
-        }
-    }
 
     //地址管理
     public static void addAddress(String userName, String address) {
@@ -351,19 +247,6 @@ public class DBFunction {
             newContact.setContactsName(MainActivity.getCurrentUsername());
             newContact.setLastContent(message.getContent());
             newContact.save();
-        }
-    }
-
-    // 获取最后一条聊天记录
-    public static Message getLastMessage(long userId1, long userId2) {
-        Message sender1 = LitePal.where("senderId = ? and receiverId = ?",
-                String.valueOf(userId1), String.valueOf(userId2)).findLast(Message.class);
-        Message sender2 = LitePal.where("senderId = ? and receiverId = ?",
-                String.valueOf(userId2), String.valueOf(userId1)).findLast(Message.class);
-        if (sender1.getTimestamp() > sender2.getTimestamp()) {
-            return sender1;
-        } else {
-            return sender2;
         }
     }
 

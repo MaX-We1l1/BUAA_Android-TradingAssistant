@@ -46,7 +46,6 @@ import com.example.myapplication.database.User;
 import com.example.myapplication.profile.cart.CartActivity;
 import com.example.myapplication.database.CartItem;
 import com.example.myapplication.profile.cart.CartManager;
-import com.example.myapplication.profile.comment.CommentAdapter;
 
 import org.litepal.LitePal;
 
@@ -77,7 +76,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
     private InputNumberView quantity;
     private InputNumberView buyNum;
     private RecyclerView commentRecyclerView;
-    private CommentAdapter commentAdapter;
+    private CommodityCommentAdapter commentAdapter;
     private List<Comment> commentList;
     private TextView commodityStock; // 添加库存数量显示控件
     private Button delButton;
@@ -371,7 +370,7 @@ public class CommodityDetailActivity extends AppCompatActivity {
         try {
             commentList = DBFunction.findCommentsByCommodityId(commodity.getId());
             if (commentList != null && !commentList.isEmpty()) {
-                commentAdapter = new CommentAdapter(this, commentList);
+                commentAdapter = new CommodityCommentAdapter(this, commentList);
                 commentRecyclerView.setAdapter(commentAdapter);
             } else {
                 Toast.makeText(this, "没有评论", Toast.LENGTH_SHORT).show();
